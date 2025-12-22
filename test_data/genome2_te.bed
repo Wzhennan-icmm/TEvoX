@@ -1,0 +1,18 @@
+# Example BED file for genome 2 transposons
+# Format: chr	start	end	name	score	strand	type
+chr1	900	1050	TE001	100	+	transposable_element
+chr1	5700	6400	TE002	95	-	LTR_retrotransposon
+chr2	2300	2900	TE003	88	+	DNA_transposon
+chr2	8700	9400	TE004	92	+	LINE
+chr3	11800	12300	TE005	85	-	SINE
+chr3	16800	17000	TE006	78	+	MITE
+chr4	4800	5300	TE007	90	+	helitron
+chr4	10200	10700	TE008	87	-	TIR
+chr5	7200	8000	TE009	93	+	LTR_retrotransposon
+chr5	14300	14800	TE010	82	-	DNA_transposon
+# Some TEs outside synteny regions
+chr1	20000	20500	TE014	95	+	transposable_element
+chr2	18000	18800	TE015	89	+	LINE
+chr3	25000	25300	TE016	84	-	SINE
+chr4	15000	15500	TE017	91	+	helitron
+chr5	20000	20500	TE018	88	-	DNA_transposon

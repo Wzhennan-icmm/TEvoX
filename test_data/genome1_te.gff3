@@ -1,0 +1,16 @@
+##gff-version 3
+# Example GFF3 file for genome 1 transposons
+chr1	TE_annotator	transposable_element	800	950	.	+	.	ID=TE001;Name=TE001;family=DNA_transposon
+chr1	TE_annotator	LTR_retrotransposon	5500	6200	.	-	.	ID=TE002;Name=TE002;family=Gypsy
+chr2	TE_annotator	DNA_transposon	2500	3100	.	+	.	ID=TE003;Name=TE003;family=Tc1-Mariner
+chr2	TE_annotator	LINE	8500	9200	.	+	.	ID=TE004;Name=TE004;family=L1
+chr3	TE_annotator	SINE	12000	12500	.	-	.	ID=TE005;Name=TE005;family=Alu
+chr3	TE_annotator	MITE	17000	17200	.	+	.	ID=TE006;Name=TE006;family=MITE
+chr4	TE_annotator	helitron	5000	5500	.	+	.	ID=TE007;Name=TE007;family=Helitron
+chr4	TE_annotator	TIR	10000	10500	.	-	.	ID=TE008;Name=TE008;family=TIR
+chr5	TE_annotator	LTR_retrotransposon	7000	7800	.	+	.	ID=TE009;Name=TE009;family=Copia
+chr5	TE_annotator	DNA_transposon	14500	15000	.	-	.	ID=TE010;Name=TE010;family=hAT
+# Some TEs outside synteny regions
+chr1	TE_annotator	transposable_element	15000	15500	.	+	.	ID=TE011;Name=TE011;family=DNA_transposon
+chr2	TE_annotator	LINE	15000	15800	.	+	.	ID=TE012;Name=TE012;family=L1
+chr3	TE_annotator	SINE	22000	22300	.	-	.	ID=TE013;Name=TE013;family=Alu

@@ -1,0 +1,41 @@
+# Object files
+*.o
+obj/
+
+# Executable
+tevo
+te_comparator
+
+# Output files from analysis
+*_genome1_unique.txt
+*_genome2_unique.txt
+te_comparison_*.txt
+test_output_*.txt
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Dependency files
+*.d
+
+# Editor files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
