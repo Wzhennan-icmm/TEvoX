@@ -6,17 +6,17 @@ echo "=== TE Comparator Test Script ==="
 echo
 
 # Check if the executable exists
-if [ ! -f "./tevo" ]; then
+if [ ! -f "./tevox" ]; then
     echo "Error: tevo executable not found. Please run 'make' first."
     exit 1
 fi
 
 # Test 1: Basic functionality test
 echo "Test 1: Basic functionality test"
-echo "Running: ./tevo test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -v"
+echo "Running: ./tevox test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -v"
 echo
 
-./tevo test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -v
+./tevox test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -v
 
 if [ $? -eq 0 ]; then
     echo "✓ Test 1 passed"
@@ -30,10 +30,10 @@ echo
 
 # Test 2: Test with custom output prefix
 echo "Test 2: Custom output prefix test"
-echo "Running: ./tevo test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -o test_output"
+echo "Running: ./tevox test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -o test_output"
 echo
 
-./tevo test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -o test_output
+./tevox test_data/synteny_example.txt test_data/genome1_te.gff3 test_data/genome2_te.bed -o test_output
 
 if [ $? -eq 0 ]; then
     echo "✓ Test 2 passed"
@@ -56,10 +56,10 @@ echo
 
 # Test 3: Help message test
 echo "Test 3: Help message test"
-echo "Running: ./tevo --help"
+echo "Running: ./tevox --help"
 echo
 
-./tevo --help
+./tevox --help
 
 if [ $? -eq 0 ]; then
     echo "✓ Test 3 passed"
@@ -73,10 +73,10 @@ echo
 
 # Test 4: Error handling test (invalid file)
 echo "Test 4: Error handling test"
-echo "Running: ./tevo nonexistent.txt test_data/genome1_te.gff3 test_data/genome2_te.bed"
+echo "Running: ./tevox nonexistent.txt test_data/genome1_te.gff3 test_data/genome2_te.bed"
 echo
 
-./tevo nonexistent.txt test_data/genome1_te.gff3 test_data/genome2_te.bed
+./tevox nonexistent.txt test_data/genome1_te.gff3 test_data/genome2_te.bed
 
 if [ $? -ne 0 ]; then
     echo "✓ Test 4 passed (correctly handled error)"

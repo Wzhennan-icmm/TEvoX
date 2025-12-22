@@ -1,4 +1,4 @@
-# TEvo - Transposable Element Evolution Analyzer
+# TEvoX - Transposable Element Evolution Explorer
 
 A C-language tool for comparing transposon (TE) differences between two genomes using synteny information.
 

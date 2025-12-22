@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -O2 -g
-TARGET = tevo
+TARGET = tevox
 SRCDIR = src
 OBJDIR = obj
 SOURCES = $(wildcard $(SRCDIR)/*.c)
@@ -30,7 +30,7 @@ test: $(TARGET)
 
 help:
 	@echo "Available targets:"
-	@echo "  all     - Build the TEvo analyzer"
+	@echo "  all     - Build the TEvoX analyzer"
 	@echo "  clean   - Remove build files"
 	@echo "  install - Install to /usr/local/bin"
 	@echo "  test    - Run tests"
