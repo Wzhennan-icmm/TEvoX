@@ -118,6 +118,67 @@ static void print_te_context_id(FILE *stream, uint64_t id)
     (void)fprintf(stream, "TEC%016llx", (unsigned long long)id);
 }
 
+static void print_edge_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "EDG%016llx", (unsigned long long)id);
+}
+
+static void print_matching_group_id(FILE *stream, uint64_t id)
+{
+    if (id == 0) {
+        fputc('.', stream);
+    } else {
+        (void)fprintf(stream, "MAT%016llx", (unsigned long long)id);
+    }
+}
+
+static void print_solver_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "SOL%016llx", (unsigned long long)id);
+}
+
+static void print_relation_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "REL%016llx", (unsigned long long)id);
+}
+
+static void print_prediction_set(FILE *stream, const double *scores,
+                                 const char *const *names, size_t count,
+                                 double mass)
+{
+    bool *used = calloc(count == 0 ? 1 : count, sizeof(*used));
+    double cumulative = 0.0;
+    bool first = true;
+
+    if (used == NULL) {
+        tv_print_error("out of memory");
+        exit(EXIT_FAILURE);
+    }
+    while (cumulative + 1e-12 < mass) {
+        size_t best = count;
+        for (size_t index = 0; index < count; index++) {
+            if (!used[index]
+                && (best == count || scores[index] > scores[best])) {
+                best = index;
+            }
+        }
+        if (best == count) {
+            break;
+        }
+        if (!first) {
+            fputc(',', stream);
+        }
+        first = false;
+        fputs(names[best], stream);
+        used[best] = true;
+        cumulative += scores[best];
+    }
+    if (first) {
+        fputc('.', stream);
+    }
+    free(used);
+}
+
 static bool decision_disagrees(const TvRun *run, const TvDecision *left,
                                const TvDecision *right)
 {
@@ -452,7 +513,8 @@ static int write_evidence(TvRun *run, const char *prefix)
           "\tleft_flank\tright_flank"
           "\tleft_flank_status\tright_flank_status\tte_aligned_fraction"
           "\tinsertion_fraction\ttarget_n_fraction\tnearby_candidate_count"
-          "\tretained_candidate_count\teligible_candidate_count"
+          "\tretained_candidate_count\tgraph_candidate_count"
+          "\teligible_candidate_count"
           "\tselected_target_te_id\ttechnical_state"
           "\tbiological_state\tannotation_state\tlegacy_state\tclaim_type"
           "\tclaimable\tquality\tevidence_completeness\tobservation_rank\tprimary"
@@ -521,9 +583,10 @@ static int write_evidence(TvRun *run, const char *prefix)
                       projection->te_aligned_fraction,
                       projection->insertion_fraction);
         print_double(stream, projection->n_fraction, 6);
-        (void)fprintf(stream, "\t%d\t%zu\t%d\t",
+        (void)fprintf(stream, "\t%d\t%d\t%d\t%d\t",
                       projection->nearby_candidate_count,
-                      projection->candidate_count,
+                      projection->retained_candidate_count,
+                      projection->graph_candidate_count,
                       projection->eligible_candidate_count);
         if (projection->target_te >= 0) {
             fputs(run->nodes[projection->target_te].id, stream);
@@ -552,6 +615,189 @@ static int write_evidence(TvRun *run, const char *prefix)
     return 0;
 }
 
+static int write_observation_scores(TvRun *run, const char *prefix)
+{
+    static const char *const technical_names[] = {
+        "CALLABLE", "GAP", "AMBIGUOUS", "UNCALLABLE"
+    };
+    static const char *const biological_names[] = {
+        "PRESENT", "EMPTY", "STRUCTURAL_ALTERNATIVE", "UNKNOWN"
+    };
+    static const char *const annotation_names[] = {
+        "MATCHED", "MISSING", "FAMILY_CONFLICT", "NOT_APPLICABLE", "UNKNOWN"
+    };
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".observation_scores.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tevidence_id\tmodel_id\tcalibration_status"
+          "\tout_of_domain\tscore_callable\tscore_gap\tscore_ambiguous"
+          "\tscore_uncallable\ttechnical_prediction_set\ttechnical_entropy"
+          "\tscore_present\tscore_empty\tscore_structural_alternative"
+          "\tscore_biological_unknown\tbiological_prediction_set"
+          "\tbiological_entropy\tscore_annotation_matched"
+          "\tscore_annotation_missing\tscore_family_conflict"
+          "\tscore_not_applicable\tscore_annotation_unknown"
+          "\tannotation_prediction_set\tannotation_entropy\n", stream);
+    for (size_t index = 0; index < run->n_projections; index++) {
+        const TvProjection *projection = &run->projections[index];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_evidence_id(stream, projection->evidence_id);
+        (void)fprintf(stream, "\t%s\t%s\t", TEVOX_MODEL_ID,
+                      TEVOX_CALIBRATION_STATUS);
+        print_bool(stream, projection->inference_out_of_domain);
+        for (size_t score = 0; score < 4; score++) {
+            (void)fprintf(stream, "\t%.8f",
+                          projection->technical_scores[score]);
+        }
+        fputc('\t', stream);
+        print_prediction_set(stream, projection->technical_scores,
+                             technical_names, 4,
+                             run->cfg.prediction_set_mass);
+        (void)fprintf(stream, "\t%.8f", projection->technical_entropy);
+        for (size_t score = 0; score < 4; score++) {
+            (void)fprintf(stream, "\t%.8f",
+                          projection->biological_scores[score]);
+        }
+        fputc('\t', stream);
+        print_prediction_set(stream, projection->biological_scores,
+                             biological_names, 4,
+                             run->cfg.prediction_set_mass);
+        (void)fprintf(stream, "\t%.8f", projection->biological_entropy);
+        for (size_t score = 0; score < 5; score++) {
+            (void)fprintf(stream, "\t%.8f",
+                          projection->annotation_scores[score]);
+        }
+        fputc('\t', stream);
+        print_prediction_set(stream, projection->annotation_scores,
+                             annotation_names, 5,
+                             run->cfg.prediction_set_mass);
+        (void)fprintf(stream, "\t%.8f\n", projection->annotation_entropy);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static void print_missing_features(FILE *stream, uint32_t observed)
+{
+    static const struct {
+        uint32_t flag;
+        const char *name;
+    } features[] = {
+        {TV_FEATURE_FLANK, "flank_min"},
+        {TV_FEATURE_LOCAL_IDENTITY | TV_FEATURE_AGGREGATE_IDENTITY,
+         "identity"},
+        {TV_FEATURE_MAPQ, "mapq"},
+        {TV_FEATURE_N_FRACTION, "n_fraction"},
+        {TV_FEATURE_FAMILY, "family"},
+        {TV_FEATURE_CONTEXT, "context"}
+    };
+    bool first = true;
+
+    for (size_t index = 0; index < sizeof(features) / sizeof(features[0]);
+         index++) {
+        if ((observed & features[index].flag) != 0) {
+            continue;
+        }
+        if (!first) {
+            fputc(',', stream);
+        }
+        first = false;
+        fputs(features[index].name, stream);
+    }
+    if (first) {
+        fputc('.', stream);
+    }
+}
+
+static int write_candidate_features(TvRun *run, const char *prefix)
+{
+    static const char *const membership_names[] = {
+        "SAME_LOCUS", "DIFFERENT_LOCUS"
+    };
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".candidate_features.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tcandidate_id\tevidence_id\tmodel_id"
+          "\tcalibration_status\tobserved_feature_mask\tmissing_features"
+          "\tflank_min\tlocal_identity\taggregate_identity\tmapq_normalized"
+          "\ttarget_n_fraction\tte_aligned_fraction\tinsertion_fraction"
+          "\treciprocal_overlap\tboundary_score\tfamily_relation"
+          "\tcontext_relation\tmembership_logit\tmembership_score"
+          "\tmembership_entropy\tmembership_prediction_set\tout_of_domain"
+          "\teligible\n", stream);
+    for (size_t index = 0; index < run->n_candidates; index++) {
+        const TvCandidate *candidate = &run->candidates[index];
+
+        if (!candidate->output_retained) {
+            continue;
+        }
+        const TvProjection *projection =
+            &run->projections[candidate->projection_index];
+        const TvPaf *alignment = &run->pafs[projection->paf_index];
+        double membership_scores[] = {
+            candidate->membership_score, 1.0 - candidate->membership_score
+        };
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_candidate_id(stream, candidate->candidate_id);
+        fputc('\t', stream);
+        print_evidence_id(stream, projection->evidence_id);
+        (void)fprintf(stream, "\t%s\t%s\t0x%08x\t", TEVOX_MODEL_ID,
+                      TEVOX_CALIBRATION_STATUS,
+                      (unsigned int)candidate->observed_feature_mask);
+        print_missing_features(stream, candidate->observed_feature_mask);
+        fputc('\t', stream);
+        if (candidate->observed_feature_mask & TV_FEATURE_FLANK) {
+            print_double(stream, fmin(projection->left_flank,
+                                      projection->right_flank), 6);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\t', stream);
+        print_double(stream, projection->identity, 6);
+        fputc('\t', stream);
+        print_double(stream, alignment->aggregate_identity, 6);
+        fputc('\t', stream);
+        if (projection->mapq_observed) {
+            print_double(stream, fmin(1.0, (double)projection->mapq / 60.0),
+                         6);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\t', stream);
+        print_double(stream, projection->n_fraction, 6);
+        (void)fprintf(stream, "\t%.6f\t%.6f\t%.6f\t%.6f\t%s\t%s"
+                      "\t%.8f\t%.8f\t%.8f\t",
+                      projection->te_aligned_fraction,
+                      projection->insertion_fraction,
+                      candidate->reciprocal_overlap,
+                      candidate->boundary_score,
+                      tv_family_relation_name(candidate->family_relation),
+                      tv_context_relation_name(candidate->context_relation),
+                      candidate->membership_logit,
+                      candidate->membership_score,
+                      candidate->membership_entropy);
+        print_prediction_set(stream, membership_scores, membership_names, 2,
+                             run->cfg.prediction_set_mass);
+        fputc('\t', stream);
+        print_bool(stream, candidate->inference_out_of_domain);
+        fputc('\t', stream);
+        print_bool(stream, candidate->eligible);
+        fputc('\n', stream);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
 static int write_candidates(TvRun *run, const char *prefix)
 {
     char *path = NULL;
@@ -564,10 +810,14 @@ static int write_candidates(TvRun *run, const char *prefix)
           "\ttarget_te_id\ttarget_contig\ttarget_start\ttarget_end\tscore"
           "\treciprocal_overlap\tboundary_score\tbreakpoint_distance"
           "\tfamily_relation\tcontext_relation\tshared_homology_group_id"
-          "\tcontext_compatible\tcandidate_rank\teligible\tselected"
+          "\tcontext_compatible\tcandidate_rank\tgraph_retained\teligible\tselected"
           "\tdecision_code\n", stream);
     for (size_t index = 0; index < run->n_candidates; index++) {
         TvCandidate *candidate = &run->candidates[index];
+
+        if (!candidate->output_retained) {
+            continue;
+        }
         TvProjection *projection = &run->projections[candidate->projection_index];
         TvDecision *decision = &run->decisions[projection->decision_index];
         TvTE *target = &run->nodes[candidate->target_te];
@@ -591,6 +841,8 @@ static int write_candidates(TvRun *run, const char *prefix)
         fputc('\t', stream);
         print_bool(stream, candidate->context_compatible);
         (void)fprintf(stream, "\t%d\t", candidate->rank);
+        print_bool(stream, candidate->graph_retained);
+        fputc('\t', stream);
         print_bool(stream, candidate->eligible);
         fputc('\t', stream);
         print_bool(stream, candidate->selected);
@@ -807,6 +1059,10 @@ static int write_candidate_contexts(TvRun *run, const char *prefix)
           "\ttarget_context_ids\n", stream);
     for (size_t index = 0; index < run->n_candidates; index++) {
         const TvCandidate *candidate = &run->candidates[index];
+
+        if (!candidate->output_retained) {
+            continue;
+        }
         const TvProjection *projection =
             &run->projections[candidate->projection_index];
 
@@ -888,30 +1144,151 @@ static int write_edges(TvRun *run, const char *prefix)
     if (stream == NULL) {
         return -1;
     }
-    fputs("schema_version\tte_a\tgenome_a\tte_b\tgenome_b\tscore"
-          "\tindependent_reciprocal\tfamily_compatible\tbreakpoint_distance"
-          "\tsupport_count\tevidence_ids\tevidence_group_ids\tselected"
+    fputs("schema_version\tedge_id\tte_a\tgenome_a\tte_b\tgenome_b\tscore"
+          "\tmodel_id\tcalibration_status\tmembership_logit"
+          "\tmembership_score\tmembership_entropy\tout_of_domain"
+          "\tindependent_reciprocal\tfamily_compatible\tcontext_relation"
+          "\tshared_homology_group_id\tbreakpoint_distance"
+          "\tsupport_count\tevidence_ids\tevidence_group_ids"
+          "\tmatching_group_id\tmatching_method\tmatching_selected"
+          "\tsolver_component_id\tselected"
           "\tselection_reason\n", stream);
     for (size_t index = 0; index < run->n_edges; index++) {
         TvEdge *edge = &run->edges[index];
         TvTE *a = &run->nodes[edge->a];
         TvTE *b = &run->nodes[edge->b];
 
-        (void)fprintf(stream, "%s\t%s\t%s\t%s\t%s\t%.2f\t",
-                      TEVOX_SCHEMA_VERSION, a->id,
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_edge_id(stream, edge->edge_id);
+        (void)fprintf(stream, "\t%s\t%s\t%s\t%s\t%.2f\t%s\t%s"
+                      "\t%.8f\t%.8f\t%.8f\t",
+                      a->id,
                       run->genomes[a->genome].id, b->id,
-                      run->genomes[b->genome].id, edge->score);
+                      run->genomes[b->genome].id, edge->score,
+                      TEVOX_MODEL_ID, TEVOX_CALIBRATION_STATUS,
+                      edge->membership_logit, edge->membership_score,
+                      edge->membership_entropy);
+        print_bool(stream, edge->inference_out_of_domain);
+        fputc('\t', stream);
         print_bool(stream, edge->independent_reciprocal);
         fputc('\t', stream);
         print_bool(stream, edge->family_compatible);
+        (void)fprintf(stream, "\t%s\t",
+                      tv_context_relation_name(edge->context_relation));
+        print_homology_group_id(stream, edge->shared_homology_group_id);
         (void)fprintf(stream, "\t%d\t%zu\t", edge->breakpoint_distance,
                       edge->support_count);
         print_edge_support(stream, run, edge, false);
         fputc('\t', stream);
         print_edge_support(stream, run, edge, true);
         fputc('\t', stream);
+        print_matching_group_id(stream, edge->matching_group_id);
+        (void)fprintf(stream, "\t%s\t",
+                      tv_matching_method_name(edge->matching_method));
+        print_bool(stream, edge->matching_selected);
+        fputc('\t', stream);
+        if (edge->solver_component >= 0
+            && (size_t)edge->solver_component < run->n_solver_components) {
+            print_solver_id(stream,
+                run->solver_components[edge->solver_component].solver_id);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\t', stream);
         print_bool(stream, edge->selected);
         (void)fprintf(stream, "\t%s\n", edge->selection_reason);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static int write_relations(TvRun *run, const char *prefix)
+{
+    static const char *const relation_names[] = {
+        "ORTHOLOG", "WGD_HOMEOLOG", "ALLELIC", "TANDEM_PARALOG",
+        "SEGMENTAL_PARALOG", "TRANSPOSED_PARALOG", "UNKNOWN"
+    };
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".relations.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\trelation_id\tte_a\tgenome_a\tte_b\tgenome_b"
+          "\tedge_id\tlocus_id\tdirect_edge\tpredicted_relation"
+          "\tscore_ortholog\tscore_wgd_homeolog\tscore_allelic"
+          "\tscore_tandem_paralog\tscore_segmental_paralog"
+          "\tscore_transposed_paralog\tscore_unknown\tprediction_set"
+          "\tentropy\tmodel_id\tcalibration_status\tout_of_domain\n",
+          stream);
+    for (size_t index = 0; index < run->n_relations; index++) {
+        const TvRelation *relation = &run->relations[index];
+        const TvTE *a = &run->nodes[relation->a];
+        const TvTE *b = &run->nodes[relation->b];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_relation_id(stream, relation->relation_id);
+        (void)fprintf(stream, "\t%s\t%s\t%s\t%s\t", a->id,
+                      run->genomes[a->genome].id, b->id,
+                      run->genomes[b->genome].id);
+        if (relation->edge_index >= 0) {
+            print_edge_id(stream,
+                          run->edges[relation->edge_index].edge_id);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\t', stream);
+        if (relation->locus >= 0) {
+            (void)fprintf(stream, "TEL%06d", relation->locus + 1);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\t', stream);
+        print_bool(stream, relation->edge_index >= 0);
+        (void)fprintf(stream, "\t%s",
+                      tv_relation_class_name(relation->predicted));
+        for (int score = 0; score < TV_RELATION_COUNT; score++) {
+            (void)fprintf(stream, "\t%.8f", relation->scores[score]);
+        }
+        fputc('\t', stream);
+        print_prediction_set(stream, relation->scores, relation_names,
+                             TV_RELATION_COUNT,
+                             run->cfg.prediction_set_mass);
+        (void)fprintf(stream, "\t%.8f\t%s\t%s\t", relation->entropy,
+                      TEVOX_MODEL_ID, TEVOX_CALIBRATION_STATUS);
+        print_bool(stream, relation->out_of_domain);
+        fputc('\n', stream);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static int write_solver(TvRun *run, const char *prefix)
+{
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".solver.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tsolver_component_id\tnode_count\tedge_count"
+          "\tmethod\tstatus\tobjective\tupper_bound\trelative_gap"
+          "\tstates_explored\n", stream);
+    for (size_t index = 0; index < run->n_solver_components; index++) {
+        const TvSolverComponent *component = &run->solver_components[index];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_solver_id(stream, component->solver_id);
+        (void)fprintf(stream, "\t%d\t%d\t%s\t%s\t%.8f\t%.8f\t%.8f"
+                      "\t%llu\n", component->node_count,
+                      component->edge_count,
+                      tv_solver_method_name(component->method),
+                      tv_solver_status_name(component->status),
+                      component->objective, component->upper_bound,
+                      component->relative_gap,
+                      (unsigned long long)component->states_explored);
     }
     fclose(stream);
     free(path);
@@ -1153,6 +1530,8 @@ static int write_run_json(TvRun *run, const char *prefix)
     FILE *stream = open_output(prefix, ".run.json", &path);
     size_t native_groups = 0;
     size_t candidate_observations = 0;
+    size_t output_candidates = 0;
+    size_t graph_candidates = 0;
 
     for (size_t index = 0; index < run->n_pafs; index++) {
         if (run->pafs[index].origin == TV_EVIDENCE_NATIVE) {
@@ -1166,6 +1545,14 @@ static int write_run_json(TvRun *run, const char *prefix)
             candidate_observations += (size_t)count;
         }
     }
+    for (size_t index = 0; index < run->n_candidates; index++) {
+        if (run->candidates[index].output_retained) {
+            output_candidates++;
+        }
+        if (run->candidates[index].graph_retained) {
+            graph_candidates++;
+        }
+    }
 
     if (stream == NULL) {
         return -1;
@@ -1174,6 +1561,12 @@ static int write_run_json(TvRun *run, const char *prefix)
                   "{\n  \"software\": \"TEvoX\",\n  \"version\": \"%s\",\n"
                   "  \"schema_version\": \"%s\",\n"
                   "  \"coordinate_system\": \"0-based-half-open\",\n"
+                  "  \"inference_model\": {\n"
+                  "    \"model_id\": \"%s\",\n"
+                  "    \"calibration_status\": \"%s\",\n"
+                  "    \"score_semantics\": "
+                  "\"normalized_scores_not_calibrated_probabilities\"\n"
+                  "  },\n"
                   "  \"config\": {\n"
                   "    \"flank\": %d,\n"
                   "    \"candidate_window\": %d,\n"
@@ -1184,33 +1577,58 @@ static int write_run_json(TvRun *run, const char *prefix)
                   "    \"min_reciprocal_overlap\": %.6f,\n"
                   "    \"near_best_delta\": %.6f,\n"
                   "    \"min_delta_identity\": %.6f,\n"
-                  "    \"max_candidates\": %d\n"
-                  "  },\n  \"counts\": {\n"
+                  "    \"min_membership_score\": %.6f,\n"
+                  "    \"prediction_set_mass\": %.6f,\n"
+                  "    \"max_candidates\": %d,\n"
+                  "    \"max_graph_candidates\": %d,\n"
+                  "    \"exact_max_edges\": %d,\n"
+                  "    \"exact_matching_max_nodes\": %d,\n"
+                  "    \"tandem_distance\": %d\n"
+                  "  },\n",
+                  TEVOX_VERSION, TEVOX_SCHEMA_VERSION, TEVOX_MODEL_ID,
+                  TEVOX_CALIBRATION_STATUS, run->cfg.flank,
+                  run->cfg.candidate_window, run->cfg.min_mapq,
+                  run->cfg.min_flank_fraction, run->cfg.min_edge_score,
+                  run->cfg.max_n_fraction, run->cfg.min_reciprocal_overlap,
+                  run->cfg.near_best_delta, run->cfg.min_delta_identity,
+                  run->cfg.min_membership_score,
+                  run->cfg.prediction_set_mass, run->cfg.max_candidates,
+                  run->cfg.max_graph_candidates,
+                  run->cfg.exact_max_edges,
+                  run->cfg.exact_matching_max_nodes,
+                  run->cfg.tandem_distance);
+    (void)fprintf(stream,
+                  "  \"counts\": {\n"
                   "    \"genomes\": %zu,\n    \"tes\": %zu,\n"
                   "    \"alignment_views\": %zu,\n"
                   "    \"native_evidence_groups\": %zu,\n"
                   "    \"synteny_evidence_groups\": %zu,\n"
                   "    \"evidence_observations\": %zu,\n"
+                  "    \"observation_score_rows\": %zu,\n"
                   "    \"candidate_observations\": %zu,\n"
-                  "    \"candidates\": %zu,\n    \"decisions\": %zu,\n"
+                  "    \"internal_candidates\": %zu,\n"
+                  "    \"graph_candidates\": %zu,\n"
+                  "    \"candidates\": %zu,\n"
+                  "    \"candidate_feature_rows\": %zu,\n"
+                  "    \"decisions\": %zu,\n"
                   "    \"genes\": %zu,\n    \"synteny_blocks\": %zu,\n"
                   "    \"synteny_anchors\": %zu,\n"
                   "    \"copy_contexts\": %zu,\n"
                   "    \"te_context_assignments\": %zu,\n"
-                  "    \"edges\": %zu,\n    \"loci\": %d\n  },\n"
+                  "    \"edges\": %zu,\n"
+                  "    \"relations\": %zu,\n"
+                  "    \"solver_components\": %zu,\n"
+                  "    \"loci\": %d\n  },\n"
                   "  \"genomes\": [\n",
-                  TEVOX_VERSION, TEVOX_SCHEMA_VERSION, run->cfg.flank,
-                  run->cfg.candidate_window, run->cfg.min_mapq,
-                  run->cfg.min_flank_fraction, run->cfg.min_edge_score,
-                  run->cfg.max_n_fraction, run->cfg.min_reciprocal_overlap,
-                  run->cfg.near_best_delta, run->cfg.min_delta_identity,
-                  run->cfg.max_candidates, run->n_genomes, run->n_nodes,
-                  run->n_pafs, native_groups, run->n_synteny_blocks,
+                  run->n_genomes, run->n_nodes, run->n_pafs, native_groups,
+                  run->n_synteny_blocks, run->n_projections,
                   run->n_projections, candidate_observations,
-                  run->n_candidates, run->n_decisions, run->n_genes,
-                  run->n_synteny_blocks, run->n_synteny_anchors,
-                  run->n_contexts, run->n_te_contexts, run->n_edges,
-                  run->n_loci);
+                  run->n_candidates, graph_candidates,
+                  output_candidates, output_candidates, run->n_decisions,
+                  run->n_genes, run->n_synteny_blocks,
+                  run->n_synteny_anchors, run->n_contexts,
+                  run->n_te_contexts, run->n_edges, run->n_relations,
+                  run->n_solver_components, run->n_loci);
     for (size_t index = 0; index < run->n_genomes; index++) {
         TvGenome *genome = &run->genomes[index];
 
@@ -1289,9 +1707,11 @@ static int write_run_json(TvRun *run, const char *prefix)
                   (unsigned long long)run->performance.gap_queries,
                   (unsigned long long)run->performance.fasta_reopens_after_index,
                   (unsigned long long)run->performance.edge_support_records);
-    fputs("  \"outputs\": [\"evidence.tsv\", \"candidates.tsv\", "
+    fputs("  \"outputs\": [\"evidence.tsv\", \"observation_scores.tsv\", "
+          "\"candidates.tsv\", \"candidate_features.tsv\", "
           "\"candidate_contexts.tsv\", \"decisions.tsv\", \"edges.tsv\", "
-          "\"loci.tsv\", \"instances.tsv\", \"states.tsv\", "
+          "\"relations.tsv\", \"solver.tsv\", \"loci.tsv\", "
+          "\"instances.tsv\", \"states.tsv\", "
           "\"summary.tsv\", \"synteny.blocks.tsv\", "
           "\"synteny.anchors.tsv\", \"contexts.tsv\", "
           "\"te_contexts.tsv\"]\n}\n", stream);
@@ -1306,7 +1726,9 @@ int tv_write_outputs(TvRun *run, const char *prefix)
         return -1;
     }
     if (write_evidence(run, prefix) != 0
+        || write_observation_scores(run, prefix) != 0
         || write_candidates(run, prefix) != 0
+        || write_candidate_features(run, prefix) != 0
         || write_candidate_contexts(run, prefix) != 0
         || write_synteny_blocks(run, prefix) != 0
         || write_synteny_anchors(run, prefix) != 0
@@ -1314,6 +1736,8 @@ int tv_write_outputs(TvRun *run, const char *prefix)
         || write_te_contexts(run, prefix) != 0
         || write_decisions(run, prefix) != 0
         || write_edges(run, prefix) != 0
+        || write_relations(run, prefix) != 0
+        || write_solver(run, prefix) != 0
         || write_loci(run, prefix) != 0
         || write_instances(run, prefix) != 0
         || write_states(run, prefix) != 0

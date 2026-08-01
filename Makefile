@@ -28,12 +28,13 @@ check test: $(TARGET) build/index_test build/delta_test
 asan:
 	$(MAKE) clean
 	$(MAKE) CFLAGS="-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer" LDFLAGS="-fsanitize=address,undefined" all build/index_test build/delta_test
-	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 ./build/index_test
-	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 ./build/delta_test tests/data/conflict/A.fa tests/data/conflict/A.gff3 tests/data/conflict/B.fa tests/data/reverse/B.gff3 tests/data/v04/delta/plus.delta tests/data/v04/delta/reverse.delta
-	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 bash ./tests/run_tests.sh
+	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 ./build/index_test
+	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 ./build/delta_test tests/data/conflict/A.fa tests/data/conflict/A.gff3 tests/data/conflict/B.fa tests/data/reverse/B.gff3 tests/data/v04/delta/plus.delta tests/data/v04/delta/reverse.delta
+	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 bash ./tests/run_tests.sh
 install: $(TARGET)
 	install -d "$(DESTDIR)$(PREFIX)/bin"
 	install -m 0755 $(TARGET) "$(DESTDIR)$(PREFIX)/bin/tevox"
 	install -m 0755 scripts/tevox_phylo.py "$(DESTDIR)$(PREFIX)/bin/tevox-phylo"
+	install -m 0755 scripts/tevox_score_audit.py "$(DESTDIR)$(PREFIX)/bin/tevox-score-audit"
 clean:
 	$(RM) -r build $(TARGET)

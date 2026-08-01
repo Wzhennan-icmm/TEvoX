@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use TEvoX, cite the software release and associated paper when available."
 title: "TEvoX: uncertainty-aware reconstruction of orthologous transposable-element loci"
 type: software
-version: 0.4.0-alpha.1
+version: 0.5.0-alpha.1
 date-released: 2026-08-01
 authors:
   - family-names: "Wang"

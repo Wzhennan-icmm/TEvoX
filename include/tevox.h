@@ -5,8 +5,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define TEVOX_VERSION "0.4.0-alpha.1"
-#define TEVOX_SCHEMA_VERSION "1.1.0"
+#define TEVOX_VERSION "0.5.0-alpha.1"
+#define TEVOX_SCHEMA_VERSION "1.2.0"
+#define TEVOX_MODEL_ID "BUILTIN_UNCALIBRATED_V1"
+#define TEVOX_CALIBRATION_STATUS "UNCALIBRATED"
 #define TEVOX_UNKNOWN "."
 
 typedef struct {
@@ -269,6 +271,48 @@ typedef enum {
     TV_FAMILY_UNKNOWN
 } TvFamilyRelation;
 
+typedef enum {
+    TV_RELATION_ORTHOLOG,
+    TV_RELATION_WGD_HOMEOLOG,
+    TV_RELATION_ALLELIC,
+    TV_RELATION_TANDEM_PARALOG,
+    TV_RELATION_SEGMENTAL_PARALOG,
+    TV_RELATION_TRANSPOSED_PARALOG,
+    TV_RELATION_UNKNOWN,
+    TV_RELATION_COUNT
+} TvRelationClass;
+
+typedef enum {
+    TV_MATCH_NOT_APPLICABLE,
+    TV_MATCH_OPTIMAL,
+    TV_MATCH_HEURISTIC
+} TvMatchingMethod;
+
+typedef enum {
+    TV_SOLVER_TRIVIAL,
+    TV_SOLVER_EXACT_ENUMERATION,
+    TV_SOLVER_DETERMINISTIC_GREEDY
+} TvSolverMethod;
+
+typedef enum {
+    TV_SOLVER_OPTIMAL,
+    TV_SOLVER_HEURISTIC
+} TvSolverStatus;
+
+enum {
+    TV_FEATURE_FLANK = UINT32_C(1) << 0,
+    TV_FEATURE_LOCAL_IDENTITY = UINT32_C(1) << 1,
+    TV_FEATURE_AGGREGATE_IDENTITY = UINT32_C(1) << 2,
+    TV_FEATURE_MAPQ = UINT32_C(1) << 3,
+    TV_FEATURE_N_FRACTION = UINT32_C(1) << 4,
+    TV_FEATURE_TE_ALIGNMENT = UINT32_C(1) << 5,
+    TV_FEATURE_INSERTION = UINT32_C(1) << 6,
+    TV_FEATURE_RECIPROCAL_OVERLAP = UINT32_C(1) << 7,
+    TV_FEATURE_BOUNDARY = UINT32_C(1) << 8,
+    TV_FEATURE_FAMILY = UINT32_C(1) << 9,
+    TV_FEATURE_CONTEXT = UINT32_C(1) << 10
+};
+
 typedef struct {
     int source_te;
     int target_genome;
@@ -304,10 +348,19 @@ typedef struct {
     int target_contig_index;
     int nearby_candidate_count;
     int eligible_candidate_count;
+    int retained_candidate_count;
+    int graph_candidate_count;
     size_t candidate_start;
     size_t candidate_count;
     int selected_candidate_index;
     uint64_t evidence_id;
+    double technical_scores[4];
+    double biological_scores[4];
+    double annotation_scores[5];
+    double technical_entropy;
+    double biological_entropy;
+    double annotation_entropy;
+    bool inference_out_of_domain;
     char decision_code[96];
     char claimability_reason[96];
 } TvProjection;
@@ -325,6 +378,13 @@ typedef struct {
     bool context_compatible;
     bool eligible;
     bool selected;
+    bool output_retained;
+    bool graph_retained;
+    uint32_t observed_feature_mask;
+    double membership_logit;
+    double membership_score;
+    double membership_entropy;
+    bool inference_out_of_domain;
     int rank;
     uint64_t candidate_id;
     char decision_code[64];
@@ -352,18 +412,53 @@ typedef struct {
 } TvDecision;
 
 typedef struct {
+    uint64_t edge_id;
     int a;
     int b;
     double score;
+    double membership_logit;
+    double membership_score;
+    double membership_entropy;
     bool independent_reciprocal;
     bool family_compatible;
+    TvContextRelation context_relation;
+    uint64_t shared_homology_group_id;
+    bool inference_out_of_domain;
+    bool matching_selected;
+    uint64_t matching_group_id;
+    TvMatchingMethod matching_method;
     bool selected;
+    int solver_component;
     int breakpoint_distance;
     size_t support_count;
     size_t support_start;
     size_t support_record_count;
     char selection_reason[64];
 } TvEdge;
+
+typedef struct {
+    uint64_t solver_id;
+    int node_count;
+    int edge_count;
+    TvSolverMethod method;
+    TvSolverStatus status;
+    double objective;
+    double upper_bound;
+    double relative_gap;
+    uint64_t states_explored;
+} TvSolverComponent;
+
+typedef struct {
+    uint64_t relation_id;
+    int a;
+    int b;
+    int edge_index;
+    int locus;
+    TvRelationClass predicted;
+    double scores[TV_RELATION_COUNT];
+    double entropy;
+    bool out_of_domain;
+} TvRelation;
 
 typedef struct {
     int key_a;
@@ -409,7 +504,13 @@ typedef struct {
     double min_reciprocal_overlap;
     double near_best_delta;
     double min_delta_identity;
+    double min_membership_score;
+    double prediction_set_mass;
     int max_candidates;
+    int max_graph_candidates;
+    int exact_max_edges;
+    int exact_matching_max_nodes;
+    int tandem_distance;
     bool verbose;
 } TvConfig;
 
@@ -437,6 +538,12 @@ typedef struct {
     TvEdgeSupport *edge_support;
     size_t n_edge_support;
     size_t cap_edge_support;
+    TvSolverComponent *solver_components;
+    size_t n_solver_components;
+    size_t cap_solver_components;
+    TvRelation *relations;
+    size_t n_relations;
+    size_t cap_relations;
     TvGene *genes;
     size_t n_genes;
     size_t cap_genes;
@@ -508,6 +615,8 @@ TvIndexRange tv_te_index_range(TvRun *run, int genome, int contig_index,
                                int64_t start, int64_t end);
 int tv_analyze(TvRun *run);
 int tv_write_outputs(TvRun *run, const char *prefix);
+void tv_score_inference(TvRun *run);
+int tv_infer_loci(TvRun *run);
 
 const char *tv_state_name(TvState state);
 const char *tv_technical_state_name(TvTechnicalState state);
@@ -524,6 +633,10 @@ const char *tv_evidence_origin_name(TvEvidenceOrigin origin);
 const char *tv_family_relation_name(TvFamilyRelation relation);
 const char *tv_context_assignment_name(TvContextAssignment assignment);
 const char *tv_context_relation_name(TvContextRelation relation);
+const char *tv_relation_class_name(TvRelationClass relation);
+const char *tv_matching_method_name(TvMatchingMethod method);
+const char *tv_solver_method_name(TvSolverMethod method);
+const char *tv_solver_status_name(TvSolverStatus status);
 void tv_print_error(const char *format, ...);
 
 #endif

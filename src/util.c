@@ -184,3 +184,52 @@ const char *tv_context_relation_name(TvContextRelation relation)
     }
     return names[relation];
 }
+
+const char *tv_relation_class_name(TvRelationClass relation)
+{
+    static const char *names[] = {
+        "ORTHOLOG",
+        "WGD_HOMEOLOG",
+        "ALLELIC",
+        "TANDEM_PARALOG",
+        "SEGMENTAL_PARALOG",
+        "TRANSPOSED_PARALOG",
+        "UNKNOWN"
+    };
+
+    if (relation < TV_RELATION_ORTHOLOG
+        || relation >= TV_RELATION_COUNT) {
+        return "UNKNOWN";
+    }
+    return names[relation];
+}
+
+const char *tv_matching_method_name(TvMatchingMethod method)
+{
+    static const char *names[] = {
+        "NOT_APPLICABLE", "OPTIMAL_HUNGARIAN", "DETERMINISTIC_GREEDY"
+    };
+
+    if (method < TV_MATCH_NOT_APPLICABLE || method > TV_MATCH_HEURISTIC) {
+        return "NOT_APPLICABLE";
+    }
+    return names[method];
+}
+
+const char *tv_solver_method_name(TvSolverMethod method)
+{
+    static const char *names[] = {
+        "TRIVIAL", "EXACT_ENUMERATION", "DETERMINISTIC_GREEDY"
+    };
+
+    if (method < TV_SOLVER_TRIVIAL
+        || method > TV_SOLVER_DETERMINISTIC_GREEDY) {
+        return "TRIVIAL";
+    }
+    return names[method];
+}
+
+const char *tv_solver_status_name(TvSolverStatus status)
+{
+    return status == TV_SOLVER_OPTIMAL ? "OPTIMAL" : "HEURISTIC";
+}

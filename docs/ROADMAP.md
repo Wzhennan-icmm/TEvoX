@@ -34,15 +34,37 @@ Remaining v0.4 hardening before a beta tag:
 - measured runtime/RAM scaling on plant chromosomes;
 - optional GENESPACE and AnchorWave adapters after their semantics are frozen.
 
-## Probabilistic inference — planned 0.5
+## Constrained score inference — 0.5.0-alpha.1
 
-- missing-aware feature table and calibrated hierarchical state model;
-- block-level maximum-weight matching;
-- copy-context-constrained correlation clustering/ILP;
-- explicit `ORTHOLOG`, `WGD_HOMEOLOG`, `ALLELIC`, `TANDEM_PARALOG`,
-  `SEGMENTAL_PARALOG`, `TRANSPOSED_PARALOG` and `UNKNOWN` posteriors;
-- prediction sets, entropy, out-of-domain flags and solver status/gap;
-- species-pair holdout and calibration evaluation.
+- missing-aware candidate features and three-axis observation score tables;
+- explicit `BUILTIN_UNCALIBRATED_V1` model/calibration labelling;
+- copy-context-pair maximum-weight Hungarian matching with a labelled
+  deterministic size fallback;
+- constrained component partitioning: exhaustive optimum for bounded small
+  components, deterministic heuristic plus upper-bound gap otherwise;
+- normalized scores for `ORTHOLOG`, `WGD_HOMEOLOG`, `ALLELIC`,
+  `TANDEM_PARALOG`, `SEGMENTAL_PARALOG`, `TRANSPOSED_PARALOG` and `UNKNOWN`;
+- prediction sets, entropy, out-of-domain flags and stable edge/matching/
+  relation/solver keys in schema `1.2.0`;
+- a truth-controlled fixture proving a case where exact global optimization
+  improves on the greedy fallback;
+- an independent-truth score audit for Brier/log-loss/ECE/AUROC and group-wise
+  evaluation that cannot mark the built-in model calibrated.
+- separate deterministic limits for reported and graph-inference candidates,
+  preventing report truncation from changing reconstructed loci.
+
+Remaining before v0.5 beta:
+
+- train and freeze a calibrated model on independent truth with species-pair
+  or clade holdout; until then every score remains explicitly uncalibrated;
+- replace exhaustive small-component search with a production ILP/correlation-
+  clustering backend if benchmarks justify the dependency;
+- add independent duplication evidence before making confident segmental or
+  transposed-paralog calls;
+- benchmark Hungarian fallback thresholds and component constraint checks on
+  chromosome-scale plant graphs;
+- add DNA-only/synteny-only/combined ablation reports and score calibration
+  audit plots.
 
 ## Publication validation — planned 0.9
 

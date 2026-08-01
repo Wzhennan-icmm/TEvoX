@@ -50,8 +50,14 @@ static void usage(FILE *stream)
         "  --near-best-delta FLOAT   ambiguity score delta (5.0)\n"
         "  --min-edge FLOAT          graph edge threshold (45)\n"
         "  --max-n FLOAT             maximum N fraction (0.25)\n"
-        "  --max-candidates INT      retained candidates/observation (64; 0=all)\n"
+        "  --max-candidates INT      candidates reported/observation (64; 0=all)\n"
+        "  --max-graph-candidates INT candidates used for inference (64; 0=all)\n"
         "  --min-delta-identity FLOAT aggregate NUCMER identity gate (0.50)\n"
+        "  --min-membership FLOAT  uncalibrated locus score gate (0.50)\n"
+        "  --prediction-mass FLOAT cumulative score mass for sets (0.90)\n"
+        "  --exact-max-edges INT    exact global solve limit/component (18)\n"
+        "  --exact-match-nodes INT  exact block matching limit/side (256)\n"
+        "  --tandem-distance INT    tandem relation distance (10000)\n"
         "  --max-copies-a/b INT      legacy pair-mode component quota\n"
         "  -v, --verbose\n",
         TEVOX_VERSION);
@@ -201,12 +207,48 @@ static int parse_options(int argc, char **argv, Arguments *arguments,
                 return invalid_value(option, value);
             }
             config->max_candidates = (int)integer;
+        } else if (strcmp(option, "--max-graph-candidates") == 0) {
+            if (!parse_long(value, &integer) || integer < 0
+                || integer > 1000000) {
+                return invalid_value(option, value);
+            }
+            config->max_graph_candidates = (int)integer;
         } else if (strcmp(option, "--min-delta-identity") == 0) {
             if (!parse_double(value, &decimal) || decimal < 0.0
                 || decimal > 1.0) {
                 return invalid_value(option, value);
             }
             config->min_delta_identity = decimal;
+        } else if (strcmp(option, "--min-membership") == 0) {
+            if (!parse_double(value, &decimal) || decimal < 0.50
+                || decimal > 1.0) {
+                return invalid_value(option, value);
+            }
+            config->min_membership_score = decimal;
+        } else if (strcmp(option, "--prediction-mass") == 0) {
+            if (!parse_double(value, &decimal) || decimal < 0.50
+                || decimal > 1.0) {
+                return invalid_value(option, value);
+            }
+            config->prediction_set_mass = decimal;
+        } else if (strcmp(option, "--exact-max-edges") == 0) {
+            if (!parse_long(value, &integer) || integer < 0
+                || integer > 24) {
+                return invalid_value(option, value);
+            }
+            config->exact_max_edges = (int)integer;
+        } else if (strcmp(option, "--exact-match-nodes") == 0) {
+            if (!parse_long(value, &integer) || integer < 1
+                || integer > 100000) {
+                return invalid_value(option, value);
+            }
+            config->exact_matching_max_nodes = (int)integer;
+        } else if (strcmp(option, "--tandem-distance") == 0) {
+            if (!parse_long(value, &integer) || integer < 0
+                || integer > 1000000000L) {
+                return invalid_value(option, value);
+            }
+            config->tandem_distance = (int)integer;
         } else {
             tv_print_error("unknown option '%s'", option);
             return -1;
@@ -325,7 +367,7 @@ int main(int argc, char **argv)
                      run.n_loci, run.n_genomes);
         (void)printf(
             "Evidence schema: %s; outputs: "
-            "%s.{evidence,candidates,candidate_contexts,decisions,edges,loci,instances,states,summary,contexts,te_contexts,synteny.blocks,synteny.anchors}.tsv "
+            "%s.{evidence,observation_scores,candidates,candidate_features,candidate_contexts,decisions,edges,relations,solver,loci,instances,states,summary,contexts,te_contexts,synteny.blocks,synteny.anchors}.tsv "
             "and %s.run.json\n",
             TEVOX_SCHEMA_VERSION, arguments.output, arguments.output);
     }

@@ -1,6 +1,6 @@
-# Evidence schema 1.1.0
+# Evidence schema 1.2.0
 
-Schema `1.1.0` is the public contract for TEvoX `0.4.x`. All coordinates are
+Schema `1.2.0` is the public contract for TEvoX `0.5.x`. All coordinates are
 0-based half-open. A literal `.` means unobserved or not applicable; it never
 means numeric zero.
 
@@ -17,6 +17,10 @@ means numeric zero.
 | `CTX` | copy context | genome/contig/span/anchor set/subgenome/haplotype/WGD |
 | `HMG` | context homology group | connected context IDs |
 | `TEC` | TE-context assignment | TE × context |
+| `EDG` | reduced candidate edge | canonical TE pair |
+| `MAT` | block matching group | ordered stable copy-context pair |
+| `SOL` | solver component | candidate-connected stable TE set |
+| `REL` | relationship score row | canonical TE pair |
 | `TEL` | reconstructed locus | selected global component |
 | `INS` | locus instance | locus × genome |
 
@@ -52,8 +56,9 @@ explicit claim gate, not a probability.
 
 `nearby_candidate_count` counts every exact-window candidate examined;
 `retained_candidate_count` is the deterministic top-K written to candidate
-tables. Eligibility, the best and second-best score, and ambiguity are computed
-over all candidates before truncation.
+tables; `graph_candidate_count` is the separately bounded top-K admitted to
+matching and global inference. Eligibility, the best and second-best score,
+and ambiguity are computed over all candidates before either truncation.
 
 ### `candidates.tsv` and `candidate_contexts.tsv`
 
@@ -66,8 +71,10 @@ complete comparator:
 4. increasing breakpoint distance;
 5. stable candidate ID.
 
-Ranks are contiguous within an observation and exactly one eligible winner may
-have `selected=true`. Reciprocal overlap is
+Ranks are contiguous within the reported prefix and exactly one eligible winner
+may have `selected=true`. `graph_retained` says whether a reported candidate
+also entered inference; changing `--max-candidates` alone cannot change edges
+or loci. Reciprocal overlap is
 
 \[
 \min\left(\frac{|P\cap T|}{|P|},\frac{|P\cap T|}{|T|}\right).
@@ -77,6 +84,23 @@ have `selected=true`. Reciprocal overlap is
 contains source/target context foreign keys, a shared HMG when present, and
 `SUPPORTED`, `CONFLICT`, `AMBIGUOUS`, or `UNKNOWN`.
 
+### `observation_scores.tsv` and `candidate_features.tsv`
+
+These are one-to-one sidecars keyed by `evidence_id` and `candidate_id`.
+Every row records `model_id=BUILTIN_UNCALIBRATED_V1` and
+`calibration_status=UNCALIBRATED`.
+
+`observation_scores.tsv` contains normalized scores, entropy and a cumulative
+score prediction set for each state axis. `candidate_features.tsv` contains an
+observed bit mask, named missing fields, raw feature values, membership logit,
+normalized score, entropy, prediction set and out-of-domain flag. A missing
+feature remains `.` and contributes through an explicit missing term; it is
+never imputed as numeric zero.
+
+These normalized values are not calibrated probabilities. The legacy state
+and `claimable` fields remain the state-call contract. Exact coefficients and
+non-claims are specified in [the v0.5 inference contract](V05_INFERENCE.md).
+
 ### `decisions.tsv`
 
 One row per source TE × target genome. `winner_evidence_id` is the deterministic
@@ -85,10 +109,30 @@ used for consistency testing, and its cardinality equals `near_best_count`.
 
 ### `edges.tsv`
 
-One row per undirected annotated TE pair. Evidence IDs are listed once and
-evidence groups are deduplicated. `support_count` equals the number of unique
-alignment groups. `independent_reciprocal=true` requires native opposite
-directions from different groups; an automatic reverse never qualifies.
+One row per undirected annotated TE pair with stable `edge_id`. Evidence IDs
+are listed once and evidence groups are deduplicated. `support_count` equals
+the number of unique alignment groups. `independent_reciprocal=true` requires
+native opposite directions from different groups; an automatic reverse never
+qualifies.
+
+Membership fields retain the model/calibration label. An otherwise eligible
+strong-context edge also has `matching_group_id`, `matching_method` and
+`matching_selected`; a pre-matching hard-gate failure remains
+`NOT_APPLICABLE` and records its gate-specific selection reason.
+Selected graph edges reference a `solver_component_id`; rejected rows preserve
+the exact gate or global-separation reason.
+
+### `relations.tsv` and `solver.tsv`
+
+`relations.tsv` contains direct edge relations plus implicit within-locus and
+nearby tandem relations. It exposes a seven-class normalized score vector,
+prediction set, entropy, OOD flag, and optional edge/locus foreign keys.
+
+`solver.tsv` contains one row for every candidate-connected component,
+including trivial singletons. `EXACT_ENUMERATION/OPTIMAL` rows have
+`objective == upper_bound` and zero gap. `DETERMINISTIC_GREEDY/HEURISTIC` rows
+report the sum of all positive edge weights as a valid, potentially loose upper
+bound. Matching and global fallbacks are never labelled optimal.
 
 ## Synteny and copy context
 
@@ -130,7 +174,13 @@ missing context are neutral; ambiguous context cannot be converted to support.
 - `states.tsv` retains the eight-state compatibility matrix.
 - `summary.tsv` counts compatibility states by genome.
 - `run.json` records versions, parameters, provider groups, row counts,
-  performance counters and the complete output inventory.
+  inference model/calibration status, performance counters and the complete
+  output inventory.
+
+`run.json` distinguishes the exact-window `candidate_observations`, union
+`internal_candidates`, `graph_candidates`, and reported `candidates` counts.
+`max_candidates` controls only report size; `max_graph_candidates` controls the
+inference graph and therefore can change loci.
 
 Strong copy-context constraints replace the legacy quota for assigned TEs:
 one ancestral locus may contain at most one member per `context_id`, while
@@ -152,6 +202,7 @@ span cannot independently produce `EMPTY_SITE_CONFIRMED`.
 ## Integrity validation
 
 `tests/validate_schema.py PREFIX` validates schema versions, primary and foreign
-keys, provider-specific missing semantics, context chains, ambiguity links,
+keys, provider-specific missing semantics, score normalization, logits,
+prediction sets, matching/solver state, context chains, ambiguity links,
 edge-group deduplication, row counts and the zero-FASTA-reopen invariant. It is
 executed by `make check` and under ASan/UBSan by `make asan`.

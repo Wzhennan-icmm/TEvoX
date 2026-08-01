@@ -512,7 +512,13 @@ void tv_run_init(TvRun *run)
     run->cfg.min_reciprocal_overlap = 0.50;
     run->cfg.near_best_delta = 5.0;
     run->cfg.min_delta_identity = 0.50;
+    run->cfg.min_membership_score = 0.50;
+    run->cfg.prediction_set_mass = 0.90;
     run->cfg.max_candidates = 64;
+    run->cfg.max_graph_candidates = 64;
+    run->cfg.exact_max_edges = 18;
+    run->cfg.exact_matching_max_nodes = 256;
+    run->cfg.tandem_distance = 10000;
 }
 
 void tv_run_free(TvRun *run)
@@ -580,6 +586,8 @@ void tv_run_free(TvRun *run)
     free(run->decisions);
     free(run->edges);
     free(run->edge_support);
+    free(run->solver_components);
+    free(run->relations);
     free(run->genes);
     free(run->synteny_blocks);
     free(run->synteny_anchors);

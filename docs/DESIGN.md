@@ -1,8 +1,9 @@
-# TEvoX 0.4 inference design
+# TEvoX 0.5 inference design
 
-This document freezes `0.4.0-alpha.1` and schema `1.1.0`. It describes an
-evidence-aware deterministic model, not the calibrated probabilistic model
-planned for v0.5.
+This document freezes the architecture of `0.5.0-alpha.1` and schema `1.2.0`.
+The evidence/state safety layer remains deterministic. v0.5 adds an explicitly
+uncalibrated score model plus constrained matching and component optimization;
+it does not claim calibrated posterior inference.
 
 ## Evidence layers
 
@@ -44,9 +45,12 @@ Candidate-window arithmetic is clamped to contig bounds. Every exact-window
 candidate contributes to eligibility, best/second score and ambiguity before
 optional output truncation.
 
-The same complete order selects the winner, retains bounded top-K and assigns
-rank. This prevents a score-tied winner from being discarded. `max_candidates=0`
-appends all candidates and sorts once; bounded mode grows memory incrementally.
+The same complete order selects the winner and assigns rank. Two independent
+prefixes are then marked: `max_candidates` controls only rows written to the
+candidate tables, while `max_graph_candidates` controls candidates admitted to
+matching and global inference. This prevents output-size tuning from changing
+loci. A zero limit means unlimited; the internal buffer retains the union of
+both prefixes and bounded mode grows memory incrementally.
 
 A candidate requires minimum reciprocal interval overlap. Zero-overlap adjacent
 TEs cannot become loci through family or copy quota. A known MCScanX conflict
@@ -103,14 +107,26 @@ The eight-state compatibility field is a projection of axes plus claimability;
 for example `BIO=EMPTY, claimable=false` becomes `UNCALLABLE`, never
 `EMPTY_SITE_CONFIRMED`.
 
-## Global locus graph
+## Missing-aware inference and global locus graph
 
 Only callable, unambiguous decisions with an eligible selected annotation can
 support an edge. Evidence support is sorted and aggregated once per TE pair;
 native reciprocal directions must use distinct groups.
 
-Edges are processed by deterministic `score, node A, node B` order. A merge
-must:
+Every internally retained candidate has an observed-feature mask and explicit
+missing terms. Its fixed logit is converted to a normalized membership score,
+but the row remains `UNCALIBRATED`. Only graph-retained candidates can produce
+edges. Observation-level state scores are informational:
+they cannot bypass the v0.4 claimability rules.
+
+Within every supported pair of strong copy contexts, edges that pass the
+legacy score, family and positive-membership gates enter a one-to-one
+maximum-weight matching. A rejected edge cannot consume a copy slot. The
+Hungarian path is exact; oversized context pairs use an explicitly labelled
+deterministic fallback.
+
+The resulting candidate graph is split into connected components. A feasible
+locus partition must:
 
 1. pass the edge threshold;
 2. have no direct or component-wide known-family conflict;
@@ -120,9 +136,12 @@ must:
    context.
 
 Thus two WGD contexts in one HMG can remain co-orthologous copies, while two TEs
-bracketed by the same context are not treated as WGD copies. This is a discrete
-constraint model; ORTHOLOG/WGD_HOMEOLOG posterior classification and ILP
-clustering are deferred to v0.5.
+bracketed by the same context are not treated as WGD copies. Components up to
+the configured edge limit use exhaustive constrained partition search. Larger
+ones use deterministic greedy optimization with a reported upper bound and
+gap. Relation rows expose seven normalized class scores, prediction sets,
+entropy and OOD; they are not posteriors. The full equations and exact/fallback
+contract are in [V05_INFERENCE.md](V05_INFERENCE.md).
 
 ## Performance model
 
@@ -133,11 +152,16 @@ clustering are deferred to v0.5.
 - TE-context assignments are stored in per-node contiguous ranges.
 - raw TE edges and evidence support are sorted/reduced; reciprocal detection is
   linear in support records.
+- candidate-component construction and final locus numbering use linear
+  root-to-component maps plus stable component hashes;
 - graph edge ordering uses `qsort`.
 
-Component family/quota checks and TE-to-context construction still have
-scaling work before chromosome-scale benchmark claims. Runtime and memory must
-be measured on publication datasets rather than inferred from unit tests.
+The Hungarian exact path is cubic in the number of nodes in a context pair;
+exact global enumeration is exponential in component edge count and therefore
+strictly bounded. Component family/context checks, fragmented block handling
+and TE-to-context construction still have scaling work before chromosome-scale
+benchmark claims. Runtime and memory must be measured on publication datasets
+rather than inferred from unit tests.
 
 ## Phylogeny
 

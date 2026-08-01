@@ -39,7 +39,7 @@ run_pair() {
         --output "$prefix" >/dev/null
 }
 
-"$bin" --version | grep -F '0.4.0-alpha.1 (schema 1.1.0)' >/dev/null
+"$bin" --version | grep -F '0.5.0-alpha.1 (schema 1.2.0)' >/dev/null
 
 # Non-finite numeric values must not bypass range validation.
 for value in nan inf -inf; do
@@ -119,6 +119,10 @@ run_pair "$work/missing_identity" \
     "$data/v03/missing_identity.paf"
 any_row "$work/missing_identity.evidence.tsv" source_te_id A_conflict \
     local_identity . identity_method MISSING
+any_row "$work/missing_identity.candidate_features.tsv" local_identity . \
+    aggregate_identity 0.995000 model_id BUILTIN_UNCALIBRATED_V1 \
+    calibration_status UNCALIBRATED
+python3 "$repo/tests/validate_schema.py" "$work/missing_identity"
 
 # PAF MAPQ 255 is missing, and neither it nor a low native MAPQ can be rescued
 # by the generated reverse view.
@@ -190,7 +194,7 @@ python3 "$repo/tests/validate_schema.py" "$work/multi"
 "$bin" graph --manifest "$data/v03/bridge/manifest.tsv" \
     --alignments "$data/v03/bridge/alignments.tsv" --flank 20 \
     --candidate-window 10 --output "$work/bridge" >/dev/null
-any_row "$work/bridge.edges.tsv" selection_reason COMPONENT_FAMILY_CONFLICT \
+any_row "$work/bridge.edges.tsv" selection_reason GLOBAL_CONSTRAINT_SEPARATED \
     selected false
 test "$(($(wc -l < "$work/bridge.loci.tsv") - 1))" -eq 2
 if grep -E 'FamA.*FamC|FamC.*FamA' "$work/bridge.loci.tsv" >/dev/null; then
@@ -203,7 +207,8 @@ python3 "$repo/tests/validate_schema.py" "$work/bridge"
 "$bin" graph --manifest "$data/v03/bridge/manifest.sorted.tsv" \
     --alignments "$data/v03/bridge/alignments.sorted.tsv" --flank 20 \
     --candidate-window 10 --output "$work/bridge_sorted" >/dev/null
-for suffix in loci instances edges decisions candidates; do
+for suffix in loci instances edges decisions candidates observation_scores \
+    candidate_features relations solver; do
     diff -u "$work/bridge.$suffix.tsv" "$work/bridge_sorted.$suffix.tsv"
 done
 
@@ -216,7 +221,8 @@ run_pair "$work/order_b" \
     "$data/v03/order/A.fa" "$data/v03/order/A.reverse.gff3" \
     "$data/v03/order/B.fa" "$data/v03/order/B.reverse.gff3" \
     "$data/v03/order/A_B.reverse.paf"
-for suffix in loci instances edges decisions candidates; do
+for suffix in loci instances edges decisions candidates observation_scores \
+    candidate_features relations solver; do
     diff -u "$work/order_a.$suffix.tsv" "$work/order_b.$suffix.tsv"
 done
 
@@ -363,8 +369,14 @@ done
 any_row "$work/combined.instances.tsv" genome_id B copy_count 2
 any_row "$work/combined.candidates.tsv" context_relation SUPPORTED \
     shared_homology_group_id HMGfd5f79567dd2c40d context_compatible true
-test "$(awk -F '\t' 'NR > 1 && $13 == "true" {n++} END {print n+0}' \
-    "$work/combined.edges.tsv")" -eq 2
+python3 - "$work/combined.edges.tsv" <<'PY'
+import csv, sys
+rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
+assert sum(row["selected"] == "true" for row in rows) == 2
+assert all(row["matching_method"] == "OPTIMAL_HUNGARIAN" for row in rows)
+PY
+any_row "$work/combined.relations.tsv" predicted_relation WGD_HOMEOLOG \
+    calibration_status UNCALIBRATED out_of_domain false
 python3 "$repo/tests/validate_schema.py" "$work/combined"
 
 # Two otherwise supported edges that would place two A annotations from the
@@ -378,10 +390,70 @@ any_row "$work/copy_context_conflict.candidate_contexts.tsv" \
     source_te_id A_TE target_te_id B1_TE context_relation SUPPORTED \
     context_compatible true
 any_row "$work/copy_context_conflict.edges.tsv" te_a A_TE te_b B1_TE \
-    selected false selection_reason COPY_CONTEXT_CONFLICT
+    selected false matching_selected false \
+    selection_reason BLOCK_MATCHING_CONFLICT
 any_row "$work/copy_context_conflict.edges.tsv" te_a A_TE_same_context \
-    te_b B1_TE selected true selection_reason SELECTED
+    te_b B1_TE selected true matching_selected true \
+    selection_reason SELECTED_EXACT
 python3 "$repo/tests/validate_schema.py" "$work/copy_context_conflict"
+
+# Both A annotations locally prefer B_MATCH_1, but the exact block objective is
+# larger when A_MATCH_2 uses its second-ranked candidate B_MATCH_2. This proves
+# matching operates over retained alternatives rather than selected winners.
+"$bin" graph --manifest "$data/v05/matching/manifest.tsv" \
+    --alignments "$data/v05/matching/alignments.tsv" \
+    --synteny "$data/v05/matching/sources.tsv" --flank 20 \
+    --candidate-window 30 --output "$work/matching_alternative" >/dev/null
+python3 - "$work/matching_alternative.evidence.tsv" \
+    "$work/matching_alternative.candidates.tsv" \
+    "$work/matching_alternative.edges.tsv" <<'PY'
+import csv, sys
+evidence = {
+    row["evidence_id"]: row
+    for row in csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t")
+}
+candidates = list(csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"))
+edges = list(csv.DictReader(open(sys.argv[3], newline="", encoding="utf-8"), delimiter="\t"))
+for source in ("A_MATCH_1", "A_MATCH_2"):
+    selected = [
+        row for row in candidates
+        if evidence[row["evidence_id"]]["source_te_id"] == source
+        and evidence[row["evidence_id"]]["query_genome_id"] == "A"
+        and row["selected"] == "true"
+    ]
+    assert len(selected) == 1 and selected[0]["target_te_id"] == "B_MATCH_1"
+edge = next(row for row in edges if row["te_a"] == "A_MATCH_2" and row["te_b"] == "B_MATCH_2")
+assert edge["matching_method"] == "OPTIMAL_HUNGARIAN"
+assert edge["matching_selected"] == edge["selected"] == "true"
+conflict = next(
+    row for row in edges
+    if row["te_a"] == "A_MATCH_1" and row["te_b"] == "B_MATCH_CONFLICT"
+)
+assert conflict["family_compatible"] == "false"
+assert conflict["matching_method"] == "NOT_APPLICABLE"
+assert conflict["matching_group_id"] == "."
+assert conflict["selected"] == "false"
+assert conflict["selection_reason"] == "DIRECT_FAMILY_CONFLICT"
+assert next(
+    row for row in candidates
+    if evidence[row["evidence_id"]]["source_te_id"] == "A_MATCH_2"
+    and row["target_te_id"] == "B_MATCH_2"
+)["candidate_rank"] == "2"
+PY
+python3 "$repo/tests/validate_schema.py" "$work/matching_alternative"
+
+# The block matcher reports its deterministic fallback instead of claiming an
+# exact result when a context side exceeds the configured Hungarian limit.
+"$bin" graph \
+    --manifest "$data/v04/synteny/manifest.copy_context_conflict.tsv" \
+    --alignments "$data/v04/synteny/alignments.copy_context_conflict.tsv" \
+    --synteny "$data/v04/synteny/sources.tsv" --flank 20 \
+    --candidate-window 20 --exact-match-nodes 1 \
+    --output "$work/copy_context_heuristic" >/dev/null
+any_row "$work/copy_context_heuristic.edges.tsv" \
+    matching_method DETERMINISTIC_GREEDY matching_selected true \
+    selected true selection_reason SELECTED_EXACT
+python3 "$repo/tests/validate_schema.py" "$work/copy_context_heuristic"
 
 # A context-free bridge may provide individually valid DNA edges, but it must
 # not transitively merge TEs assigned to two disconnected HMGs.
@@ -396,11 +468,80 @@ any_row "$work/hmg_conflict.candidate_contexts.tsv" \
     source_te_id A_HMG2_TE target_te_id B_CONTEXT_FREE_TE \
     context_relation UNKNOWN context_compatible true
 any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG1_TE \
-    te_b B_CONTEXT_FREE_TE selected true selection_reason SELECTED
-any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG2_TE \
     te_b B_CONTEXT_FREE_TE selected false \
-    selection_reason HOMOLOGY_GROUP_CONFLICT
+    selection_reason GLOBAL_CONSTRAINT_SEPARATED
+any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG2_TE \
+    te_b B_CONTEXT_FREE_TE selected true selection_reason SELECTED_EXACT
 python3 "$repo/tests/validate_schema.py" "$work/hmg_conflict"
+
+# A truth-controlled four-node component makes the greedy failure explicit:
+# its strongest first edge blocks two compatible medium edges. Exact search
+# recovers the higher global objective and reports a zero optimality gap.
+"$bin" graph --manifest "$data/v05/global/manifest.tsv" \
+    --alignments "$data/v05/global/alignments.tsv" --flank 20 \
+    --candidate-window 10 --output "$work/global_exact" >/dev/null
+"$bin" graph --manifest "$data/v05/global/manifest.tsv" \
+    --alignments "$data/v05/global/alignments.tsv" --flank 20 \
+    --candidate-window 10 --exact-max-edges 0 \
+    --output "$work/global_heuristic" >/dev/null
+any_row "$work/global_exact.edges.tsv" te_a A_global te_b B_bridge \
+    selected true selection_reason SELECTED_EXACT
+any_row "$work/global_exact.edges.tsv" te_a B_bridge te_b C_global \
+    selected true selection_reason SELECTED_EXACT
+any_row "$work/global_exact.solver.tsv" method EXACT_ENUMERATION \
+    status OPTIMAL relative_gap 0.00000000
+any_row "$work/global_heuristic.edges.tsv" te_a A_greedy te_b B_bridge \
+    selected true selection_reason SELECTED_HEURISTIC
+any_row "$work/global_heuristic.solver.tsv" \
+    method DETERMINISTIC_GREEDY status HEURISTIC
+python3 - "$work/global_exact.solver.tsv" \
+    "$work/global_heuristic.solver.tsv" <<'PY'
+import csv, sys
+def objective(path):
+    rows = list(csv.DictReader(open(path, newline="", encoding="utf-8"), delimiter="\t"))
+    return sum(float(row["objective"]) for row in rows)
+assert objective(sys.argv[1]) > objective(sys.argv[2])
+PY
+python3 "$repo/tests/validate_schema.py" "$work/global_exact"
+python3 "$repo/tests/validate_schema.py" "$work/global_heuristic"
+
+# Calibration auditing consumes independent truth by candidate ID and reports
+# group-wise evaluation without relabelling the built-in model as calibrated.
+python3 - "$work/global_exact.evidence.tsv" \
+    "$work/global_exact.candidates.tsv" "$work/global_truth.tsv" <<'PY'
+import csv, sys
+evidence = {
+    row["evidence_id"]: row
+    for row in csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t")
+}
+truth_pairs = {frozenset(("A_global", "B_bridge")), frozenset(("B_bridge", "C_global"))}
+with open(sys.argv[3], "w", newline="", encoding="utf-8") as handle:
+    writer = csv.DictWriter(handle, fieldnames=["candidate_id", "label", "group_id"], delimiter="\t")
+    writer.writeheader()
+    for row in csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"):
+        observation = evidence[row["evidence_id"]]
+        pair = frozenset((observation["source_te_id"], row["target_te_id"]))
+        writer.writerow({
+            "candidate_id": row["candidate_id"],
+            "label": int(pair in truth_pairs),
+            "group_id": f'{observation["query_genome_id"]}-{observation["target_genome_id"]}',
+        })
+PY
+python3 "$repo/scripts/tevox_score_audit.py" \
+    --features "$work/global_exact.candidate_features.tsv" \
+    --truth "$work/global_truth.tsv" --bins 4 \
+    --output "$work/global_audit" >/dev/null
+python3 - "$work/global_audit.metrics.json" \
+    "$work/global_audit.calibration.tsv" <<'PY'
+import csv, json, sys
+report = json.load(open(sys.argv[1], encoding="utf-8"))
+assert report["input_calibration_status"] == "UNCALIBRATED"
+assert report["report_status"] == "EVALUATION_ONLY_NOT_A_CALIBRATED_MODEL"
+assert len(report["truth_groups"]) >= 2
+assert report["overall"]["n"] > 0
+rows = list(csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"))
+assert {row["scope"] for row in rows} >= {"overall"}
+PY
 
 # Conflicting context metadata is explicit ambiguity, never strong support.
 "$bin" graph --manifest "$data/v04/synteny/manifest1.tsv" \
@@ -450,10 +591,45 @@ a1 = next(row for row in ev1 if row["source_te_id"] == "A_conflict")
 a0 = next(row for row in ev0 if row["source_te_id"] == "A_conflict")
 assert a1["nearby_candidate_count"] == "2" and a1["retained_candidate_count"] == "1"
 assert a0["nearby_candidate_count"] == "2" and a0["retained_candidate_count"] == "2"
+assert a1["graph_candidate_count"] == a0["graph_candidate_count"] == "2"
 winner1 = next(row for row in ca1 if row["evidence_id"] == a1["evidence_id"] and row["selected"] == "true")
 winner0 = next(row for row in ca0 if row["evidence_id"] == a0["evidence_id"] and row["selected"] == "true")
 assert winner1["target_te_id"] == winner0["target_te_id"] == a1["selected_target_te_id"]
+assert all(row["graph_retained"] == "true" for row in ca1 + ca0)
 PY
+
+# Reporting top-K cannot alter inference. Internal pruning is a separate,
+# explicitly recorded control and marks candidates excluded from the graph.
+"$bin" pair \
+    --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+    --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/v04/topk/B.gff3" \
+    --paf "$data/conflict/A_B.paf" --flank 20 --candidate-window 10 \
+    --max-candidates 0 --max-graph-candidates 1 \
+    --output "$work/topk_graph_1" >/dev/null
+python3 "$repo/tests/validate_schema.py" "$work/topk_graph_1"
+python3 - "$work/topk_graph_1.evidence.tsv" \
+    "$work/topk_graph_1.candidates.tsv" "$work/topk_graph_1.run.json" <<'PY'
+import csv, json, sys
+evidence = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
+candidates = list(csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"))
+run = json.load(open(sys.argv[3], encoding="utf-8"))
+row = next(item for item in evidence if item["source_te_id"] == "A_conflict")
+rows = [item for item in candidates if item["evidence_id"] == row["evidence_id"]]
+assert row["retained_candidate_count"] == "2"
+assert row["graph_candidate_count"] == "1"
+assert [item["graph_retained"] for item in rows] == ["true", "false"]
+assert run["config"]["max_candidates"] == 0
+assert run["config"]["max_graph_candidates"] == 1
+PY
+
+if "$bin" pair \
+    --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+    --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/conflict/B.gff3" \
+    --paf "$data/conflict/A_B.paf" --min-membership 0.49 \
+    --output "$work/low_membership" >/dev/null 2>&1; then
+    echo "accepted a negative-log-odds membership threshold" >&2
+    exit 1
+fi
 
 # Declared PAF query/target direction is validated against FASTA lengths.
 if "$bin" pair \
@@ -488,5 +664,5 @@ python3 "$repo/scripts/tevox_phylo.py" \
 grep -Eq $'^TEL000001\t(gain|loss)\t' "$work/phylo.events.tsv"
 
 python3 -m py_compile "$repo/tests/validate_schema.py" \
-    "$repo/scripts/tevox_phylo.py"
+    "$repo/scripts/tevox_phylo.py" "$repo/scripts/tevox_score_audit.py"
 echo 'All TEvoX tests passed.'

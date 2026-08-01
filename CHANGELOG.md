@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.5.0-alpha.1 — 2026-08-01
+
+- added missing-aware candidate features and normalized three-axis observation
+  scores under the explicit `BUILTIN_UNCALIBRATED_V1` contract;
+- added exact Hungarian one-to-one matching within strong MCScanX copy-context
+  pairs, including alternative-candidate assignment, hard-gate prefiltering
+  and a deterministic, visibly labelled large-block fallback;
+- replaced the greedy locus forest with component-wise constrained partition
+  optimization: exhaustive optimal search for bounded components and a
+  deterministic heuristic with objective, upper bound and relative gap for
+  larger components;
+- added normalized relationship scores for ortholog, WGD homeolog, allelic,
+  tandem, segmental, transposed and unknown classes, including prediction sets,
+  entropy and out-of-domain flags;
+- introduced schema 1.2.0 sidecars for observation scores, candidate features,
+  relations and solver diagnostics plus stable edge/matching/relation/solver
+  identities;
+- separated report candidate truncation from graph candidate pruning so output
+  size controls cannot silently alter inferred edges or loci;
+- added a truth-controlled graph where the exact solver recovers the global
+  optimum missed by greedy selection, plus matching fallback, order-invariance
+  and schema-integrity regression tests;
+- retained v0.4 state/claimability gates and prohibited probability/posterior
+  wording until independent holdout calibration exists.
+
 ## 0.4.0-alpha.1 — 2026-08-01
 
 - added strict MUMmer4 NUCMER `.delta` import with file-header direction

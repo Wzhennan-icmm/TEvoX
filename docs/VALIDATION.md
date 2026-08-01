@@ -1,6 +1,6 @@
 # Validation strategy
 
-## Automated v0.4 coverage
+## Automated v0.5 coverage
 
 `make check` compiles with strong warnings and covers:
 
@@ -23,15 +23,29 @@
 - same-context, cross-HMG bridge and metadata-ambiguous constraints;
 - separation of overlapping evidence assigned to different WGD nodes;
 - MCScanX-only inability to emit a confirmed empty-site call;
-- top-K=1 versus unlimited winner/decision/locus equivalence under score ties;
+- report top-K=1 versus unlimited edge/locus equivalence, plus separately
+  recorded graph-candidate pruning under score ties;
+- missing-aware feature masks, normalized axis/relation scores, entropy,
+  prediction sets, OOD and mandatory `UNCALIBRATED` model labels;
+- exact Hungarian selection of a second-ranked local alternative, exclusion
+  of hard-gated edges from copy slots, conflict rejection, and deterministic
+  oversized-block fallback;
+- exact component objective/bound/gap reporting and a controlled graph where
+  the exact partition beats the greedy fallback;
+- independent-truth score auditing for Brier/log-loss/ECE/AUROC and group-wise
+  evaluation without upgrading the built-in model's calibration status;
+- explicit WGD-homeolog and tandem relation rows plus stable edge, matching,
+  relation and solver foreign keys;
 - standalone alignment and TE interval-index boundary/counter tests;
-- schema `1.1.0` primary/foreign keys, provider-specific missing semantics,
-  context chains, row counts and zero FASTA reopen after indexing;
+- schema `1.2.0` primary/foreign keys, provider-specific missing semantics,
+  score/logit normalization, matching/solver invariants, context chains, row
+  counts and zero FASTA reopen after indexing;
 - golden compatibility output and exploratory phylogenetic events.
 
 `make asan` rebuilds the program plus the standalone index and delta-importer
 tests under AddressSanitizer/UndefinedBehaviorSanitizer, then repeats the
-complete suite. Leak detection is disabled in ptrace-restricted containers.
+complete suite. Both sanitizers halt on their first error. Leak detection is
+disabled in ptrace-restricted containers.
 
 The release gate also runs:
 
@@ -67,7 +81,8 @@ add:
   projection methods;
 - per-state precision/recall/F1, empty-site FDR, B-cubed/ARI locus clustering,
   breakpoint error and callability–accuracy curves;
-- calibrated probabilities after the heuristic model is replaced;
+- calibrated probabilities trained and evaluated under species-pair/clade
+  holdout; the built-in v0.5 score is explicitly not calibrated;
 - threshold sensitivity and DNA-only/synteny-only/combined ablations;
 - stratification by TE class, divergence, repeat density, nesting, assembly
   quality, ploidy and structural context.
