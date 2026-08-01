@@ -1,0 +1,3 @@
+query_id	target_id	paf
+A	B	../../pair/A_B.paf
+B	A	B_A.paf

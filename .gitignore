@@ -5,9 +5,14 @@
 *.tmp
 *.temp
 *.edges.tsv
+*.evidence.tsv
+*.candidates.tsv
+*.decisions.tsv
 *.loci.tsv
+*.instances.tsv
 *.states.tsv
 *.summary.tsv
+*.run.json
 *.events.tsv
 *.ancestral_states.tsv
 !tests/golden/
