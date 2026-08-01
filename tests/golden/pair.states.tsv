@@ -1,0 +1,5 @@
+locus_id	genome_id	state	quality	copy_count	member_ids	contig	start	end	identity	left_flank	right_flank	n_fraction	mapq	evidence
+TEL000001	A	PRESENT_ANNOTATED	100.00	1	A_shared	chr1	40	60	.	.	.	.	.	ANNOTATED_COMPONENT
+TEL000001	B	PRESENT_ANNOTATED	100.00	1	B_shared	chr1	40	60	.	.	.	.	.	ANNOTATED_COMPONENT
+TEL000002	A	PRESENT_ANNOTATED	70.00	1	A_empty	chr1	100	120	.	.	.	.	.	ANNOTATED_COMPONENT
+TEL000002	B	EMPTY_SITE_CONFIRMED	97.73	0	.	chr1	100	100	0.9091	1.0000	1.0000	0.0000	60	TE_SPANS_QUERY_INSERTION

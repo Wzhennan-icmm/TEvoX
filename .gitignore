@@ -10,6 +10,8 @@
 *.summary.tsv
 *.events.tsv
 *.ancestral_states.tsv
+!tests/golden/
+!tests/golden/*.states.tsv
 .idea/
 .vscode/
 .DS_Store
