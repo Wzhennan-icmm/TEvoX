@@ -1,0 +1,8 @@
+## Alignment 1: score=290.0 e_value=1e-28 N=3 chrA&chrB2 minus
+  1-  2:	A_g3	B2_g1	1e-19
+  1-  0:	A_g1	B2_g3	1e-28
+  1-  1:	A_g2	B2_g2	1e-24
+## Alignment 0: score=300.0 e_value=1e-30 N=3 chrA&chrB1 plus
+  0-  1:	A_g2	B1_g2	1e-25
+  0-  2:	A_g3	B1_g3	1e-20
+  0-  0:	A_g1	B1_g1	1e-30

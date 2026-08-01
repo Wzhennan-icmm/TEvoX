@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.4.0-alpha.1 — 2026-08-01
+
+- added strict MUMmer4 NUCMER `.delta` import with file-header direction
+  verification, while keeping aggregate alignment identity, local identity and
+  mapping confidence as separate evidence fields;
+- added strict MCScanX collinearity import and normalized gene tables as an
+  independent synteny prior that cannot by itself produce base-level state
+  calls or confirmed empty sites;
+- introduced stable homology groups and copy contexts across genome,
+  subgenome, haplotype, syntenic copy and WGD-node metadata;
+- constrained graph merges by copy context and made metadata conflicts
+  explicit rather than silently choosing one annotation;
+- added sparse FASTA gap indexes, alignment/TE interval indexes, deterministic
+  bounded top-K candidates and deduplicated edge-support aggregation;
+- introduced schema 1.1.0 sidecars for synteny blocks, anchors, copy contexts
+  and TE-to-context assignments, with provider provenance and performance
+  counters;
+- expanded regression tests for delta parsing, MCScanX order invariance, WGD
+  copy slots, context ambiguity, top-K equivalence and index boundaries.
+
 ## 0.3.0-alpha.1 — 2026-08-01
 
 - corrected minimap2/PAF direction documentation and added direction checks;

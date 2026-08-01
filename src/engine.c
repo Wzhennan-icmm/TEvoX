@@ -1,5 +1,6 @@
 #include "tevox.h"
 
+#include <limits.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -120,61 +121,47 @@ static uint64_t candidate_id(const TvRun *run, uint64_t evidence_id,
     return hash_text(hash, target->id);
 }
 
-static TvContig *find_contig(TvGenome *genome, const char *name)
+static TvContig *contig_at(TvGenome *genome, int index)
 {
-    for (size_t index = 0; index < genome->n_contigs; index++) {
-        if (strcmp(genome->contigs[index].name, name) == 0) {
-            return &genome->contigs[index];
-        }
+    if (index < 0 || index >= (int)genome->n_contigs) {
+        return NULL;
     }
-    return NULL;
+    return &genome->contigs[index];
 }
 
-static double n_fraction(TvGenome *genome, const char *name,
+static double n_fraction(TvRun *run, int genome_index, int contig_index,
                          int64_t start, int64_t end)
 {
-    TvContig *contig = find_contig(genome, name);
-    FILE *stream;
-    int64_t position;
-    int64_t bases = 0;
+    TvGenome *genome = &run->genomes[genome_index];
+    TvContig *contig = contig_at(genome, contig_index);
     int64_t ambiguous = 0;
+    size_t low = 0;
+    size_t high;
 
     if (contig == NULL || contig->line_bases == 0 || start < 0
         || end > contig->length || end <= start) {
         return 1.0;
     }
-    stream = fopen(genome->fasta_path, "rb");
-    if (stream == NULL) {
-        return 1.0;
-    }
-    position = start;
-    while (position < end) {
-        int64_t row = position / contig->line_bases;
-        int64_t column = position % contig->line_bases;
-        int64_t take = minimum_i64(contig->line_bases - column, end - position);
-        int64_t offset = contig->seq_offset + row * contig->line_bytes + column;
+    run->performance.gap_queries++;
+    high = contig->n_gap_runs;
+    while (low < high) {
+        size_t middle = low + (high - low) / 2;
 
-        if (fseeko(stream, (off_t)offset, SEEK_SET) != 0) {
-            fclose(stream);
-            return 1.0;
+        if (contig->gap_runs[middle].end <= start) {
+            low = middle + 1;
+        } else {
+            high = middle;
         }
-        for (int64_t index = 0; index < take; index++) {
-            int character = fgetc(stream);
-
-            if (character == EOF) {
-                fclose(stream);
-                return 1.0;
-            }
-            bases++;
-            if (character == 'N' || character == 'n' || character == '-'
-                || character == '.') {
-                ambiguous++;
-            }
-        }
-        position += take;
     }
-    fclose(stream);
-    return bases == 0 ? 1.0 : (double)ambiguous / (double)bases;
+    for (size_t index = low; index < contig->n_gap_runs; index++) {
+        TvGapRun run_interval = contig->gap_runs[index];
+
+        if (run_interval.start >= end) {
+            break;
+        }
+        ambiguous += overlap(run_interval.start, run_interval.end, start, end);
+    }
+    return (double)ambiguous / (double)(end - start);
 }
 
 static bool consumes_query(char code)
@@ -316,16 +303,6 @@ static TvFamilyRelation family_relation(const TvTE *source, const TvTE *target)
         ? TV_FAMILY_MATCH : TV_FAMILY_CONFLICT;
 }
 
-static int node_for(const TvRun *run, int genome, size_t local_index)
-{
-    size_t offset = 0;
-
-    for (int index = 0; index < genome; index++) {
-        offset += run->genomes[index].n_tes;
-    }
-    return (int)(offset + local_index);
-}
-
 static int compare_paf(const void *left, const void *right)
 {
     const TvPaf *a = left;
@@ -392,6 +369,74 @@ static void push_candidate(TvRun *run, TvCandidate *candidate)
     run->candidates[run->n_candidates++] = *candidate;
 }
 
+static bool candidate_precedes(const TvCandidate *left,
+                               const TvCandidate *right)
+{
+    if (left->eligible != right->eligible) {
+        return left->eligible;
+    }
+    if (left->score != right->score) {
+        return left->score > right->score;
+    }
+    if (left->reciprocal_overlap != right->reciprocal_overlap) {
+        return left->reciprocal_overlap > right->reciprocal_overlap;
+    }
+    if (left->breakpoint_distance != right->breakpoint_distance) {
+        return left->breakpoint_distance < right->breakpoint_distance;
+    }
+    return left->candidate_id < right->candidate_id;
+}
+
+static int compare_candidate_order(const void *left, const void *right)
+{
+    const TvCandidate *a = left;
+    const TvCandidate *b = right;
+
+    if (candidate_precedes(a, b)) {
+        return -1;
+    }
+    if (candidate_precedes(b, a)) {
+        return 1;
+    }
+    return 0;
+}
+
+static void retain_candidate(TvCandidate **retained, size_t *count,
+                             size_t *capacity, int limit,
+                             const TvCandidate *candidate)
+{
+    size_t position;
+
+    if (limit > 0 && *count == (size_t)limit
+        && !candidate_precedes(candidate, &(*retained)[*count - 1])) {
+        return;
+    }
+    if (limit == 0 || *count < (size_t)limit) {
+        if (*count == *capacity) {
+            size_t new_capacity = *capacity == 0 ? 16 : *capacity * 2;
+
+            if (limit > 0 && new_capacity > (size_t)limit) {
+                new_capacity = (size_t)limit;
+            }
+            *retained = grow(*retained, new_capacity, sizeof(**retained));
+            *capacity = new_capacity;
+        }
+        position = (*count)++;
+    } else {
+        position = *count - 1;
+    }
+    if (limit == 0) {
+        (*retained)[position] = *candidate;
+        return;
+    }
+    while (position > 0
+           && candidate_precedes(candidate, &(*retained)[position - 1])) {
+        (*retained)[position] = (*retained)[position - 1];
+        position--;
+    }
+    (*retained)[position] = *candidate;
+}
+
 static void push_decision(TvRun *run, TvDecision *decision)
 {
     if (run->n_decisions == run->cap_decisions) {
@@ -405,10 +450,16 @@ static void push_decision(TvRun *run, TvDecision *decision)
 
 static int breakpoint_distance(const TvProjection *projection, const TvTE *target)
 {
-    int64_t distance = llabs(projection->start - target->start)
-        + llabs(projection->end - target->end);
+    int64_t start_distance = projection->start >= target->start
+        ? projection->start - target->start : target->start - projection->start;
+    int64_t end_distance = projection->end >= target->end
+        ? projection->end - target->end : target->end - projection->end;
 
-    return distance > INT32_MAX ? INT32_MAX : (int)distance;
+    if (start_distance >= INT32_MAX || end_distance >= INT32_MAX
+        || start_distance > INT32_MAX - end_distance) {
+        return INT32_MAX;
+    }
+    return (int)(start_distance + end_distance);
 }
 
 static double reciprocal_overlap(const TvProjection *projection,
@@ -486,6 +537,14 @@ static void set_claimability(TvProjection *projection)
                            sizeof(projection->claimability_reason),
                            "TECHNICAL_UNCALLABLE");
         }
+        return;
+    }
+    if (projection->mapping_confidence != TV_MAPPING_MAPQ_PASS
+        && projection->mapping_confidence != TV_MAPPING_UNIQUE_ALIGNMENT
+        && projection->mapping_confidence != TV_MAPPING_UNIQUE_COPY_CONTEXT) {
+        (void)snprintf(projection->claimability_reason,
+                       sizeof(projection->claimability_reason),
+                       "MAPPING_CONFIDENCE_NOT_ESTABLISHED");
         return;
     }
     if (projection->biological_state == TV_BIO_PRESENT
@@ -629,6 +688,9 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
         .biological_state = TV_BIO_UNKNOWN,
         .annotation_state = TV_ANN_UNKNOWN,
         .claim_type = TV_CLAIM_NONE,
+        .mapping_confidence = paf->provider == TV_ALIGNMENT_PAF
+            && paf->mapq_observed && paf->mapq >= run->cfg.min_mapq
+            ? TV_MAPPING_MAPQ_PASS : TV_MAPPING_NOT_ESTABLISHED,
         .identity = NAN,
         .left_flank = NAN,
         .right_flank = NAN,
@@ -639,11 +701,14 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
         .start = -1,
         .end = -1,
         .target_te = -1,
+        .target_contig_index = paf->tcontig_index,
+        .selected_candidate_index = -1,
+        .candidate_start = run->n_candidates,
         .evidence_id = projection_id(run, source_index, target_genome,
                                      paf->evidence_group_id)
     };
-    TvContig *source_contig = find_contig(&run->genomes[source->genome],
-                                          source->contig);
+    TvContig *source_contig = contig_at(&run->genomes[source->genome],
+                                        source->contig_index);
     int flank_length = run->cfg.flank;
     int64_t left_start;
     int64_t right_end;
@@ -652,7 +717,15 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
     TvContig *target_contig;
     int64_t n_start;
     int64_t n_end;
-    int best_candidate = -1;
+    int64_t candidate_low;
+    int64_t candidate_high;
+    TvCandidate *retained = NULL;
+    size_t retained_count = 0;
+    size_t retained_capacity = 0;
+    int best_target = -1;
+    uint64_t best_candidate_id = 0;
+    TvCandidate best_candidate;
+    bool have_best_candidate = false;
     double best_score = -1.0;
     double second_score = -1.0;
     double uniqueness = NAN;
@@ -703,7 +776,8 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
     }
     projection.start = minimum_i64(mapped_start, mapped_end);
     projection.end = maximum_i64(mapped_start, mapped_end);
-    target_contig = find_contig(&run->genomes[target_genome], projection.contig);
+    target_contig = contig_at(&run->genomes[target_genome],
+                              projection.target_contig_index);
     if (target_contig == NULL) {
         (void)snprintf(projection.decision_code,
                        sizeof(projection.decision_code),
@@ -720,12 +794,23 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
     if (n_end <= n_start) {
         n_end = minimum_i64(target_contig->length, n_start + 1);
     }
-    projection.n_fraction = n_fraction(&run->genomes[target_genome],
-                                       projection.contig, n_start, n_end);
+    projection.n_fraction = n_fraction(run, target_genome,
+                                       projection.target_contig_index,
+                                       n_start, n_end);
 
-    for (size_t local = 0; local < run->genomes[target_genome].n_tes; local++) {
-        TvTE *target = &run->genomes[target_genome].tes[local];
-        int target_node;
+    candidate_low = projection.start >= run->cfg.candidate_window
+        ? projection.start - run->cfg.candidate_window : 0;
+    candidate_high = projection.end
+        <= target_contig->length - run->cfg.candidate_window
+        ? projection.end + run->cfg.candidate_window : target_contig->length;
+    TvIndexRange te_range = tv_te_index_range(
+        run, target_genome, projection.target_contig_index,
+        candidate_low, candidate_high);
+
+    for (size_t interval_index = te_range.begin;
+         interval_index < te_range.end; interval_index++) {
+        int target_node = run->te_interval_index[interval_index].value;
+        TvTE *target = &run->nodes[target_node];
         double reciprocal;
         int distance;
         double boundary;
@@ -733,13 +818,12 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
         double score;
         TvCandidate candidate;
 
-        if (strcmp(target->contig, projection.contig) != 0
-            || target->end < projection.start - run->cfg.candidate_window
-            || target->start > projection.end + run->cfg.candidate_window) {
+        run->performance.te_records_examined++;
+        if (target->contig_index != projection.target_contig_index
+            || target->end < candidate_low || target->start > candidate_high) {
             continue;
         }
         projection.nearby_candidate_count++;
-        target_node = node_for(run, target_genome, local);
         reciprocal = reciprocal_overlap(&projection, target);
         distance = breakpoint_distance(&projection, target);
         boundary = 1.0 - clamp(
@@ -756,41 +840,66 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
         candidate.boundary_score = boundary;
         candidate.breakpoint_distance = distance;
         candidate.family_relation = relation;
+        candidate.context_relation = tv_candidate_context_relation(
+            run, source_index, target_node,
+            &candidate.shared_homology_group_id);
+        candidate.context_compatible =
+            candidate.context_relation != TV_CONTEXT_RELATION_CONFLICT
+            && candidate.context_relation != TV_CONTEXT_RELATION_AMBIGUOUS;
         candidate.eligible = reciprocal >= run->cfg.min_reciprocal_overlap;
         candidate.candidate_id = candidate_id(run, projection.evidence_id,
                                               target_node);
-        (void)snprintf(candidate.decision_code,
-                       sizeof(candidate.decision_code), "%s",
-                       candidate.eligible ? "PASS_RECIPROCAL_OVERLAP"
-                       : "RECIPROCAL_OVERLAP_LT_0.50");
-        push_candidate(run, &candidate);
+        (void)snprintf(
+            candidate.decision_code, sizeof(candidate.decision_code), "%s",
+            !candidate.eligible ? "RECIPROCAL_OVERLAP_LT_0.50"
+            : candidate.context_relation == TV_CONTEXT_RELATION_CONFLICT
+                ? "BASE_SYNTENY_CONFLICT"
+            : candidate.context_relation == TV_CONTEXT_RELATION_AMBIGUOUS
+                ? "SYNTENY_CONTEXT_AMBIGUOUS"
+            : "PASS_RECIPROCAL_OVERLAP");
+        retain_candidate(&retained, &retained_count, &retained_capacity,
+                         run->cfg.max_candidates, &candidate);
         if (!candidate.eligible) {
             continue;
         }
         projection.eligible_candidate_count++;
-        if (score > best_score
-            || (score == best_score
-                && (best_candidate < 0
-                    || target_node
-                       < run->candidates[(size_t)best_candidate].target_te))) {
-            second_score = best_score;
-            best_score = score;
-            best_candidate = (int)(run->n_candidates - 1);
+        if (!have_best_candidate
+            || candidate_precedes(&candidate, &best_candidate)) {
+            if (have_best_candidate && best_candidate.score > second_score) {
+                second_score = best_candidate.score;
+            }
+            best_candidate = candidate;
+            have_best_candidate = true;
+            best_score = candidate.score;
+            best_target = candidate.target_te;
+            best_candidate_id = candidate.candidate_id;
         } else if (score > second_score) {
             second_score = score;
         }
     }
-    if (best_candidate >= 0) {
-        TvCandidate *chosen = &run->candidates[(size_t)best_candidate];
-
-        chosen->selected = true;
-        projection.target_te = chosen->target_te;
+    if (retained_count > 1) {
+        qsort(retained, retained_count, sizeof(*retained),
+              compare_candidate_order);
+    }
+    for (size_t index = 0; index < retained_count; index++) {
+        retained[index].rank = (int)index + 1;
+        if (retained[index].candidate_id == best_candidate_id
+            && retained[index].target_te == best_target) {
+            retained[index].selected = true;
+            projection.selected_candidate_index = (int)run->n_candidates;
+        }
+        push_candidate(run, &retained[index]);
+    }
+    free(retained);
+    if (best_target >= 0) {
+        projection.target_te = best_target;
         if (projection.eligible_candidate_count == 1) {
             uniqueness = 1.0;
         } else if (projection.eligible_candidate_count > 1) {
             uniqueness = clamp((best_score - second_score) / 20.0, 0.0, 1.0);
         }
     }
+    projection.candidate_count = run->n_candidates - projection.candidate_start;
     calculate_quality(&projection, uniqueness);
 
     if (projection.target_te >= 0) {
@@ -821,14 +930,24 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
         (void)snprintf(projection.decision_code,
                        sizeof(projection.decision_code),
                        "SOURCE_CONTIG_EDGE");
-    } else if (!projection.mapq_observed) {
+    } else if (paf->provider == TV_ALIGNMENT_PAF
+               && !projection.mapq_observed) {
         projection.technical_state = TV_TECH_UNCALLABLE;
         (void)snprintf(projection.decision_code,
                        sizeof(projection.decision_code), "MAPQ_MISSING");
-    } else if (projection.mapq < run->cfg.min_mapq) {
+    } else if (paf->provider == TV_ALIGNMENT_PAF
+               && projection.mapq < run->cfg.min_mapq) {
         projection.technical_state = TV_TECH_UNCALLABLE;
         (void)snprintf(projection.decision_code,
                        sizeof(projection.decision_code), "MAPQ_BELOW_THRESHOLD");
+    } else if (paf->provider == TV_ALIGNMENT_MUMMER_DELTA
+               && (isnan(paf->aggregate_identity)
+                   || paf->aggregate_identity < run->cfg.min_delta_identity)) {
+        projection.technical_state = TV_TECH_UNCALLABLE;
+        projection.mapping_confidence = TV_MAPPING_FAILED;
+        (void)snprintf(projection.decision_code,
+                       sizeof(projection.decision_code),
+                       "DELTA_IDENTITY_BELOW_THRESHOLD");
     } else if (projection.left_flank < run->cfg.min_flank_fraction
                || projection.right_flank < run->cfg.min_flank_fraction) {
         projection.technical_state = TV_TECH_UNCALLABLE;
@@ -839,7 +958,23 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
         projection.technical_state = TV_TECH_GAP;
         (void)snprintf(projection.decision_code,
                        sizeof(projection.decision_code), "TARGET_SEQUENCE_GAP");
-    } else if (best_candidate >= 0
+    } else if (projection.selected_candidate_index >= 0
+               && run->candidates[projection.selected_candidate_index].context_relation
+                  == TV_CONTEXT_RELATION_CONFLICT) {
+        projection.technical_state = TV_TECH_AMBIGUOUS;
+        projection.mapping_confidence = TV_MAPPING_AMBIGUOUS;
+        (void)snprintf(projection.decision_code,
+                       sizeof(projection.decision_code),
+                       "BASE_SYNTENY_CONFLICT");
+    } else if (projection.selected_candidate_index >= 0
+               && run->candidates[projection.selected_candidate_index].context_relation
+                  == TV_CONTEXT_RELATION_AMBIGUOUS) {
+        projection.technical_state = TV_TECH_AMBIGUOUS;
+        projection.mapping_confidence = TV_MAPPING_AMBIGUOUS;
+        (void)snprintf(projection.decision_code,
+                       sizeof(projection.decision_code),
+                       "SYNTENY_CONTEXT_AMBIGUOUS");
+    } else if (best_target >= 0
                && second_score >= best_score - run->cfg.near_best_delta) {
         projection.technical_state = TV_TECH_AMBIGUOUS;
         (void)snprintf(projection.decision_code,
@@ -1007,10 +1142,31 @@ static void finalize_decision(TvRun *run, TvDecision *decision)
         for (size_t index = start; index < end; index++) {
             if (run->projections[index].near_best) {
                 run->projections[index].decision_ambiguous = true;
+                run->projections[index].mapping_confidence =
+                    TV_MAPPING_AMBIGUOUS;
             }
         }
     } else {
         TvProjection *projection = &run->projections[winner];
+        TvPaf *alignment = &run->pafs[projection->paf_index];
+
+        if (alignment->provider == TV_ALIGNMENT_MUMMER_DELTA
+            && projection->technical_state == TV_TECH_CALLABLE
+            && projection->mapping_confidence
+               == TV_MAPPING_NOT_ESTABLISHED) {
+            TvContextRelation relation = TV_CONTEXT_RELATION_UNKNOWN;
+
+            if (projection->selected_candidate_index >= 0) {
+                relation = run->candidates[
+                    projection->selected_candidate_index].context_relation;
+            }
+            projection->mapping_confidence =
+                relation == TV_CONTEXT_RELATION_SUPPORTED
+                ? TV_MAPPING_UNIQUE_COPY_CONTEXT
+                : TV_MAPPING_UNIQUE_ALIGNMENT;
+            set_claimability(projection);
+            projection->state = legacy_state(projection);
+        }
 
         decision->technical_state = projection->technical_state;
         decision->biological_state = projection->biological_state;
@@ -1053,19 +1209,26 @@ static void build_projections(TvRun *run)
             decision.claim_type = TV_CLAIM_NONE;
             decision.decision_id = decision_id(run, (int)source_index,
                                                (int)target);
-            for (size_t paf_index = 0; paf_index < run->n_pafs; paf_index++) {
+            TvIndexRange paf_range = tv_paf_index_range(
+                run, source->genome, (int)target, source->contig_index,
+                source->start, source->end);
+
+            for (size_t interval_index = paf_range.begin;
+                 interval_index < paf_range.end; interval_index++) {
+                int paf_index = run->paf_interval_index[interval_index].value;
                 TvPaf *paf = &run->pafs[paf_index];
                 TvProjection projection;
 
+                run->performance.paf_records_examined++;
                 if (paf->query_genome != source->genome
                     || paf->target_genome != (int)target
-                    || strcmp(paf->qname, source->contig) != 0
+                    || paf->qcontig_index != source->contig_index
                     || paf->qend <= source->start
                     || paf->qstart >= source->end) {
                     continue;
                 }
                 projection = evaluate(run, (int)source_index, (int)target,
-                                      (int)paf_index, current_decision);
+                                      paf_index, current_decision);
                 push_projection(run, &projection);
             }
             decision.projection_count = run->n_projections
@@ -1078,17 +1241,17 @@ static void build_projections(TvRun *run)
 
 static TvCandidate *selected_candidate(TvRun *run, int projection_index)
 {
-    for (size_t index = 0; index < run->n_candidates; index++) {
-        if (run->candidates[index].projection_index == projection_index
-            && run->candidates[index].selected) {
-            return &run->candidates[index];
-        }
+    TvProjection *projection = &run->projections[projection_index];
+
+    if (projection->selected_candidate_index >= 0
+        && projection->selected_candidate_index < (int)run->n_candidates) {
+        return &run->candidates[projection->selected_candidate_index];
     }
     return NULL;
 }
 
-static void add_edge(TvRun *run, int left, int right, double score,
-                     bool compatible, int distance)
+static void append_edge(TvRun *run, int left, int right, double score,
+                        bool compatible, int distance)
 {
     int a;
     int b;
@@ -1098,18 +1261,6 @@ static void add_edge(TvRun *run, int left, int right, double score,
     }
     a = left < right ? left : right;
     b = left < right ? right : left;
-    for (size_t index = 0; index < run->n_edges; index++) {
-        TvEdge *edge = &run->edges[index];
-
-        if (edge->a == a && edge->b == b) {
-            edge->family_compatible = edge->family_compatible && compatible;
-            if (score > edge->score) {
-                edge->score = score;
-                edge->breakpoint_distance = distance;
-            }
-            return;
-        }
-    }
     if (run->n_edges == run->cap_edges) {
         run->cap_edges = run->cap_edges == 0 ? 256 : run->cap_edges * 2;
         run->edges = grow(run->edges, run->cap_edges, sizeof(*run->edges));
@@ -1123,74 +1274,208 @@ static void add_edge(TvRun *run, int left, int right, double score,
     };
 }
 
-static bool projection_supports_pair(const TvProjection *projection,
-                                     int source, int target)
+static int compare_edge_pair(const void *left, const void *right)
 {
-    return projection->near_best
-        && projection->source_te == source
-        && projection->target_te == target
-        && projection->technical_state == TV_TECH_CALLABLE;
+    const TvEdge *a = left;
+    const TvEdge *b = right;
+
+    if (a->a != b->a) {
+        return a->a < b->a ? -1 : 1;
+    }
+    if (a->b != b->b) {
+        return a->b < b->b ? -1 : 1;
+    }
+    if (a->score != b->score) {
+        return a->score > b->score ? -1 : 1;
+    }
+    if (a->breakpoint_distance != b->breakpoint_distance) {
+        return a->breakpoint_distance < b->breakpoint_distance ? -1 : 1;
+    }
+    return 0;
 }
 
-static void finalize_reciprocal(TvRun *run, TvEdge *edge)
+static void reduce_edges(TvRun *run)
 {
-    edge->support_count = 0;
+    size_t write = 0;
+
+    if (run->n_edges > 1) {
+        qsort(run->edges, run->n_edges, sizeof(*run->edges), compare_edge_pair);
+    }
+    for (size_t index = 0; index < run->n_edges; index++) {
+        TvEdge *edge = &run->edges[index];
+
+        if (write > 0 && run->edges[write - 1].a == edge->a
+            && run->edges[write - 1].b == edge->b) {
+            run->edges[write - 1].family_compatible =
+                run->edges[write - 1].family_compatible
+                && edge->family_compatible;
+            continue;
+        }
+        if (write != index) {
+            run->edges[write] = *edge;
+        }
+        write++;
+    }
+    run->n_edges = write;
+}
+
+static int find_edge(const TvRun *run, int a, int b)
+{
+    size_t low = 0;
+    size_t high = run->n_edges;
+
+    while (low < high) {
+        size_t middle = low + (high - low) / 2;
+        const TvEdge *edge = &run->edges[middle];
+
+        if (edge->a < a || (edge->a == a && edge->b < b)) {
+            low = middle + 1;
+        } else {
+            high = middle;
+        }
+    }
+    if (low < run->n_edges && run->edges[low].a == a
+        && run->edges[low].b == b) {
+        return (int)low;
+    }
+    return -1;
+}
+
+static void push_edge_support(TvRun *run, const TvEdgeSupport *support)
+{
+    if (run->n_edge_support == run->cap_edge_support) {
+        run->cap_edge_support = run->cap_edge_support == 0
+            ? 256 : run->cap_edge_support * 2;
+        run->edge_support = grow(run->edge_support, run->cap_edge_support,
+                                 sizeof(*run->edge_support));
+    }
+    run->edge_support[run->n_edge_support++] = *support;
+}
+
+static int compare_edge_support(const void *left, const void *right)
+{
+    const TvEdgeSupport *a = left;
+    const TvEdgeSupport *b = right;
+
+    if (a->a != b->a) {
+        return a->a < b->a ? -1 : 1;
+    }
+    if (a->b != b->b) {
+        return a->b < b->b ? -1 : 1;
+    }
+    if (a->evidence_group_id != b->evidence_group_id) {
+        return a->evidence_group_id < b->evidence_group_id ? -1 : 1;
+    }
+    if (a->evidence_id != b->evidence_id) {
+        return a->evidence_id < b->evidence_id ? -1 : 1;
+    }
+    if (a->direction_ab != b->direction_ab) {
+        return a->direction_ab ? -1 : 1;
+    }
+    if (a->native != b->native) {
+        return a->native ? -1 : 1;
+    }
+    return 0;
+}
+
+static void aggregate_edge_support(TvRun *run)
+{
+    size_t cursor = 0;
+
     for (size_t index = 0; index < run->n_projections; index++) {
         TvProjection *projection = &run->projections[index];
         TvDecision *decision = &run->decisions[projection->decision_index];
-        uint64_t group = run->pafs[projection->paf_index].evidence_group_id;
-        bool supports = !decision->ambiguous
-            && (projection_supports_pair(projection, edge->a, edge->b)
-                || projection_supports_pair(projection, edge->b, edge->a));
-        bool seen = false;
+        TvPaf *alignment = &run->pafs[projection->paf_index];
+        int a;
+        int b;
 
-        if (!supports) {
+        if (decision->ambiguous || !projection->near_best
+            || projection->technical_state != TV_TECH_CALLABLE
+            || projection->target_te < 0) {
             continue;
         }
-        for (size_t previous = 0; previous < index; previous++) {
-            TvProjection *prior = &run->projections[previous];
-            TvDecision *prior_decision =
-                &run->decisions[prior->decision_index];
-            uint64_t previous_group =
-                run->pafs[prior->paf_index].evidence_group_id;
-            bool previous_supports = !prior_decision->ambiguous
-                && (projection_supports_pair(prior, edge->a, edge->b)
-                    || projection_supports_pair(prior, edge->b, edge->a));
+        a = projection->source_te < projection->target_te
+            ? projection->source_te : projection->target_te;
+        b = projection->source_te < projection->target_te
+            ? projection->target_te : projection->source_te;
+        if (find_edge(run, a, b) < 0) {
+            continue;
+        }
+        TvEdgeSupport support = {
+            .a = a,
+            .b = b,
+            .evidence_group_id = alignment->evidence_group_id,
+            .evidence_id = projection->evidence_id,
+            .direction_ab = projection->source_te == a,
+            .native = alignment->origin == TV_EVIDENCE_NATIVE
+        };
 
-            if (previous_supports && previous_group == group) {
-                seen = true;
-                break;
-            }
-        }
-        if (!seen) {
-            edge->support_count++;
-        }
+        push_edge_support(run, &support);
     }
-    for (size_t left = 0; left < run->n_projections; left++) {
-        TvProjection *projection_ab = &run->projections[left];
-        TvDecision *decision_ab =
-            &run->decisions[projection_ab->decision_index];
-        TvPaf *paf_ab = &run->pafs[projection_ab->paf_index];
+    if (run->n_edge_support > 1) {
+        qsort(run->edge_support, run->n_edge_support,
+              sizeof(*run->edge_support), compare_edge_support);
+    }
+    run->performance.edge_support_records = run->n_edge_support;
+    for (size_t edge_index = 0; edge_index < run->n_edges; edge_index++) {
+        TvEdge *edge = &run->edges[edge_index];
+        uint64_t previous_group = 0;
+        bool have_previous_group = false;
 
-        if (decision_ab->ambiguous
-            || paf_ab->origin != TV_EVIDENCE_NATIVE
-            || !projection_supports_pair(projection_ab, edge->a, edge->b)) {
-            continue;
+        while (cursor < run->n_edge_support
+               && (run->edge_support[cursor].a < edge->a
+                   || (run->edge_support[cursor].a == edge->a
+                       && run->edge_support[cursor].b < edge->b))) {
+            cursor++;
         }
-        for (size_t right = 0; right < run->n_projections; right++) {
-            TvProjection *projection_ba = &run->projections[right];
-            TvDecision *decision_ba =
-                &run->decisions[projection_ba->decision_index];
-            TvPaf *paf_ba = &run->pafs[projection_ba->paf_index];
+        edge->support_start = cursor;
+        while (cursor < run->n_edge_support
+               && run->edge_support[cursor].a == edge->a
+               && run->edge_support[cursor].b == edge->b) {
+            TvEdgeSupport *current = &run->edge_support[cursor];
 
-            if (!decision_ba->ambiguous
-                && paf_ba->origin == TV_EVIDENCE_NATIVE
-                && projection_supports_pair(projection_ba, edge->b, edge->a)
-                && paf_ab->evidence_group_id != paf_ba->evidence_group_id) {
-                edge->independent_reciprocal = true;
-                edge->score = clamp(edge->score + 5.0, 0.0, 100.0);
-                return;
+            if (!have_previous_group
+                || current->evidence_group_id != previous_group) {
+                edge->support_count++;
+                previous_group = current->evidence_group_id;
+                have_previous_group = true;
             }
+            cursor++;
+        }
+        edge->support_record_count = cursor - edge->support_start;
+        uint64_t first_ab = 0;
+        uint64_t first_ba = 0;
+        bool have_ab = false;
+        bool have_ba = false;
+        bool alternate_ab = false;
+        bool alternate_ba = false;
+
+        for (size_t support_index = edge->support_start;
+             support_index < edge->support_start + edge->support_record_count;
+             support_index++) {
+            const TvEdgeSupport *support = &run->edge_support[support_index];
+
+            if (!support->native) {
+                continue;
+            }
+            if (support->direction_ab) {
+                if (!have_ab) {
+                    first_ab = support->evidence_group_id;
+                    have_ab = true;
+                } else if (support->evidence_group_id != first_ab) {
+                    alternate_ab = true;
+                }
+            } else if (!have_ba) {
+                first_ba = support->evidence_group_id;
+                have_ba = true;
+            } else if (support->evidence_group_id != first_ba) {
+                alternate_ba = true;
+            }
+        }
+        if (have_ab && have_ba
+            && (first_ab != first_ba || alternate_ab || alternate_ba)) {
+            edge->independent_reciprocal = true;
+            edge->score = clamp(edge->score + 5.0, 0.0, 100.0);
         }
     }
 }
@@ -1215,14 +1500,13 @@ static void build_edges(TvRun *run)
         if (candidate == NULL || !candidate->eligible) {
             continue;
         }
-        add_edge(run, projection->source_te, projection->target_te,
-                 candidate->score,
-                 candidate->family_relation != TV_FAMILY_CONFLICT,
-                 candidate->breakpoint_distance);
+        append_edge(run, projection->source_te, projection->target_te,
+                    candidate->score,
+                    candidate->family_relation != TV_FAMILY_CONFLICT,
+                    candidate->breakpoint_distance);
     }
-    for (size_t index = 0; index < run->n_edges; index++) {
-        finalize_reciprocal(run, &run->edges[index]);
-    }
+    reduce_edges(run);
+    aggregate_edge_support(run);
 }
 
 static int root(int *parents, int node)
@@ -1231,6 +1515,25 @@ static int root(int *parents, int node)
         parents[node] = root(parents, parents[node]);
     }
     return parents[node];
+}
+
+static bool node_has_copy_context(const TvRun *run, int node)
+{
+    if (run->te_context_offsets == NULL || node < 0
+        || (size_t)node >= run->n_nodes) {
+        return false;
+    }
+    for (size_t index = run->te_context_offsets[node];
+         index < run->te_context_offsets[node + 1]; index++) {
+        if (run->te_contexts[index].assignment == TV_CONTEXT_BRACKETED
+            && run->te_contexts[index].context_index >= 0
+            && (size_t)run->te_contexts[index].context_index < run->n_contexts
+            && strcmp(run->contexts[run->te_contexts[index].context_index].status,
+                      "PASS") == 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 static bool quota_allows(const TvRun *run, int *parents, int left_root,
@@ -1243,7 +1546,8 @@ static bool quota_allows(const TvRun *run, int *parents, int left_root,
             int component = root(parents, (int)node);
 
             if ((component == left_root || component == right_root)
-                && run->nodes[node].genome == (int)genome) {
+                && run->nodes[node].genome == (int)genome
+                && !node_has_copy_context(run, (int)node)) {
                 count++;
             }
         }
@@ -1274,25 +1578,35 @@ static bool component_families_compatible(const TvRun *run, int *parents,
     return true;
 }
 
-static bool edge_precedes(const TvRun *run, int left_index, int right_index)
-{
-    const TvEdge *left = &run->edges[left_index];
-    const TvEdge *right = &run->edges[right_index];
+typedef struct {
+    int index;
+    double score;
+    int a;
+    int b;
+} TvEdgeOrder;
 
-    if (left->score != right->score) {
-        return left->score > right->score;
+static int compare_edge_order(const void *left, const void *right)
+{
+    const TvEdgeOrder *a = left;
+    const TvEdgeOrder *b = right;
+
+    if (a->score != b->score) {
+        return a->score > b->score ? -1 : 1;
     }
-    if (left->a != right->a) {
-        return left->a < right->a;
+    if (a->a != b->a) {
+        return a->a < b->a ? -1 : 1;
     }
-    return left->b < right->b;
+    if (a->b != b->b) {
+        return a->b < b->b ? -1 : 1;
+    }
+    return a->index == b->index ? 0 : (a->index < b->index ? -1 : 1);
 }
 
 static void select_graph(TvRun *run)
 {
     int *parents = grow(NULL, run->n_nodes, sizeof(*parents));
     int *ranks = calloc(run->n_nodes, sizeof(*ranks));
-    int *order = grow(NULL, run->n_edges, sizeof(*order));
+    TvEdgeOrder *order = grow(NULL, run->n_edges, sizeof(*order));
     int *component_map;
 
     if (ranks == NULL) {
@@ -1303,24 +1617,21 @@ static void select_graph(TvRun *run)
         parents[index] = (int)index;
     }
     for (size_t index = 0; index < run->n_edges; index++) {
-        order[index] = (int)index;
+        order[index] = (TvEdgeOrder){
+            .index = (int)index,
+            .score = run->edges[index].score,
+            .a = run->edges[index].a,
+            .b = run->edges[index].b
+        };
         (void)snprintf(run->edges[index].selection_reason,
                        sizeof(run->edges[index].selection_reason),
                        "NOT_EVALUATED");
     }
-    for (size_t index = 1; index < run->n_edges; index++) {
-        int value = order[index];
-        size_t position = index;
-
-        while (position > 0
-               && edge_precedes(run, value, order[position - 1])) {
-            order[position] = order[position - 1];
-            position--;
-        }
-        order[position] = value;
+    if (run->n_edges > 1) {
+        qsort(order, run->n_edges, sizeof(*order), compare_edge_order);
     }
     for (size_t index = 0; index < run->n_edges; index++) {
-        TvEdge *edge = &run->edges[order[index]];
+        TvEdge *edge = &run->edges[order[index].index];
         int left_root;
         int right_root;
 
@@ -1348,6 +1659,15 @@ static void select_graph(TvRun *run)
             (void)snprintf(edge->selection_reason,
                            sizeof(edge->selection_reason),
                            "COMPONENT_FAMILY_CONFLICT");
+            continue;
+        }
+        const char *context_reason = tv_context_merge_reason(
+            run, parents, left_root, right_root);
+
+        if (context_reason != NULL) {
+            (void)snprintf(edge->selection_reason,
+                           sizeof(edge->selection_reason), "%s",
+                           context_reason);
             continue;
         }
         if (!quota_allows(run, parents, left_root, right_root)) {
@@ -1392,11 +1712,22 @@ int tv_analyze(TvRun *run)
     size_t node_count = 0;
     size_t node = 0;
 
-    if (run->n_genomes < 2 || run->n_pafs == 0 || run->nodes != NULL) {
-        tv_print_error("analysis requires genomes/alignments and runs once");
+    if (run->n_genomes < 2
+        || (run->n_pafs == 0 && run->n_synteny_blocks == 0)
+        || run->nodes != NULL) {
+        tv_print_error(
+            "analysis requires genomes plus alignment or synteny evidence and runs once");
         return -1;
     }
-    qsort(run->pafs, run->n_pafs, sizeof(*run->pafs), compare_paf);
+    if (run->n_genomes > (size_t)INT_MAX
+        || run->n_pafs > (size_t)INT_MAX
+        || run->n_synteny_blocks > (size_t)INT_MAX) {
+        tv_print_error("input contains too many indexed records");
+        return -1;
+    }
+    if (run->n_pafs > 1) {
+        qsort(run->pafs, run->n_pafs, sizeof(*run->pafs), compare_paf);
+    }
     for (size_t genome = 0; genome < run->n_genomes; genome++) {
         if (node_count > SIZE_MAX - run->genomes[genome].n_tes) {
             return -1;
@@ -1407,12 +1738,21 @@ int tv_analyze(TvRun *run)
         tv_print_error("no TE annotations were loaded");
         return -1;
     }
+    if (node_count > (size_t)INT_MAX) {
+        tv_print_error("too many TE nodes for graph indexing");
+        return -1;
+    }
     run->n_nodes = node_count;
     run->nodes = grow(NULL, run->n_nodes, sizeof(*run->nodes));
     for (size_t genome = 0; genome < run->n_genomes; genome++) {
+        run->genomes[genome].node_offset = node;
         for (size_t te = 0; te < run->genomes[genome].n_tes; te++) {
             run->nodes[node++] = run->genomes[genome].tes[te];
         }
+    }
+    if (tv_build_synteny_contexts(run) != 0
+        || tv_build_interval_indexes(run) != 0) {
+        return -1;
     }
     build_projections(run);
     build_edges(run);
@@ -1420,9 +1760,9 @@ int tv_analyze(TvRun *run)
     if (run->cfg.verbose) {
         fprintf(stderr,
                 "tevox: %zu TEs, %zu evidence observations, %zu candidates, "
-                "%zu decisions, %zu edges, %d loci\n",
+                "%zu decisions, %zu edges, %zu copy contexts, %d loci\n",
                 run->n_nodes, run->n_projections, run->n_candidates,
-                run->n_decisions, run->n_edges, run->n_loci);
+                run->n_decisions, run->n_edges, run->n_contexts, run->n_loci);
     }
     return 0;
 }

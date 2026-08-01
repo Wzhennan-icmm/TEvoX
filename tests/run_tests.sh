@@ -39,7 +39,19 @@ run_pair() {
         --output "$prefix" >/dev/null
 }
 
-"$bin" --version | grep -F '0.3.0-alpha.1 (schema 1.0.0)' >/dev/null
+"$bin" --version | grep -F '0.4.0-alpha.1 (schema 1.1.0)' >/dev/null
+
+# Non-finite numeric values must not bypass range validation.
+for value in nan inf -inf; do
+    if "$bin" pair \
+        --genome-a A --fasta-a "$data/pair/A.fa" --te-a "$data/pair/A.gff3" \
+        --genome-b B --fasta-b "$data/pair/B.fa" --te-b "$data/pair/B.gff3" \
+        --paf "$data/pair/A_B.paf" --min-edge "$value" \
+        --output "$work/nonfinite" >/dev/null 2>&1; then
+        echo "accepted non-finite numeric option: $value" >&2
+        exit 1
+    fi
+done
 
 # Baseline pair: annotated match plus a cs-supported empty site.
 run_pair "$work/pair" \
@@ -207,6 +219,241 @@ run_pair "$work/order_b" \
 for suffix in loci instances edges decisions candidates; do
     diff -u "$work/order_a.$suffix.tsv" "$work/order_b.$suffix.tsv"
 done
+
+# MUMmer4 NUCMER delta is normalized into the same evidence chain. Aggregate
+# delta identity is not mislabelled as local identity or MAPQ, and a generated
+# reverse view remains dependent on the same evidence group.
+"$bin" graph --manifest "$data/v04/delta/manifest.tsv" \
+    --alignments "$data/v04/delta/alignments.tsv" --flank 20 \
+    --candidate-window 10 --output "$work/delta" >/dev/null
+any_row "$work/delta.evidence.tsv" provider MUMMER_DELTA origin NATIVE \
+    alignment_identity 1.000000 alignment_identity_method DELTA_ERROR_COUNT \
+    local_identity . identity_method MISSING mapq . mapq_status NOT_PROVIDED \
+    mapping_confidence UNIQUE_ALIGNMENT
+any_row "$work/delta.evidence.tsv" provider MUMMER_DELTA \
+    origin DERIVED_REVERSE dependency DERIVED_SAME_GROUP
+no_row "$work/delta.states.tsv" state EMPTY_SITE_CONFIRMED
+python3 "$repo/tests/validate_schema.py" "$work/delta"
+
+"$bin" pair \
+    --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+    --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/reverse/B.gff3" \
+    --alignment "$data/v04/delta/full_reverse.delta" \
+    --alignment-format mummer-delta --flank 20 --candidate-window 10 \
+    --output "$work/delta_reverse" >/dev/null
+any_row "$work/delta_reverse.edges.tsv" te_a A_conflict te_b B_reverse \
+    independent_reciprocal false selected true
+python3 "$repo/tests/validate_schema.py" "$work/delta_reverse"
+
+# Canonical file-header paths take precedence over basename fallback. The
+# swapped canonical direction must be rejected even when contig IDs and lengths
+# are identical in the two genomes.
+python3 - "$data/v04/delta/full.delta" "$data/conflict/B.fa" \
+    "$data/conflict/A.fa" "$work/delta_canonical.delta" \
+    "$work/delta_canonical_swapped.delta" <<'PY'
+from pathlib import Path
+import sys
+
+template, target, query, correct, swapped = map(Path, sys.argv[1:])
+lines = template.read_text(encoding="utf-8").splitlines()
+lines[0] = f"{target.resolve()} {query.resolve()}"
+correct.write_text("\n".join(lines) + "\n", encoding="utf-8")
+lines[0] = f"{query.resolve()} {target.resolve()}"
+swapped.write_text("\n".join(lines) + "\n", encoding="utf-8")
+PY
+"$bin" pair \
+    --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+    --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/reverse/B.gff3" \
+    --alignment "$work/delta_canonical.delta" --alignment-format delta \
+    --output "$work/delta_canonical" >/dev/null
+if "$bin" pair \
+    --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+    --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/reverse/B.gff3" \
+    --alignment "$work/delta_canonical_swapped.delta" --alignment-format delta \
+    --output "$work/delta_canonical_swapped" >/dev/null 2>&1; then
+    echo "accepted swapped canonical NUCMER reference/query paths" >&2
+    exit 1
+fi
+
+# If neither header token resolves, basename fallback is legal only when the
+# expected target/query FASTA basenames are distinct.
+same_name="tevox_delta_same_${BASHPID}.fa"
+mkdir -p "$work/same_query" "$work/same_target"
+ln -s "$data/conflict/A.fa" "$work/same_query/$same_name"
+ln -s "$data/conflict/B.fa" "$work/same_target/$same_name"
+python3 - "$data/v04/delta/full.delta" "$same_name" \
+    "$work/delta_ambiguous_header.delta" <<'PY'
+from pathlib import Path
+import sys
+
+template, basename, output = sys.argv[1:]
+lines = Path(template).read_text(encoding="utf-8").splitlines()
+lines[0] = f"{basename} {basename}"
+Path(output).write_text("\n".join(lines) + "\n", encoding="utf-8")
+PY
+if "$bin" pair \
+    --genome-a A --fasta-a "$work/same_query/$same_name" \
+    --te-a "$data/conflict/A.gff3" \
+    --genome-b B --fasta-b "$work/same_target/$same_name" \
+    --te-b "$data/reverse/B.gff3" \
+    --alignment "$work/delta_ambiguous_header.delta" --alignment-format delta \
+    --output "$work/delta_ambiguous_header" >/dev/null 2>&1; then
+    echo "accepted ambiguous unresolved NUCMER header basenames" >&2
+    exit 1
+fi
+
+for fixture in invalid_promer invalid_unterminated invalid_span invalid_errors \
+    invalid_direction; do
+    if "$bin" pair \
+        --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+        --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/conflict/B.gff3" \
+        --alignment "$data/v04/delta/$fixture.delta" --alignment-format delta \
+        --output "$work/$fixture" >/dev/null 2>&1; then
+        echo "accepted malformed MUMmer delta fixture: $fixture" >&2
+        exit 1
+    fi
+done
+
+# MCScanX is a synteny prior only. It builds stable WGD copy contexts but, in
+# the absence of base alignment evidence, cannot produce an empty-site call.
+"$bin" graph --manifest "$data/v04/synteny/manifest.tsv" \
+    --synteny "$data/v04/synteny/sources.tsv" \
+    --output "$work/synteny" >/dev/null
+no_row "$work/synteny.states.tsv" state EMPTY_SITE_CONFIRMED
+test "$(wc -l < "$work/synteny.evidence.tsv")" -eq 1
+python3 "$repo/tests/validate_schema.py" "$work/synteny"
+python3 - "$work/synteny.contexts.tsv" "$work/synteny.te_contexts.tsv" <<'PY'
+import csv, sys
+contexts = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
+assignments = list(csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"))
+assert len(contexts) == 3
+assert len({row["homology_group_id"] for row in contexts}) == 1
+assert sorted(row["syntenic_copy_id"] for row in contexts if row["genome_id"] == "B") == ["copy001", "copy002"]
+assert len(assignments) == 4
+assert {row["assignment"] for row in assignments} == {"BRACKETED"}
+PY
+
+# Gene, block, anchor, and side order cannot change biological stable IDs.
+"$bin" graph --manifest "$data/v04/synteny/manifest.tsv" \
+    --synteny "$data/v04/synteny/sources.shuffled.tsv" \
+    --output "$work/synteny_shuffled" >/dev/null
+"$bin" graph --manifest "$data/v04/synteny/manifest.tsv" \
+    --synteny "$data/v04/synteny/sources.swapped.tsv" \
+    --output "$work/synteny_swapped" >/dev/null
+for suffix in contexts te_contexts synteny.anchors; do
+    diff -u "$work/synteny.$suffix.tsv" "$work/synteny_shuffled.$suffix.tsv"
+    diff -u "$work/synteny.$suffix.tsv" "$work/synteny_swapped.$suffix.tsv"
+done
+
+for sources in sources.malformed.tsv sources.bad_prefix.tsv; do
+    if "$bin" graph --manifest "$data/v04/synteny/manifest.tsv" \
+        --synteny "$data/v04/synteny/$sources" \
+        --output "$work/synteny_bad" >/dev/null 2>&1; then
+        echo "accepted malformed MCScanX input: $sources" >&2
+        exit 1
+    fi
+done
+
+# Two explicit WGD copy slots may join one ancestral locus even when the
+# legacy per-genome fallback quota is one. Same-context copies remain blocked.
+"$bin" graph --manifest "$data/v04/synteny/manifest1.tsv" \
+    --alignments "$data/v04/synteny/alignments.tsv" \
+    --synteny "$data/v04/synteny/sources.tsv" --flank 20 \
+    --candidate-window 20 --output "$work/combined" >/dev/null
+any_row "$work/combined.instances.tsv" genome_id B copy_count 2
+any_row "$work/combined.candidates.tsv" context_relation SUPPORTED \
+    shared_homology_group_id HMGfd5f79567dd2c40d context_compatible true
+test "$(awk -F '\t' 'NR > 1 && $13 == "true" {n++} END {print n+0}' \
+    "$work/combined.edges.tsv")" -eq 2
+python3 "$repo/tests/validate_schema.py" "$work/combined"
+
+# Two otherwise supported edges that would place two A annotations from the
+# same strong copy context into one locus are rejected during graph merging.
+"$bin" graph \
+    --manifest "$data/v04/synteny/manifest.copy_context_conflict.tsv" \
+    --alignments "$data/v04/synteny/alignments.copy_context_conflict.tsv" \
+    --synteny "$data/v04/synteny/sources.tsv" --flank 20 \
+    --candidate-window 20 --output "$work/copy_context_conflict" >/dev/null
+any_row "$work/copy_context_conflict.candidate_contexts.tsv" \
+    source_te_id A_TE target_te_id B1_TE context_relation SUPPORTED \
+    context_compatible true
+any_row "$work/copy_context_conflict.edges.tsv" te_a A_TE te_b B1_TE \
+    selected false selection_reason COPY_CONTEXT_CONFLICT
+any_row "$work/copy_context_conflict.edges.tsv" te_a A_TE_same_context \
+    te_b B1_TE selected true selection_reason SELECTED
+python3 "$repo/tests/validate_schema.py" "$work/copy_context_conflict"
+
+# A context-free bridge may provide individually valid DNA edges, but it must
+# not transitively merge TEs assigned to two disconnected HMGs.
+"$bin" graph --manifest "$data/v04/synteny/manifest.hmg_conflict.tsv" \
+    --alignments "$data/v04/synteny/alignments.hmg_conflict.tsv" \
+    --synteny "$data/v04/synteny/sources.hmg_conflict.tsv" --flank 20 \
+    --candidate-window 20 --output "$work/hmg_conflict" >/dev/null
+any_row "$work/hmg_conflict.candidate_contexts.tsv" \
+    source_te_id A_HMG1_TE target_te_id B_CONTEXT_FREE_TE \
+    context_relation UNKNOWN context_compatible true
+any_row "$work/hmg_conflict.candidate_contexts.tsv" \
+    source_te_id A_HMG2_TE target_te_id B_CONTEXT_FREE_TE \
+    context_relation UNKNOWN context_compatible true
+any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG1_TE \
+    te_b B_CONTEXT_FREE_TE selected true selection_reason SELECTED
+any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG2_TE \
+    te_b B_CONTEXT_FREE_TE selected false \
+    selection_reason HOMOLOGY_GROUP_CONFLICT
+python3 "$repo/tests/validate_schema.py" "$work/hmg_conflict"
+
+# Conflicting context metadata is explicit ambiguity, never strong support.
+"$bin" graph --manifest "$data/v04/synteny/manifest1.tsv" \
+    --alignments "$data/v04/synteny/alignments.tsv" \
+    --synteny "$data/v04/synteny/sources.metadata_conflict.tsv" --flank 20 \
+    --candidate-window 20 --output "$work/context_ambiguous" >/dev/null
+any_row "$work/context_ambiguous.contexts.tsv" genome_id A \
+    status METADATA_AMBIGUOUS subgenome_id . haplotype_id hap1
+any_row "$work/context_ambiguous.candidates.tsv" context_relation AMBIGUOUS \
+    context_compatible false decision_code SYNTENY_CONTEXT_AMBIGUOUS
+no_row "$work/context_ambiguous.candidates.tsv" context_relation SUPPORTED
+python3 "$repo/tests/validate_schema.py" "$work/context_ambiguous"
+
+# Overlapping evidence assigned to different WGD layers must remain separate.
+"$bin" graph --manifest "$data/v04/synteny/manifest.tsv" \
+    --synteny "$data/v04/synteny/sources.two_wgd.tsv" \
+    --output "$work/two_wgd" >/dev/null
+python3 - "$work/two_wgd.contexts.tsv" <<'PY'
+import csv, sys
+rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
+assert len(rows) == 6
+assert len({row["context_id"] for row in rows}) == 6
+assert {row["wgd_node"] for row in rows} == {"WGD1", "WGD2"}
+assert len({row["homology_group_id"] for row in rows}) == 2
+PY
+python3 "$repo/tests/validate_schema.py" "$work/two_wgd"
+
+# Bounded top-K and unlimited candidates use the same complete winner order.
+for limit in 1 0; do
+    "$bin" pair \
+        --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
+        --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/v04/topk/B.gff3" \
+        --paf "$data/conflict/A_B.paf" --flank 20 --candidate-window 10 \
+        --max-candidates "$limit" --output "$work/topk_$limit" >/dev/null
+    python3 "$repo/tests/validate_schema.py" "$work/topk_$limit"
+done
+for suffix in decisions edges loci instances states; do
+    diff -u "$work/topk_1.$suffix.tsv" "$work/topk_0.$suffix.tsv"
+done
+python3 - "$work/topk_1.evidence.tsv" "$work/topk_1.candidates.tsv" \
+    "$work/topk_0.evidence.tsv" "$work/topk_0.candidates.tsv" <<'PY'
+import csv, sys
+def read(path):
+    return list(csv.DictReader(open(path, newline="", encoding="utf-8"), delimiter="\t"))
+ev1, ca1, ev0, ca0 = map(read, sys.argv[1:])
+a1 = next(row for row in ev1 if row["source_te_id"] == "A_conflict")
+a0 = next(row for row in ev0 if row["source_te_id"] == "A_conflict")
+assert a1["nearby_candidate_count"] == "2" and a1["retained_candidate_count"] == "1"
+assert a0["nearby_candidate_count"] == "2" and a0["retained_candidate_count"] == "2"
+winner1 = next(row for row in ca1 if row["evidence_id"] == a1["evidence_id"] and row["selected"] == "true")
+winner0 = next(row for row in ca0 if row["evidence_id"] == a0["evidence_id"] and row["selected"] == "true")
+assert winner1["target_te_id"] == winner0["target_te_id"] == a1["selected_target_te_id"]
+PY
 
 # Declared PAF query/target direction is validated against FASTA lengths.
 if "$bin" pair \

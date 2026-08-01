@@ -1,49 +1,91 @@
-# TEvoX 0.3 correctness model
+# TEvoX 0.4 inference design
 
-This document freezes the algorithm implemented by `0.3.0-alpha.1`. All
-intervals are zero-based and half-open. Schema `1.0.0` separates observations,
-inference decisions and biological claims.
+This document freezes `0.4.0-alpha.1` and schema `1.1.0`. It describes an
+evidence-aware deterministic model, not the calibrated probabilistic model
+planned for v0.5.
 
-## Evidence hierarchy
+## Evidence layers
 
-One native PAF record defines an `evidence_group_id`. Its automatic reverse
-traversal belongs to the same group and is explicitly dependent. It can provide
-the reverse coordinate view but cannot create independent reciprocal support.
+TEvoX keeps two independent provider classes:
 
-For each `source TE → target genome`, TEvoX retains every spanning alignment as
-a directed evidence observation. Each observation retains every nearby target
-TE as a candidate. Candidates need at least 50% reciprocal interval overlap to
-be eligible; proximity, family similarity or a permissive copy quota cannot
-make a zero-overlap adjacent TE eligible.
+1. base alignment evidence from PAF or MUMmer4 NUCMER delta;
+2. gene-synteny context from MCScanX.
 
-All observations within five quality points of the best are compared. If their
-target contigs, coordinates, target annotations or biological interpretations
-disagree, the source-level decision is `AMBIGUOUS`. Every triggering
-`evidence_id` is preserved in `linked_evidence_ids`; only retaining the winner
-would violate schema `1.0.0`.
+MCScanX narrows and labels locus context but cannot observe TE sequence or an
+empty insertion site. Base alignment controls projection and biological state.
+The two layers meet only at candidate context relation and graph constraints.
 
-## Observed features and missing values
+One native alignment record defines an evidence group. Its automatic reverse
+traversal has the same group and is dependent. MCScanX blocks receive their own
+provider groups and stable block/anchor IDs but never become alignment
+observations.
 
-The directed observation measures:
+## Alignment normalization
 
-- full-length left and right flank coverage;
-- local identity among aligned query bases from `cs:Z` or exact `=X` CIGAR
-  operations (query insertions are measured separately, not counted as
-  mismatches);
-- TE-body aligned fraction and query-insertion fraction;
-- observed MAPQ, with PAF 255 represented as missing;
-- projected coordinates and target ambiguous-base fraction;
-- nearby candidate overlap, boundary distance and family relation.
+PAF local identity is computed from `cs` or exact `=X`, separately from
+`matches/block_len`. MAPQ 255 is missing.
 
-A flank truncated by a source contig boundary is missing, not 1.0. Ordinary
-`M` operations do not identify matches versus mismatches, so local identity is
-missing rather than estimated from the whole PAF record. Ranking scores are
-normalized over observed terms and multiplied by evidence completeness; the
-score is not a probability.
+NUCMER delta is converted from 1-based closed reference/query coordinates to a
+0-based half-open CIGAR-like path. Positive deltas are reference-only `D` and
+negative deltas query-only `I`. Error counts define aggregate identity, while
+local identity and MAPQ remain missing. A delta mapping becomes
+`UNIQUE_ALIGNMENT` only after source-level comparison finds one unambiguous
+passing projection.
 
-## Three-axis state and claimability
+Both providers generate the same projection features: paired flank coverage,
+TE-body aligned fraction, query insertion fraction, projected coordinates,
+target gap fraction and nearby annotation candidates. Provider-unobserved
+features remain missing.
 
-Internal state is factored into:
+## Candidate generation and top-K
+
+Alignments and target TEs are indexed by genome pair/contig and interval.
+Candidate-window arithmetic is clamped to contig bounds. Every exact-window
+candidate contributes to eligibility, best/second score and ambiguity before
+optional output truncation.
+
+The same complete order selects the winner, retains bounded top-K and assigns
+rank. This prevents a score-tied winner from being discarded. `max_candidates=0`
+appends all candidates and sorts once; bounded mode grows memory incrementally.
+
+A candidate requires minimum reciprocal interval overlap. Zero-overlap adjacent
+TEs cannot become loci through family or copy quota. A known MCScanX conflict
+marks the projection ambiguous; missing context remains neutral.
+
+## MCScanX contexts
+
+The adapter validates alignment IDs/ranks, anchor count, contigs, orientation,
+genomes and gene-table coordinates. Side order and anchors are normalized for
+stable IDs.
+
+Near-duplicate sides merge only when they share genome/contig and compatible
+WGD/subgenome/haplotype metadata, overlap each other by at least 80% in both
+directions and have anchor Jaccard ≥0.50. Opposing sides of the same block and
+different WGD layers cannot merge.
+
+Each resulting context records:
+
+```text
+(genome, contig interval, subgenome, haplotype,
+ syntenic display copy, WGD node, anchor set)
+```
+
+Blocks connect contexts into a homology group. Within an HMG, contexts are
+canonically ordered per genome to assign display labels `copy001...`; the
+stable join key is `context_id`.
+
+A TE is strong only when exactly one `PASS` context contains consecutive left
+and right block anchors that fully bracket it. Multiple brackets or metadata
+conflict are ambiguous; simple block overlap is `BLOCK_INTERIOR` and neutral.
+
+The alpha deliberately does not infer adjacent-fragment stitching for every
+MCScanX output. This avoids silently joining distinct local duplications, but
+may over-segment fragmented collinearity blocks. A validated stitching model is
+future work.
+
+## State and claimability
+
+Observations retain three axes:
 
 ```text
 Technical:   CALLABLE | GAP | AMBIGUOUS | UNCALLABLE
@@ -51,41 +93,55 @@ Biological:  PRESENT | EMPTY | STRUCTURAL_ALTERNATIVE | UNKNOWN
 Annotation:  MATCHED | MISSING | FAMILY_CONFLICT | NOT_APPLICABLE | UNKNOWN
 ```
 
-`claimable` is evaluated after these axes. Technical gap, ambiguity or
-uncallability always blocks a biological claim. Annotated presence can be
-claimed from callable paired-flank geometry and an eligible overlapping target
-annotation. Unannotated presence, empty-site and structural-alternative claims
-additionally require observed local identity of at least 0.50. A confirmed
-empty site also requires at least 70% query-insertion coverage of the source TE.
+Claimability is evaluated after these axes. Technical gap/ambiguity blocks all
+claims. Annotated presence can use an established PAF or unique delta mapping.
+Unannotated presence, empty site and structural alternative additionally need
+observed local identity, which delta does not supply. Therefore aggregate delta
+identity cannot leak into an absence claim.
 
-The legacy eight-state field is a projection of these axes and the claim gate.
-In particular, `BIO=EMPTY` with `claimable=false` maps to `UNCALLABLE`, not
+The eight-state compatibility field is a projection of axes plus claimability;
+for example `BIO=EMPTY, claimable=false` becomes `UNCALLABLE`, never
 `EMPTY_SITE_CONFIRMED`.
 
 ## Global locus graph
 
-Only a callable, unambiguous decision with an eligible selected annotation
-candidate can support an edge. Independent reciprocal support adds five points
-only when opposite directions use different evidence groups.
+Only callable, unambiguous decisions with an eligible selected annotation can
+support an edge. Evidence support is sorted and aggregated once per TE pair;
+native reciprocal directions must use distinct groups.
 
-Edges are processed in deterministic score and node order. A component merge
+Edges are processed by deterministic `score, node A, node B` order. A merge
 must:
 
-1. exceed `min_edge_score`;
-2. have no direct known-family conflict;
-3. avoid a known-family conflict across the two complete components, preventing
-   an unknown-family node from bridging incompatible families;
-4. respect the legacy per-genome component quota.
+1. pass the edge threshold;
+2. have no direct or component-wide known-family conflict;
+3. avoid two members in one strong `context_id`;
+4. avoid mixing incompatible known HMGs;
+5. satisfy the legacy per-genome fallback quota only for nodes without a strong
+   context.
 
-Every rejected edge records `selection_reason`. TE and PAF records are sorted
-canonically so input row order does not change graph selection or locus IDs.
+Thus two WGD contexts in one HMG can remain co-orthologous copies, while two TEs
+bracketed by the same context are not treated as WGD copies. This is a discrete
+constraint model; ORTHOLOG/WGD_HOMEOLOG posterior classification and ILP
+clustering are deferred to v0.5.
 
-The component quota is not described as WGD-aware: no subgenome, haplotype,
-syntenic-copy or WGD-node context exists in v0.3. That model belongs to v0.4.
+## Performance model
+
+- FASTA gap runs are indexed once; inference records zero post-index reopens.
+- PAF/delta and TE interval envelopes use sorted prefix-max indexes.
+- MCScanX gene IDs use sorted lookup; block sides use chromosome interval
+  sweep rather than all-pairs comparison.
+- TE-context assignments are stored in per-node contiguous ranges.
+- raw TE edges and evidence support are sorted/reduced; reciprocal detection is
+  linear in support records.
+- graph edge ordering uses `qsort`.
+
+Component family/quota checks and TE-to-context construction still have
+scaling work before chromosome-scale benchmark claims. Runtime and memory must
+be measured on publication datasets rather than inferred from unit tests.
 
 ## Phylogeny
 
-The exploratory helper maps present states to 1, confirmed empty sites to 0,
-and every technical/nonclaimable state to `{0,1}` before Fitch parsimony. It
-marks events touching ambiguous nodes. Branch-length-aware stochastic Dollo
-inference is future work.
+The helper maps claimable presence to 1, confirmed empty to 0 and every
+technical/nonclaimable state to missing before Fitch parsimony. It remains an
+exploratory event-candidate module; stochastic Dollo inference is planned only
+after locus accuracy is calibrated.

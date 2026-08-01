@@ -1,13 +1,16 @@
 #include "tevox.h"
 
 #include <errno.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 typedef struct {
     const char *manifest;
     const char *alignments;
+    const char *synteny;
     const char *output;
     const char *genome_a;
     const char *fasta_a;
@@ -16,6 +19,8 @@ typedef struct {
     const char *fasta_b;
     const char *te_b;
     const char *paf;
+    const char *alignment;
+    const char *alignment_format;
     int copies_a;
     int copies_b;
 } Arguments;
@@ -26,13 +31,15 @@ static void usage(FILE *stream)
         stream,
         "TEvoX %s - uncertainty-aware TE locus reconstruction\n\n"
         "Usage:\n"
-        "  tevox graph --manifest genomes.tsv --alignments alignments.tsv [options]\n"
+        "  tevox graph --manifest genomes.tsv [--alignments alignments.tsv] "
+        "[--synteny synteny.sources.tsv] [options]\n"
         "  tevox pair --genome-a A --fasta-a A.fa --te-a A.gff3 "
         "--genome-b B --fasta-b B.fa --te-b B.gff3 "
-        "--paf A_query_B_target.paf [options]\n\n"
+        "--alignment A_query_B_target.paf --alignment-format paf [options]\n\n"
         "PAF direction:\n"
         "  PAF query must be genome A and PAF target must be genome B. Because\n"
         "  minimap2 takes target first, generate it with: minimap2 [opts] B.fa A.fa\n\n"
+        "  nucmer likewise takes reference/target first: nucmer -p out B.fa A.fa\n\n"
         "Options:\n"
         "  -o, --output PREFIX       output prefix (default: tevox)\n"
         "  --flank INT               flank length (100)\n"
@@ -43,6 +50,8 @@ static void usage(FILE *stream)
         "  --near-best-delta FLOAT   ambiguity score delta (5.0)\n"
         "  --min-edge FLOAT          graph edge threshold (45)\n"
         "  --max-n FLOAT             maximum N fraction (0.25)\n"
+        "  --max-candidates INT      retained candidates/observation (64; 0=all)\n"
+        "  --min-delta-identity FLOAT aggregate NUCMER identity gate (0.50)\n"
         "  --max-copies-a/b INT      legacy pair-mode component quota\n"
         "  -v, --verbose\n",
         TEVOX_VERSION);
@@ -73,7 +82,7 @@ static bool parse_double(const char *text, double *value)
 
     errno = 0;
     *value = strtod(text, &end);
-    return errno == 0 && end != text && *end == '\0';
+    return errno == 0 && end != text && *end == '\0' && isfinite(*value);
 }
 
 static int invalid_value(const char *option, const char *value)
@@ -106,6 +115,8 @@ static int parse_options(int argc, char **argv, Arguments *arguments,
             arguments->manifest = value;
         } else if (strcmp(option, "--alignments") == 0) {
             arguments->alignments = value;
+        } else if (strcmp(option, "--synteny") == 0) {
+            arguments->synteny = value;
         } else if (strcmp(option, "-o") == 0
                    || strcmp(option, "--output") == 0) {
             arguments->output = value;
@@ -123,6 +134,10 @@ static int parse_options(int argc, char **argv, Arguments *arguments,
             arguments->te_b = value;
         } else if (strcmp(option, "--paf") == 0) {
             arguments->paf = value;
+        } else if (strcmp(option, "--alignment") == 0) {
+            arguments->alignment = value;
+        } else if (strcmp(option, "--alignment-format") == 0) {
+            arguments->alignment_format = value;
         } else if (strcmp(option, "--flank") == 0) {
             if (!parse_long(value, &integer) || integer < 1
                 || integer > 1000000) {
@@ -180,6 +195,18 @@ static int parse_options(int argc, char **argv, Arguments *arguments,
                 return invalid_value(option, value);
             }
             config->max_n_fraction = decimal;
+        } else if (strcmp(option, "--max-candidates") == 0) {
+            if (!parse_long(value, &integer) || integer < 0
+                || integer > 1000000) {
+                return invalid_value(option, value);
+            }
+            config->max_candidates = (int)integer;
+        } else if (strcmp(option, "--min-delta-identity") == 0) {
+            if (!parse_double(value, &decimal) || decimal < 0.0
+                || decimal > 1.0) {
+                return invalid_value(option, value);
+            }
+            config->min_delta_identity = decimal;
         } else {
             tv_print_error("unknown option '%s'", option);
             return -1;
@@ -193,7 +220,7 @@ static bool pair_arguments_complete(const Arguments *arguments)
     return arguments->genome_a != NULL && arguments->fasta_a != NULL
         && arguments->te_a != NULL && arguments->genome_b != NULL
         && arguments->fasta_b != NULL && arguments->te_b != NULL
-        && arguments->paf != NULL;
+        && (arguments->paf != NULL || arguments->alignment != NULL);
 }
 
 int main(int argc, char **argv)
@@ -236,15 +263,21 @@ int main(int argc, char **argv)
     if (parsed < 0) {
         status = -1;
     } else if (graph) {
-        if (arguments.manifest == NULL || arguments.alignments == NULL) {
-            tv_print_error("graph requires --manifest and --alignments");
+        if (arguments.manifest == NULL
+            || (arguments.alignments == NULL && arguments.synteny == NULL)) {
+            tv_print_error(
+                "graph requires --manifest and at least one of --alignments/--synteny");
             status = -1;
         } else if (tv_load_manifest(&run, arguments.manifest) != 0
-                   || tv_load_alignments(&run, arguments.alignments) != 0) {
+                   || (arguments.alignments != NULL
+                       && tv_load_alignments(&run, arguments.alignments) != 0)
+                   || (arguments.synteny != NULL
+                       && tv_load_synteny_sources(&run, arguments.synteny) != 0)) {
             status = -1;
         }
     } else if (!pair_arguments_complete(&arguments)) {
-        tv_print_error("pair requires both genomes, FASTAs, annotations and --paf");
+        tv_print_error(
+            "pair requires both genomes, FASTAs, annotations and --paf/--alignment");
         status = -1;
     } else {
         int genome_a = tv_add_genome(&run, arguments.genome_a,
@@ -254,8 +287,31 @@ int main(int argc, char **argv)
             : tv_add_genome(&run, arguments.genome_b, arguments.fasta_b,
                             arguments.te_b, arguments.copies_b);
 
-        if (genome_a < 0 || genome_b < 0
-            || tv_add_paf_file(&run, genome_a, genome_b, arguments.paf) != 0) {
+        const char *alignment_path = arguments.paf != NULL
+            ? arguments.paf : arguments.alignment;
+        const char *format = arguments.paf != NULL
+            ? "paf" : (arguments.alignment_format != NULL
+                       ? arguments.alignment_format : "paf");
+        int loaded = -1;
+
+        if (arguments.paf != NULL && arguments.alignment != NULL) {
+            tv_print_error("--paf and --alignment are mutually exclusive");
+        } else if (arguments.paf != NULL
+                   && arguments.alignment_format != NULL) {
+            tv_print_error("--alignment-format is valid only with --alignment");
+        } else if (genome_a >= 0 && genome_b >= 0
+                   && strcasecmp(format, "paf") == 0) {
+            loaded = tv_add_paf_file(&run, genome_a, genome_b, alignment_path);
+        } else if (genome_a >= 0 && genome_b >= 0
+                   && (strcasecmp(format, "delta") == 0
+                       || strcasecmp(format, "mummer-delta") == 0
+                       || strcasecmp(format, "mummer_delta") == 0)) {
+            loaded = tv_add_mummer_delta_file(&run, genome_a, genome_b,
+                                               alignment_path);
+        } else if (genome_a >= 0 && genome_b >= 0) {
+            tv_print_error("unsupported alignment format '%s'", format);
+        }
+        if (genome_a < 0 || genome_b < 0 || loaded != 0) {
             status = -1;
         }
     }
@@ -269,7 +325,7 @@ int main(int argc, char **argv)
                      run.n_loci, run.n_genomes);
         (void)printf(
             "Evidence schema: %s; outputs: "
-            "%s.{evidence,candidates,decisions,edges,loci,instances,states,summary}.tsv "
+            "%s.{evidence,candidates,candidate_contexts,decisions,edges,loci,instances,states,summary,contexts,te_contexts,synteny.blocks,synteny.anchors}.tsv "
             "and %s.run.json\n",
             TEVOX_SCHEMA_VERSION, arguments.output, arguments.output);
     }

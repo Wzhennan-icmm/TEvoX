@@ -1,0 +1,8 @@
+########################## Alignment 0 ##########################
+## Alignment 0: score=200.0 e_value=1e-20 N=2 chrA&chrB1 plus
+  0-  0:	A_h1_g1	B_h1_g1	1e-20
+  0-  1:	A_h1_g2	B_h1_g2	1e-18
+########################## Alignment 1 ##########################
+## Alignment 1: score=190.0 e_value=1e-19 N=2 chrA&chrB2 plus
+  1-  0:	A_h2_g1	B_h2_g1	1e-19
+  1-  1:	A_h2_g2	B_h2_g2	1e-17

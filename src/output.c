@@ -55,6 +55,20 @@ static void print_double(FILE *stream, double value, int precision)
     }
 }
 
+static void print_number(FILE *stream, double value)
+{
+    if (isnan(value)) {
+        fputc('.', stream);
+    } else {
+        (void)fprintf(stream, "%.17g", value);
+    }
+}
+
+static void print_text(FILE *stream, const char *value)
+{
+    fputs(value != NULL && *value != '\0' ? value : TEVOX_UNKNOWN, stream);
+}
+
 static void print_evidence_id(FILE *stream, uint64_t id)
 {
     (void)fprintf(stream, "EVD%016llx", (unsigned long long)id);
@@ -73,6 +87,35 @@ static void print_decision_id(FILE *stream, uint64_t id)
 static void print_candidate_id(FILE *stream, uint64_t id)
 {
     (void)fprintf(stream, "CAN%016llx", (unsigned long long)id);
+}
+
+static void print_block_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "SBL%016llx", (unsigned long long)id);
+}
+
+static void print_anchor_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "SYN%016llx", (unsigned long long)id);
+}
+
+static void print_context_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "CTX%016llx", (unsigned long long)id);
+}
+
+static void print_homology_group_id(FILE *stream, uint64_t id)
+{
+    if (id == 0) {
+        fputc('.', stream);
+    } else {
+        (void)fprintf(stream, "HMG%016llx", (unsigned long long)id);
+    }
+}
+
+static void print_te_context_id(FILE *stream, uint64_t id)
+{
+    (void)fprintf(stream, "TEC%016llx", (unsigned long long)id);
 }
 
 static bool decision_disagrees(const TvRun *run, const TvDecision *left,
@@ -355,65 +398,33 @@ static void print_instance_decisions(FILE *stream, TvRun *run, int locus,
     }
 }
 
-static bool edge_projection_supports(const TvProjection *projection,
-                                     const TvEdge *edge)
-{
-    return projection->near_best
-        && projection->technical_state == TV_TECH_CALLABLE
-        && ((projection->source_te == edge->a
-             && projection->target_te == edge->b)
-            || (projection->source_te == edge->b
-                && projection->target_te == edge->a));
-}
-
 static void print_edge_support(FILE *stream, const TvRun *run,
                                const TvEdge *edge, bool groups)
 {
     bool first = true;
+    uint64_t previous = 0;
+    bool have_previous = false;
+    size_t end = edge->support_start + edge->support_record_count;
 
-    for (size_t index = 0; index < run->n_projections; index++) {
-        const TvProjection *projection = &run->projections[index];
-        const TvDecision *decision =
-            &run->decisions[projection->decision_index];
+    for (size_t index = edge->support_start; index < end; index++) {
+        const TvEdgeSupport *support = &run->edge_support[index];
+        uint64_t value = groups ? support->evidence_group_id
+                                : support->evidence_id;
 
-        if (decision->ambiguous || !edge_projection_supports(projection, edge)) {
+        if (have_previous && value == previous) {
             continue;
-        }
-        if (groups) {
-            uint64_t group =
-                run->pafs[projection->paf_index].evidence_group_id;
-            bool seen = false;
-
-            for (size_t previous = 0; previous < index; previous++) {
-                const TvProjection *prior_projection =
-                    &run->projections[previous];
-                const TvDecision *prior =
-                    &run->decisions[prior_projection->decision_index];
-
-                if (prior->ambiguous
-                    || !edge_projection_supports(prior_projection, edge)) {
-                    continue;
-                }
-                if (run->pafs[prior_projection->paf_index].evidence_group_id
-                       == group) {
-                    seen = true;
-                    break;
-                }
-            }
-            if (seen) {
-                continue;
-            }
         }
         if (!first) {
             fputc(',', stream);
         }
         first = false;
         if (groups) {
-            print_group_id(stream,
-                           run->pafs[projection->paf_index].evidence_group_id);
+            print_group_id(stream, support->evidence_group_id);
         } else {
-            print_evidence_id(stream, projection->evidence_id);
+            print_evidence_id(stream, support->evidence_id);
         }
+        previous = value;
+        have_previous = true;
     }
     if (first) {
         fputc('.', stream);
@@ -429,15 +440,20 @@ static int write_evidence(TvRun *run, const char *prefix)
         return -1;
     }
     fputs("schema_version\tevidence_id\tevidence_group_id\tdecision_id\tprovider"
-          "\tprovider_path\tprovider_record\torigin\tdependency\tquery_genome_id"
+          "\tprovider_path\tprovider_record\tprovider_line\torigin\tdependency"
+          "\tquery_genome_id"
           "\ttarget_genome_id\tsource_te_id\tsource_contig\tsource_start\tsource_end"
           "\talignment_query_contig\talignment_query_start\talignment_query_end"
           "\talignment_target_contig\talignment_target_start\talignment_target_end"
-          "\tprojection_contig\tprojection_start\tprojection_end\tlocal_identity"
-          "\tidentity_method\tmapq\tmapq_status\tleft_flank\tright_flank"
+          "\tprojection_contig\tprojection_start\tprojection_end"
+          "\talignment_identity\talignment_identity_method\talignment_error_count"
+          "\tsimilarity_error_count\tnonalpha_count\tlocal_identity"
+          "\tidentity_method\tmapq\tmapq_status\tmapping_confidence"
+          "\tleft_flank\tright_flank"
           "\tleft_flank_status\tright_flank_status\tte_aligned_fraction"
           "\tinsertion_fraction\ttarget_n_fraction\tnearby_candidate_count"
-          "\teligible_candidate_count\tselected_target_te_id\ttechnical_state"
+          "\tretained_candidate_count\teligible_candidate_count"
+          "\tselected_target_te_id\ttechnical_state"
           "\tbiological_state\tannotation_state\tlegacy_state\tclaim_type"
           "\tclaimable\tquality\tevidence_completeness\tobservation_rank\tprimary"
           "\tnear_best\tdecision_ambiguous\tdecision_code\tclaimability_reason\n",
@@ -454,10 +470,11 @@ static int write_evidence(TvRun *run, const char *prefix)
         print_group_id(stream, paf->evidence_group_id);
         fputc('\t', stream);
         print_decision_id(stream, decision->decision_id);
-        (void)fprintf(stream,
-                      "\tPAF\t%s\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%lld\t%lld"
-                      "\t%s\t%lld\t%lld\t%s\t%lld\t%lld\t%s\t%lld\t%lld\t",
-                      paf->source_path, paf->source_line,
+        (void)fprintf(stream, "\t%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s"
+                      "\t%lld\t%lld\t%s\t%lld\t%lld\t%s\t%lld\t%lld"
+                      "\t%s\t%lld\t%lld\t",
+                      tv_alignment_provider_name(paf->provider),
+                      paf->source_path, paf->source_record, paf->source_line,
                       tv_evidence_origin_name(paf->origin),
                       paf->origin == TV_EVIDENCE_NATIVE
                           ? "INDEPENDENT" : "DERIVED_SAME_GROUP",
@@ -470,14 +487,31 @@ static int write_evidence(TvRun *run, const char *prefix)
                       (long long)paf->tstart, (long long)paf->tend,
                       projection->contig, (long long)projection->start,
                       (long long)projection->end);
+        print_double(stream, paf->aggregate_identity, 6);
+        (void)fprintf(stream, "\t%s\t%lld\t",
+                      tv_aggregate_identity_method_name(
+                          paf->aggregate_identity_method),
+                      (long long)paf->error_count);
+        if (paf->provider == TV_ALIGNMENT_MUMMER_DELTA) {
+            (void)fprintf(stream, "%lld\t%lld\t",
+                          (long long)paf->similarity_error_count,
+                          (long long)paf->nonalpha_count);
+        } else {
+            fputs(".\t.\t", stream);
+        }
         print_double(stream, projection->identity, 6);
         (void)fprintf(stream, "\t%s\t",
                       tv_identity_method_name(paf->identity_method));
         if (projection->mapq_observed) {
-            (void)fprintf(stream, "%d\tOBSERVED\t", projection->mapq);
+            (void)fprintf(stream, "%d\t%s\t", projection->mapq,
+                          tv_mapq_status_name(paf->mapq_status));
         } else {
-            fputs(".\tMISSING_255\t", stream);
+            (void)fprintf(stream, ".\t%s\t",
+                          tv_mapq_status_name(paf->mapq_status));
         }
+        (void)fprintf(stream, "%s\t",
+                      tv_mapping_confidence_name(
+                          projection->mapping_confidence));
         print_double(stream, projection->left_flank, 6);
         fputc('\t', stream);
         print_double(stream, projection->right_flank, 6);
@@ -487,7 +521,9 @@ static int write_evidence(TvRun *run, const char *prefix)
                       projection->te_aligned_fraction,
                       projection->insertion_fraction);
         print_double(stream, projection->n_fraction, 6);
-        (void)fprintf(stream, "\t%d\t%d\t", projection->nearby_candidate_count,
+        (void)fprintf(stream, "\t%d\t%zu\t%d\t",
+                      projection->nearby_candidate_count,
+                      projection->candidate_count,
                       projection->eligible_candidate_count);
         if (projection->target_te >= 0) {
             fputs(run->nodes[projection->target_te].id, stream);
@@ -527,7 +563,9 @@ static int write_candidates(TvRun *run, const char *prefix)
     fputs("schema_version\tcandidate_id\tevidence_id\tdecision_id\ttarget_genome_id"
           "\ttarget_te_id\ttarget_contig\ttarget_start\ttarget_end\tscore"
           "\treciprocal_overlap\tboundary_score\tbreakpoint_distance"
-          "\tfamily_relation\teligible\tselected\tdecision_code\n", stream);
+          "\tfamily_relation\tcontext_relation\tshared_homology_group_id"
+          "\tcontext_compatible\tcandidate_rank\teligible\tselected"
+          "\tdecision_code\n", stream);
     for (size_t index = 0; index < run->n_candidates; index++) {
         TvCandidate *candidate = &run->candidates[index];
         TvProjection *projection = &run->projections[candidate->projection_index];
@@ -541,16 +579,254 @@ static int write_candidates(TvRun *run, const char *prefix)
         fputc('\t', stream);
         print_decision_id(stream, decision->decision_id);
         (void)fprintf(stream, "\t%s\t%s\t%s\t%lld\t%lld\t%.2f\t%.6f\t%.6f"
-                      "\t%d\t%s\t",
+                      "\t%d\t%s\t%s\t",
                       run->genomes[target->genome].id, target->id, target->contig,
                       (long long)target->start, (long long)target->end,
                       candidate->score, candidate->reciprocal_overlap,
                       candidate->boundary_score, candidate->breakpoint_distance,
-                      tv_family_relation_name(candidate->family_relation));
+                      tv_family_relation_name(candidate->family_relation),
+                      tv_context_relation_name(candidate->context_relation));
+        print_homology_group_id(stream,
+                                candidate->shared_homology_group_id);
+        fputc('\t', stream);
+        print_bool(stream, candidate->context_compatible);
+        (void)fprintf(stream, "\t%d\t", candidate->rank);
         print_bool(stream, candidate->eligible);
         fputc('\t', stream);
         print_bool(stream, candidate->selected);
         (void)fprintf(stream, "\t%s\n", candidate->decision_code);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static int write_synteny_blocks(TvRun *run, const char *prefix)
+{
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".synteny.blocks.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tblock_id\tevidence_group_id\thomology_group_id"
+          "\tprovider\tsource_id\tprovider_path\tprovider_record"
+          "\tprovider_line"
+          "\tgenome_a\tcontig_a\tstart_a\tend_a\tgenome_b\tcontig_b"
+          "\tstart_b\tend_b\torientation\tanchor_count\treported_score"
+          "\treported_evalue\twgd_node\tcontext_a_id\tcontext_b_id"
+          "\tstatus\treason\n", stream);
+    for (size_t index = 0; index < run->n_synteny_blocks; index++) {
+        const TvSyntenyBlock *block = &run->synteny_blocks[index];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_block_id(stream, block->block_id);
+        fputc('\t', stream);
+        print_group_id(stream, block->evidence_group_id);
+        fputc('\t', stream);
+        print_homology_group_id(stream, block->homology_group_id);
+        (void)fprintf(stream, "\tMCScanX\t%s\t%s\t%d\t%d\t%s\t%s\t%lld\t%lld"
+                      "\t%s\t%s\t%lld\t%lld\t%c\t%d\t",
+                      block->source_id, block->source_path,
+                      block->source_record, block->source_line,
+                      run->genomes[block->genome_a].id, block->contig_a,
+                      (long long)block->start_a, (long long)block->end_a,
+                      run->genomes[block->genome_b].id, block->contig_b,
+                      (long long)block->start_b, (long long)block->end_b,
+                      block->orientation, block->anchor_count);
+        print_number(stream, block->reported_score);
+        fputc('\t', stream);
+        print_number(stream, block->reported_evalue);
+        fputc('\t', stream);
+        print_text(stream, block->wgd_node);
+        fputc('\t', stream);
+        print_context_id(stream, run->contexts[block->context_a].context_id);
+        fputc('\t', stream);
+        print_context_id(stream, run->contexts[block->context_b].context_id);
+        fputc('\t', stream);
+        print_text(stream, block->status);
+        fputc('\t', stream);
+        print_text(stream, block->reason);
+        fputc('\n', stream);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static int write_synteny_anchors(TvRun *run, const char *prefix)
+{
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".synteny.anchors.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tanchor_id\tblock_id\tanchor_rank"
+          "\tprovider_anchor_rank\tgene_a_id\tgenome_a\tgene_b_id"
+          "\tgenome_b\treported_evalue\n", stream);
+    for (size_t index = 0; index < run->n_synteny_anchors; index++) {
+        const TvSyntenyAnchor *anchor = &run->synteny_anchors[index];
+        const TvSyntenyBlock *block =
+            &run->synteny_blocks[anchor->block_index];
+        const TvGene *gene_a = &run->genes[anchor->gene_a];
+        const TvGene *gene_b = &run->genes[anchor->gene_b];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_anchor_id(stream, anchor->anchor_id);
+        fputc('\t', stream);
+        print_block_id(stream, block->block_id);
+        (void)fprintf(stream, "\t%d\t%d\t%s\t%s\t%s\t%s\t", anchor->rank,
+                      anchor->provider_rank,
+                      gene_a->id, run->genomes[gene_a->genome].id,
+                      gene_b->id, run->genomes[gene_b->genome].id);
+        print_number(stream, anchor->reported_evalue);
+        fputc('\n', stream);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static int write_contexts(TvRun *run, const char *prefix)
+{
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".contexts.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tcontext_id\thomology_group_id\tgenome_id\tcontig"
+          "\tstart\tend\tsubgenome_id\thaplotype_id\tsyntenic_copy_id"
+          "\twgd_node\tanchor_count\tstatus\n", stream);
+    for (size_t index = 0; index < run->n_contexts; index++) {
+        const TvCopyContext *context = &run->contexts[index];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_context_id(stream, context->context_id);
+        fputc('\t', stream);
+        print_homology_group_id(stream, context->homology_group_id);
+        (void)fprintf(stream, "\t%s\t%s\t%lld\t%lld\t",
+                      run->genomes[context->genome].id, context->contig,
+                      (long long)context->start, (long long)context->end);
+        print_text(stream, context->subgenome_id);
+        fputc('\t', stream);
+        print_text(stream, context->haplotype_id);
+        fputc('\t', stream);
+        print_text(stream, context->syntenic_copy_id);
+        fputc('\t', stream);
+        print_text(stream, context->wgd_node);
+        (void)fprintf(stream, "\t%d\t", context->anchor_count);
+        print_text(stream, context->status);
+        fputc('\n', stream);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static int write_te_contexts(TvRun *run, const char *prefix)
+{
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".te_contexts.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tte_context_id\tgenome_id\tte_id\tcontext_id"
+          "\thomology_group_id\tassignment\toverlap_fraction"
+          "\tleft_anchor_gene_id\tright_anchor_gene_id\n", stream);
+    for (size_t index = 0; index < run->n_te_contexts; index++) {
+        const TvTEContext *assignment = &run->te_contexts[index];
+        const TvTE *te = &run->nodes[assignment->te_node];
+        const TvCopyContext *context =
+            &run->contexts[assignment->context_index];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_te_context_id(stream, assignment->te_context_id);
+        (void)fprintf(stream, "\t%s\t%s\t",
+                      run->genomes[te->genome].id, te->id);
+        print_context_id(stream, context->context_id);
+        fputc('\t', stream);
+        print_homology_group_id(stream, context->homology_group_id);
+        (void)fprintf(stream, "\t%s\t%.6f\t",
+                      tv_context_assignment_name(assignment->assignment),
+                      assignment->overlap_fraction);
+        if (assignment->left_anchor >= 0) {
+            fputs(run->genes[assignment->left_anchor].id, stream);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\t', stream);
+        if (assignment->right_anchor >= 0) {
+            fputs(run->genes[assignment->right_anchor].id, stream);
+        } else {
+            fputc('.', stream);
+        }
+        fputc('\n', stream);
+    }
+    fclose(stream);
+    free(path);
+    return 0;
+}
+
+static void print_node_contexts(FILE *stream, const TvRun *run, int node)
+{
+    bool first = true;
+    size_t begin = run->te_context_offsets == NULL
+        ? 0 : run->te_context_offsets[node];
+    size_t end = run->te_context_offsets == NULL
+        ? 0 : run->te_context_offsets[node + 1];
+
+    for (size_t index = begin; index < end; index++) {
+        const TvTEContext *assignment = &run->te_contexts[index];
+
+        if (!first) {
+            fputc(',', stream);
+        }
+        first = false;
+        print_context_id(stream,
+                         run->contexts[assignment->context_index].context_id);
+    }
+    if (first) {
+        fputc('.', stream);
+    }
+}
+
+static int write_candidate_contexts(TvRun *run, const char *prefix)
+{
+    char *path = NULL;
+    FILE *stream = open_output(prefix, ".candidate_contexts.tsv", &path);
+
+    if (stream == NULL) {
+        return -1;
+    }
+    fputs("schema_version\tcandidate_id\tevidence_id\tsource_te_id"
+          "\ttarget_te_id\tcontext_relation\tcontext_compatible"
+          "\tshared_homology_group_id\tsource_context_ids"
+          "\ttarget_context_ids\n", stream);
+    for (size_t index = 0; index < run->n_candidates; index++) {
+        const TvCandidate *candidate = &run->candidates[index];
+        const TvProjection *projection =
+            &run->projections[candidate->projection_index];
+
+        (void)fprintf(stream, "%s\t", TEVOX_SCHEMA_VERSION);
+        print_candidate_id(stream, candidate->candidate_id);
+        fputc('\t', stream);
+        print_evidence_id(stream, projection->evidence_id);
+        (void)fprintf(stream, "\t%s\t%s\t%s\t",
+                      run->nodes[projection->source_te].id,
+                      run->nodes[candidate->target_te].id,
+                      tv_context_relation_name(candidate->context_relation));
+        print_bool(stream, candidate->context_compatible);
+        fputc('\t', stream);
+        print_homology_group_id(stream,
+                                candidate->shared_homology_group_id);
+        fputc('\t', stream);
+        print_node_contexts(stream, run, projection->source_te);
+        fputc('\t', stream);
+        print_node_contexts(stream, run, candidate->target_te);
+        fputc('\n', stream);
     }
     fclose(stream);
     free(path);
@@ -876,10 +1152,18 @@ static int write_run_json(TvRun *run, const char *prefix)
     char *path = NULL;
     FILE *stream = open_output(prefix, ".run.json", &path);
     size_t native_groups = 0;
+    size_t candidate_observations = 0;
 
     for (size_t index = 0; index < run->n_pafs; index++) {
         if (run->pafs[index].origin == TV_EVIDENCE_NATIVE) {
             native_groups++;
+        }
+    }
+    for (size_t index = 0; index < run->n_projections; index++) {
+        int count = run->projections[index].nearby_candidate_count;
+
+        if (count > 0 && (size_t)count <= SIZE_MAX - candidate_observations) {
+            candidate_observations += (size_t)count;
         }
     }
 
@@ -898,22 +1182,35 @@ static int write_run_json(TvRun *run, const char *prefix)
                   "    \"min_edge_score\": %.6f,\n"
                   "    \"max_n_fraction\": %.6f,\n"
                   "    \"min_reciprocal_overlap\": %.6f,\n"
-                  "    \"near_best_delta\": %.6f\n"
+                  "    \"near_best_delta\": %.6f,\n"
+                  "    \"min_delta_identity\": %.6f,\n"
+                  "    \"max_candidates\": %d\n"
                   "  },\n  \"counts\": {\n"
                   "    \"genomes\": %zu,\n    \"tes\": %zu,\n"
                   "    \"alignment_views\": %zu,\n"
                   "    \"native_evidence_groups\": %zu,\n"
+                  "    \"synteny_evidence_groups\": %zu,\n"
                   "    \"evidence_observations\": %zu,\n"
+                  "    \"candidate_observations\": %zu,\n"
                   "    \"candidates\": %zu,\n    \"decisions\": %zu,\n"
+                  "    \"genes\": %zu,\n    \"synteny_blocks\": %zu,\n"
+                  "    \"synteny_anchors\": %zu,\n"
+                  "    \"copy_contexts\": %zu,\n"
+                  "    \"te_context_assignments\": %zu,\n"
                   "    \"edges\": %zu,\n    \"loci\": %d\n  },\n"
                   "  \"genomes\": [\n",
                   TEVOX_VERSION, TEVOX_SCHEMA_VERSION, run->cfg.flank,
                   run->cfg.candidate_window, run->cfg.min_mapq,
                   run->cfg.min_flank_fraction, run->cfg.min_edge_score,
                   run->cfg.max_n_fraction, run->cfg.min_reciprocal_overlap,
-                  run->cfg.near_best_delta, run->n_genomes, run->n_nodes,
-                  run->n_pafs, native_groups, run->n_projections, run->n_candidates,
-                  run->n_decisions, run->n_edges, run->n_loci);
+                  run->cfg.near_best_delta, run->cfg.min_delta_identity,
+                  run->cfg.max_candidates, run->n_genomes, run->n_nodes,
+                  run->n_pafs, native_groups, run->n_synteny_blocks,
+                  run->n_projections, candidate_observations,
+                  run->n_candidates, run->n_decisions, run->n_genes,
+                  run->n_synteny_blocks, run->n_synteny_anchors,
+                  run->n_contexts, run->n_te_contexts, run->n_edges,
+                  run->n_loci);
     for (size_t index = 0; index < run->n_genomes; index++) {
         TvGenome *genome = &run->genomes[index];
 
@@ -923,7 +1220,7 @@ static int write_run_json(TvRun *run, const char *prefix)
         json_string(stream, genome->fasta_path);
         fputs(", \"te_annotation\": ", stream);
         json_string(stream, genome->te_path);
-        (void)fprintf(stream, ", \"max_locus_copies\": %d}%s\n",
+        (void)fprintf(stream, ", \"legacy_max_locus_copies\": %d}%s\n",
                       genome->max_locus_copies,
                       index + 1 == run->n_genomes ? "" : ",");
     }
@@ -940,20 +1237,64 @@ static int write_run_json(TvRun *run, const char *prefix)
                        (unsigned long long)paf->evidence_group_id);
         fputs("    {\"evidence_group_id\": ", stream);
         json_string(stream, group_id);
-        fputs(", \"provider\": \"PAF\", \"path\": ", stream);
+        fputs(", \"provider\": ", stream);
+        json_string(stream, tv_alignment_provider_name(paf->provider));
+        fputs(", \"path\": ", stream);
         json_string(stream, paf->source_path);
-        (void)fprintf(stream, ", \"record\": %d, \"query_genome_id\": ",
-                      paf->source_line);
+        (void)fprintf(stream,
+                      ", \"record\": %d, \"line\": %d, \"query_genome_id\": ",
+                      paf->source_record, paf->source_line);
         json_string(stream, run->genomes[paf->query_genome].id);
         fputs(", \"target_genome_id\": ", stream);
         json_string(stream, run->genomes[paf->target_genome].id);
         emitted++;
         (void)fprintf(stream, "}%s\n", emitted == native_groups ? "" : ",");
     }
-    fputs("  ],\n  \"outputs\": [\"evidence.tsv\", \"candidates.tsv\", "
-          "\"decisions.tsv\", \"edges.tsv\", \"loci.tsv\", "
-          "\"instances.tsv\", \"states.tsv\", \"summary.tsv\"]\n}\n",
-          stream);
+    fputs("  ],\n  \"synteny_evidence\": [\n", stream);
+    for (size_t index = 0; index < run->n_synteny_blocks; index++) {
+        const TvSyntenyBlock *block = &run->synteny_blocks[index];
+        char group_id[24];
+        char block_id[24];
+
+        (void)snprintf(group_id, sizeof(group_id), "EVG%016llx",
+                       (unsigned long long)block->evidence_group_id);
+        (void)snprintf(block_id, sizeof(block_id), "SBL%016llx",
+                       (unsigned long long)block->block_id);
+        fputs("    {\"evidence_group_id\": ", stream);
+        json_string(stream, group_id);
+        fputs(", \"block_id\": ", stream);
+        json_string(stream, block_id);
+        fputs(", \"provider\": \"MCScanX\", \"source_id\": ", stream);
+        json_string(stream, block->source_id);
+        fputs(", \"path\": ", stream);
+        json_string(stream, block->source_path);
+        (void)fprintf(stream, ", \"record\": %d, \"line\": %d}%s\n",
+                      block->source_record, block->source_line,
+                      index + 1 == run->n_synteny_blocks ? "" : ",");
+    }
+    (void)fprintf(stream,
+                  "  ],\n  \"performance\": {\n"
+                  "    \"paf_interval_queries\": %llu,\n"
+                  "    \"alignment_records_examined\": %llu,\n"
+                  "    \"te_interval_queries\": %llu,\n"
+                  "    \"te_records_examined\": %llu,\n"
+                  "    \"gap_queries\": %llu,\n"
+                  "    \"fasta_reopens_after_index\": %llu,\n"
+                  "    \"edge_support_records\": %llu\n"
+                  "  },\n",
+                  (unsigned long long)run->performance.paf_interval_queries,
+                  (unsigned long long)run->performance.paf_records_examined,
+                  (unsigned long long)run->performance.te_interval_queries,
+                  (unsigned long long)run->performance.te_records_examined,
+                  (unsigned long long)run->performance.gap_queries,
+                  (unsigned long long)run->performance.fasta_reopens_after_index,
+                  (unsigned long long)run->performance.edge_support_records);
+    fputs("  \"outputs\": [\"evidence.tsv\", \"candidates.tsv\", "
+          "\"candidate_contexts.tsv\", \"decisions.tsv\", \"edges.tsv\", "
+          "\"loci.tsv\", \"instances.tsv\", \"states.tsv\", "
+          "\"summary.tsv\", \"synteny.blocks.tsv\", "
+          "\"synteny.anchors.tsv\", \"contexts.tsv\", "
+          "\"te_contexts.tsv\"]\n}\n", stream);
     fclose(stream);
     free(path);
     return 0;
@@ -966,6 +1307,11 @@ int tv_write_outputs(TvRun *run, const char *prefix)
     }
     if (write_evidence(run, prefix) != 0
         || write_candidates(run, prefix) != 0
+        || write_candidate_contexts(run, prefix) != 0
+        || write_synteny_blocks(run, prefix) != 0
+        || write_synteny_anchors(run, prefix) != 0
+        || write_contexts(run, prefix) != 0
+        || write_te_contexts(run, prefix) != 0
         || write_decisions(run, prefix) != 0
         || write_edges(run, prefix) != 0
         || write_loci(run, prefix) != 0

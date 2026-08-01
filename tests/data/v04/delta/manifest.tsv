@@ -1,0 +1,3 @@
+genome_id	fasta	te_annotation	max_locus_copies
+A	../../conflict/A.fa	../../conflict/A.gff3	1
+B	../../conflict/B.fa	../../conflict/B.gff3	1

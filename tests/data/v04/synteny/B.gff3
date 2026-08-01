@@ -1,0 +1,3 @@
+##gff-version 3
+chrB1	fixture	transposable_element	191	230	.	+	.	ID=B1_TE;family=Fam1
+chrB2	fixture	transposable_element	451	480	.	-	.	ID=B2_TE;family=Fam1
