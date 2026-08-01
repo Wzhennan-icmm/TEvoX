@@ -1,0 +1,4 @@
+genome_id	fasta	te_annotation	max_locus_copies
+G1	G1.fa	G1.gff3	1
+G2	G2.fa	G2.gff3	2
+G3	G3.fa	G3.gff3	1

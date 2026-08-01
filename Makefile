@@ -1,37 +1,31 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2 -g
+CC ?= cc
+PREFIX ?= /usr/local
+CPPFLAGS ?= -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude
+CFLAGS ?= -O2 -g
+WARNFLAGS = -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow
+LDFLAGS ?=
+LDLIBS = -lm
 TARGET = tevox
-SRCDIR = src
-OBJDIR = obj
-SOURCES = $(wildcard $(SRCDIR)/*.c)
-OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-
-.PHONY: all clean install test
-
+SOURCES = $(sort $(wildcard src/*.c))
+OBJECTS = $(SOURCES:src/%.c=build/%.o)
+.PHONY: all clean check test asan install
 all: $(TARGET)
-
 $(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ -lm
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR):
-	mkdir -p $(OBJDIR)
-
-clean:
-	rm -rf $(OBJDIR) $(TARGET)
-
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
+build/%.o: src/%.c include/tevox.h | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(WARNFLAGS) -MMD -MP -c $< -o $@
+build:
+	mkdir -p $@
+-include $(OBJECTS:.o=.d)
+check test: $(TARGET)
+	bash ./tests/run_tests.sh
+asan:
+	$(MAKE) clean
+	$(MAKE) CFLAGS="-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer" LDFLAGS="-fsanitize=address,undefined"
+	ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 bash ./tests/run_tests.sh
 install: $(TARGET)
-	cp $(TARGET) /usr/local/bin/
-
-test: $(TARGET)
-	./test/run_tests.sh
-
-help:
-	@echo "Available targets:"
-	@echo "  all     - Build the TEvoX analyzer"
-	@echo "  clean   - Remove build files"
-	@echo "  install - Install to /usr/local/bin"
-	@echo "  test    - Run tests"
-	@echo "  help    - Show this help message"
+	install -d "$(DESTDIR)$(PREFIX)/bin"
+	install -m 0755 $(TARGET) "$(DESTDIR)$(PREFIX)/bin/tevox"
+	install -m 0755 scripts/tevox_phylo.py "$(DESTDIR)$(PREFIX)/bin/tevox-phylo"
+clean:
+	$(RM) -r build $(TARGET)

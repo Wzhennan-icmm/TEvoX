@@ -1,0 +1,2 @@
+##gff-version 3
+chr1	fixture	transposable_element	41	60	.	+	.	ID=A_conflict;family=FamA

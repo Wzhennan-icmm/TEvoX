@@ -1,137 +1,107 @@
-# TEvoX - Transposable Element Evolution Explorer
+# TEvoX
 
-A C-language tool for comparing transposon (TE) differences between two genomes using synteny information.
+TEvoX reconstructs orthologous transposable-element (TE) loci across assembled
+genomes while keeping biological absence, annotation discordance, assembly gaps
+and ambiguous mappings separate.
+
+The `0.2.0-alpha` rewrite replaces the original rule that treated every TE
+outside a synteny block as genome-specific. It projects TE boundaries and
+paired flanks through base-level PAF CIGAR alignments, scores annotation-aware
+candidates and selects a globally consistent multi-genome locus graph.
+
+> Alpha status: the locus model and output schema are tested and usable, but
+> the 0–100 quality score is an interpretable heuristic, not a calibrated
+> probability. Biological benchmarks remain necessary before manuscript claims.
 
 ## Features
 
-- Parse synteny files to identify conserved regions between genomes
-- Support for GFF3 and BED format TE annotation files
-- Identify unique transposons in each genome (those outside synteny regions)
-- Statistical analysis of TE types and families
-- Generate detailed output reports
+- strict FASTA, GFF3/BED, PAF length and `cg:Z` CIGAR validation;
+- paired-flank, local-identity, mapping-quality and target-gap evidence;
+- joint two- or multi-genome locus reconstruction;
+- per-genome WGD/co-ortholog copy quotas;
+- eight uncertainty-aware locus states;
+- deterministic edge, locus, state and summary TSV outputs;
+- exploratory Fitch-parsimony gain/loss inference on Newick trees.
 
-## Usage
-
-### Basic Usage
-
-```bash
-./te_comparator <synteny_file> <te_file1> <te_file2> [options]
-```
-
-### Required Arguments
-
-- `synteny_file`: File containing synteny blocks between two genomes
-- `te_file1`: Transposon annotation file for genome 1 (GFF3 or BED format)
-- `te_file2`: Transposon annotation file for genome 2 (GFF3 or BED format)
-
-### Optional Arguments
-
-- `genome1_file`: Genome sequence file for genome 1 (reserved for future use)
-- `genome2_file`: Genome sequence file for genome 2 (reserved for future use)
-
-### Options
-
-- `-o, --output PREFIX`: Output file prefix (default: te_comparison)
-- `-v, --verbose`: Enable verbose output
-- `-h, --help`: Show help message
-
-### Examples
-
-```bash
-# Basic comparison
-./te_comparator synteny.txt genome1.te.gff3 genome2.te.bed
-
-# With custom output prefix and verbose mode
-./te_comparator synteny.txt genome1.te.gff3 genome2.te.bed -o my_comparison -v
-
-# With genome files (for future use)
-./te_comparator synteny.txt genome1.te.gff3 genome2.te.bed genome1.fa genome2.fa
-```
-
-## Input File Formats
-
-### Synteny File Format
-
-Tab-separated file with the following columns:
-```
-chr1    start1    end1    chr2    start2    end2    [score]
-```
-
-Example:
-```
-chr1    1000    5000    chr1    1000    5000    0.95
-chr1    6000    12000   chr1    6200    12200   0.88
-```
-
-### GFF3 Format
-
-Standard GFF3 format with TE-related features. The program looks for features with types containing:
-- transposable_element
-- TE
-- retrotransposon
-- DNA_transposon
-- LINE
-- SINE
-- LTR
-- TIR
-- MITE
-- helitron
-
-### BED Format
-
-Standard BED format with at least 3 columns:
-```
-chr    start    end    [name]    [score]    [strand]    [type]
-```
-
-## Output Files
-
-The program generates two output files:
-
-1. `{prefix}_genome1_unique.txt`: Unique transposons in genome 1
-2. `{prefix}_genome2_unique.txt`: Unique transposons in genome 2
-
-Each file contains:
-- ID: Transposon identifier
-- Chr: Chromosome name
-- Start: Start position (1-based)
-- End: End position
-- Strand: Strand information (+, -, or .)
-- Type: Transposon type
-- Family: Transposon family
-- Name: Transposon name
-
-## Building
+## Build and test
 
 ```bash
 make
+make check
+make asan
 ```
 
-## Testing
+The C core has no runtime library dependencies. Python 3 is needed only for
+phylogenetic inference and its regression test.
+
+## Pairwise use
 
 ```bash
-make test
-# or
-./test/run_tests.sh
+minimap2 -cx asm5 --cs=long A.fa B.fa > A_B.paf
+./tevox pair \
+  --genome-a A --fasta-a A.fa --te-a A.te.gff3 \
+  --genome-b B --fasta-b B.fa --te-b B.te.gff3 \
+  --paf A_B.paf --output results/A_B
 ```
 
-## Dependencies
+Only one PAF direction is required; TEvoX derives the reverse CIGAR traversal.
 
-- GCC compiler
-- Standard C library
+## Multi-genome use
 
-## Algorithm
+`genomes.tsv`:
 
-1. Parse synteny blocks to identify conserved regions
-2. Parse TE annotation files for both genomes
-3. For each transposon, check if it overlaps with any synteny region
-4. Transposons outside synteny regions are considered "unique"
-5. Generate statistics and output files
+```text
+genome_id	fasta	te_annotation	max_locus_copies
+reference	reference.fa	reference.te.gff3	1
+sample_a	sample_a.fa	sample_a.te.gff3	1
+polyploid_b	polyploid_b.fa	polyploid_b.te.gff3	2
+```
 
-## License
+`alignments.tsv`:
 
-This project is open source. Please check the license file for details.
+```text
+query_id	target_id	paf
+reference	sample_a	reference_sample_a.paf
+reference	polyploid_b	reference_polyploid_b.paf
+sample_a	polyploid_b	sample_a_polyploid_b.paf
+```
 
-## Contributing
+```bash
+./tevox graph --manifest genomes.tsv --alignments alignments.tsv \
+  --output results/cohort
+```
 
-Contributions are welcome! Please ensure all code follows the project coding standards and includes appropriate tests.
+Relative paths resolve from their table's directory. Pairwise alignments need
+not form a complete clique, but disconnected genomes cannot share components.
+
+## State vocabulary
+
+| State | Interpretation |
+|---|---|
+| `PRESENT_ANNOTATED` | compatible annotation assigned to the locus |
+| `PRESENT_UNANNOTATED` | aligned TE-length sequence lacks annotation |
+| `EMPTY_SITE_CONFIRMED` | paired flanks join across a query TE insertion |
+| `STRUCTURAL_ALTERNATIVE` | non-insertion structural difference |
+| `FAMILY_OR_BOUNDARY_DISCORDANCE` | annotation family/locus conflict |
+| `ASSEMBLY_GAP` | excessive target `N`/gap sequence |
+| `PROJECTION_AMBIGUOUS` | competing mappings/candidates disagree |
+| `UNCALLABLE` | mapping or flank evidence is insufficient |
+
+Coordinates are zero-based, half-open. For prefix `cohort`, outputs are
+`cohort.edges.tsv`, `cohort.loci.tsv`, `cohort.states.tsv` and
+`cohort.summary.tsv`.
+
+## Phylogenetic candidates
+
+```bash
+python3 scripts/tevox_phylo.py --states results/cohort.states.tsv \
+  --tree species_tree.nwk --output results/cohort_phylo
+```
+
+Only annotated/unannotated presence is encoded as present and only a confirmed
+empty site as absent; all technical states are missing data. Event placements
+are exploratory parsimony candidates, not proof of ancestral state.
+
+See [design](docs/DESIGN.md), [input contracts](docs/INPUTS.md),
+[validation](docs/VALIDATION.md) and [roadmap](docs/ROADMAP.md). Licensed under
+Apache-2.0.

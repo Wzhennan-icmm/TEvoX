@@ -1,0 +1,4 @@
+##gff-version 3
+chr1	fixture	transposable_element	41	60	.	+	.	ID=G2_A1;family=FamA
+chr1	fixture	transposable_element	71	90	.	+	.	ID=G2_A2;family=FamA
+chr1	fixture	transposable_element	121	140	.	+	.	ID=G2_B;family=FamB
