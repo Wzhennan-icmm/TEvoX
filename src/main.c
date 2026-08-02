@@ -358,7 +358,9 @@ int main(int argc, char **argv)
         }
     }
     if (status == 0
-        && (tv_analyze(&run) != 0
+        && (tv_verify_inputs(&run) != 0
+            || tv_validate_output_prefix(&run, arguments.output) != 0
+            || tv_analyze(&run) != 0
             || tv_write_outputs(&run, arguments.output) != 0)) {
         status = -1;
     }

@@ -275,6 +275,9 @@ int tv_add_mummer_delta_file(TvRun *run, int query_genome, int target_genome,
         || target_genome >= (int)run->n_genomes) {
         return -1;
     }
+    if (tv_register_input(run, "alignment", path) != 0) {
+        return -1;
+    }
     stream = fopen(path, "r");
     if (stream == NULL) {
         tv_print_error("cannot open MUMmer delta '%s': %s", path,

@@ -4,16 +4,28 @@ TEvoX reconstructs transposable-element (TE) loci across assembled genomes
 while keeping technical callability, biological state, annotation status and
 evidence provenance separate.
 
-Version `0.5.0-alpha.1` adds an auditable inference and optimization layer on
-top of the v0.4 evidence backends and copy contexts:
+Version `0.5.0-alpha.2` adds a run-independent evaluation and model-preparation
+layer on top of the v0.5 inference engine:
 
 - explicit missing-aware candidate and three-axis observation feature tables;
 - a versioned `BUILTIN_UNCALIBRATED_V1` membership score;
 - exact Hungarian one-to-one matching within MCScanX copy-context pairs;
 - exact constrained component optimization for small graphs and a labelled
   deterministic fallback for larger graphs;
-- `ORTHOLOG`, `WGD_HOMEOLOG`, `ALLELIC`, tandem/segmental/transposed paralog
-  and `UNKNOWN` relation score columns;
+- semantic truth and multi-run benchmark manifests that never join truth by a
+  generated TEvoX ID;
+- B-cubed/ARI locus, three-axis state, empty-site, breakpoint,
+  callability–accuracy, AUPRC and score-diagnostic metrics;
+- raw pre-decision feature export with reconstructed feature checks, a frozen
+  candidate-generator contract and pre-parse/rechecked input SHA-256 binding;
+- partition/fold leakage auditing across TE, event, locus, homology group,
+  batch, clade and external taxa, with strict locus-truth binding;
+- corrected final-locus relation labelling, nested/tandem separation and a
+  hard negative against distinct same-contig TE bridge merges, with an
+  explicit non-allelic WGD-copy exception;
+- `ORTHOLOG`, `WGD_HOMEOLOG`, `ALLELIC`, tandem and `UNKNOWN` relation score
+  columns; segmental is reserved, while transposed is tentative/out-of-domain
+  and neither is an independently validated call;
 - prediction sets, entropy, out-of-domain flags, solver objective/bound/gap;
 - evidence schema `1.2.0` with stable edge, relation, matching and solver keys.
 
@@ -21,7 +33,8 @@ top of the v0.4 evidence backends and copy contexts:
 > built-in inference scores are explicitly uncalibrated and are not posterior
 > probabilities. The discrete state/claimability safety gates remain
 > authoritative. Publication-level calibration, simulation and biological
-> benchmarks remain future work.
+> benchmarks remain future work. Bundled truth fixtures verify the
+> evaluator and optimizer; they are not independent biological validation.
 
 ## Build and test
 
@@ -31,8 +44,8 @@ make check
 make asan
 ```
 
-The C core has no runtime library dependencies. Python 3 is used by the schema
-validator and exploratory phylogeny helper.
+The C core has no runtime library dependencies. Python 3 is used by schema,
+benchmark, model-preparation and exploratory phylogeny helpers.
 
 ## Pairwise DNA alignment
 
@@ -172,9 +185,9 @@ Useful controls are:
 See the exact coefficient, matching, optimization and non-claim contract in
 [v0.5 inference](docs/V05_INFERENCE.md).
 
-Given an independent truth TSV with `candidate_id`, binary `label` and a
-species-pair/clade `group_id`, the audit helper reports Brier score, log loss,
-ECE, AUROC, calibration bins and group-wise held-out evaluation:
+The legacy single-run audit accepts run-local `candidate_id` truth and reports
+coverage, Brier score, log loss, AUROC/AUPRC, equal-width/equal-mass ECE,
+calibration diagnostics and optional group-bootstrap intervals:
 
 ```bash
 python3 scripts/tevox_score_audit.py \
@@ -182,8 +195,41 @@ python3 scripts/tevox_score_audit.py \
   --truth independent_truth.tsv --output cohort.audit
 ```
 
-The audit deliberately retains `EVALUATION_ONLY_NOT_A_CALIBRATED_MODEL`; it
-does not fit or bless a calibrated model.
+It remains useful for debugging one fixed run, but is not the publication
+benchmark because generated IDs and duplicate alignment views are run-local.
+
+For method comparison, one semantic truth bundle can evaluate any number of
+runs without duplicating truth:
+
+```bash
+python3 scripts/tevox_benchmark.py \
+  --datasets benchmark/datasets.tsv --runs benchmark/runs.tsv \
+  --output results/benchmark
+
+python3 scripts/tevox_split_audit.py \
+  --truth benchmark/truth.candidates.tsv \
+  --locus-truth benchmark/truth.members.tsv \
+  --splits benchmark/splits.tsv --strict \
+  --output results/split_audit.json
+```
+
+Training export requires a run produced with both candidate limits disabled:
+
+```bash
+./tevox graph ... --max-candidates 0 --max-graph-candidates 0 \
+  --output results/cohort_untruncated
+mkdir -p model_data
+python3 scripts/tevox_export_training.py \
+  --prefix results/cohort_untruncated \
+  --truth benchmark/truth.candidates.tsv \
+  --dataset-id D1 --run-id export-001 --output model_data/cohort
+```
+
+The semantic benchmark, split audit and exporter do not fit a model. The
+legacy score audit may fit intercept/slope diagnostics, but never writes a
+deployable calibrated model. Alpha.2 ships no calibrated model. See the full
+[benchmark contract](docs/BENCHMARK.md) and reserved
+[model format](docs/MODEL_FORMAT.md).
 
 ## Evidence schema and outputs
 
@@ -208,12 +254,13 @@ For prefix `cohort`, schema `1.2.0` writes:
 | `cohort.te_contexts.tsv` | TE × context | bracketed/interior/ambiguous assignment |
 | `cohort.states.tsv` | locus × genome | backward-compatible eight-state view |
 | `cohort.summary.tsv` | genome × state | counts |
-| `cohort.run.json` | run | versions, parameters, providers, counts and performance counters |
+| `cohort.run.json` | run | atomic completion marker with versions, parameters, frozen input inventory, providers, counts and performance counters |
 
 All coordinates are 0-based half-open. A literal `.` means unobserved or not
 applicable and never numeric zero. See [schema](docs/SCHEMA.md),
 [input contracts](docs/INPUTS.md), [design](docs/DESIGN.md),
 [v0.5 inference](docs/V05_INFERENCE.md),
+[benchmark contract](docs/BENCHMARK.md),
 [validation](docs/VALIDATION.md) and [roadmap](docs/ROADMAP.md).
 
 ## State and phylogeny

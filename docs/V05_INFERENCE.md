@@ -1,6 +1,6 @@
 # v0.5 inference contract
 
-TEvoX `0.5.0-alpha.1` adds a missing-aware score layer and constrained global
+TEvoX `0.5.0-alpha.2` retains a missing-aware score layer and constrained global
 optimizer. The built-in model is deliberately named
 `BUILTIN_UNCALIBRATED_V1`: its normalized scores are **not calibrated
 probabilities** and must not be reported as posterior probabilities. The
@@ -92,6 +92,14 @@ locus assignment. A merge is feasible only if it:
 3. does not mix distinct known homology groups;
 4. respects the manifest quota for every member lacking strong context.
 
+Distinct TEs from the same genome and contig—including adjacent, overlapping
+and nested annotations—are an additional component hard negative. They can
+coexist only when both have different unique strong contexts in the same
+nonzero HMG, explicitly share one known WGD node and are not an allelic
+haplotype pair. This is a narrow, evidence-backed WGD exception, not a
+copy-quota shortcut. When such an explicit WGD pair remains in separate loci
+after membership gating, physical proximity cannot produce a tandem label.
+
 Components with at most `--exact-max-edges` active edges (default 18, maximum
 24) are exhaustively enumerated. Their status is `OPTIMAL`, upper bound equals
 the achieved objective and relative gap is zero. Larger components use a
@@ -103,6 +111,11 @@ component ID.
 The exact implementation is a constrained partition enumeration, not an
 external ILP solver. Calling the heuristic path “optimal”, or calling either
 path a calibrated Bayesian posterior, is outside this contract.
+
+`OPTIMAL` is conditional on graph-candidate pruning and the preceding
+one-to-one block matching. The current solver does not jointly reconsider an
+alternative rejected by Hungarian after a later component constraint blocks a
+selected edge.
 
 ## Relation scores
 
@@ -133,3 +146,7 @@ species-pair or clade-level holdout, then report Brier score, log loss,
 calibration error and calibration curves. Until such a model is versioned and
 validated, all v0.5 score tables and `run.json` retain
 `calibration_status=UNCALIBRATED`.
+
+Alpha.2 provides semantic multi-run evaluation, raw pre-decision feature
+export and split leakage auditing for that future work. Their exact contracts
+and non-claims are in [the benchmark contract](BENCHMARK.md).

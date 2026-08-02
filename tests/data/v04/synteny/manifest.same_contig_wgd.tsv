@@ -1,0 +1,3 @@
+genome_id	fasta	te_annotation	max_locus_copies
+A	A.fa	A.single_wgd.gff3	1
+B	B.fa	B.same_contig_wgd.gff3	1

@@ -1,0 +1,10 @@
+genome_id	gene_id	contig	start	end	strand	subgenome_id	haplotype_id
+A	A_g1	chrA	100	150	+	A	hap1
+A	A_g2	chrA	300	350	+	A	hap1
+A	A_g3	chrA	500	550	+	A	hap1
+B	B1_g1	chrB1	20	50	+	B1	hap1
+B	B1_g2	chrB1	100	150	+	B1	hap1
+B	B1_g3	chrB1	250	280	+	B1	hap1
+B	B2_g1	chrB1	300	330	-	B2	hap1
+B	B2_g2	chrB1	450	480	-	B2	hap1
+B	B2_g3	chrB1	550	580	-	B2	hap1

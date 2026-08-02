@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import math
 import sys
@@ -490,6 +491,26 @@ def main(prefix_text: str) -> None:
         "calibration_status": "UNCALIBRATED",
         "score_semantics": "normalized_scores_not_calibrated_probabilities",
     }
+    assert run["counts"]["input_files"] == len(run["input_files"])
+    frozen_by_path: dict[str, str] = {}
+    for item in run["input_files"]:
+        assert item["role"] in {
+            "genome_manifest", "assembly", "te_annotation",
+            "alignment_manifest", "alignment", "synteny_manifest",
+            "synteny_gene_table", "synteny_collinearity",
+        }
+        assert item["path"]
+        assert len(item["sha256"]) == 64
+        int(item["sha256"], 16)
+        with Path(item["path"]).open("rb") as input_handle:
+            observed = hashlib.sha256(input_handle.read()).hexdigest()
+        assert item["sha256"] == observed
+        previous = frozen_by_path.setdefault(item["path"], item["sha256"])
+        assert previous == item["sha256"]
+    for genome in run["genomes"]:
+        assert frozen_by_path[genome["fasta"]] == genome["fasta_sha256"]
+        assert frozen_by_path[genome["te_annotation"]] == \
+            genome["te_annotation_sha256"]
     expected_counts = {
         "evidence_observations": len(evidence),
         "observation_score_rows": len(observation_scores),
@@ -522,9 +543,24 @@ def main(prefix_text: str) -> None:
     assert run["counts"]["synteny_evidence_groups"] == len(
         run["synteny_evidence"]
     )
+    assert run["counts"]["synteny_provider_inputs"] == len(
+        run["synteny_inputs"]
+    )
+    for item in run["synteny_inputs"]:
+        assert item["provider"] == "MCScanX"
+        for path_field, hash_field in (
+            ("collinearity_path", "collinearity_sha256"),
+            ("gene_table_path", "gene_table_sha256"),
+        ):
+            assert item[path_field]
+            assert len(item[hash_field]) == 64
+            int(item[hash_field], 16)
+            assert frozen_by_path[item[path_field]] == item[hash_field]
     assert alignment_group_ids <= {
         row["evidence_group_id"] for row in run["alignment_evidence"]
     }
+    for item in run["alignment_evidence"] + run["synteny_evidence"]:
+        assert frozen_by_path[item["path"]] == item["path_sha256"]
     assert synteny_group_ids == {
         row["evidence_group_id"] for row in run["synteny_evidence"]
     }

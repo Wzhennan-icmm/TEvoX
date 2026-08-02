@@ -19,8 +19,8 @@ build:
 -include $(OBJECTS:.o=.d)
 build/index_test: tests/index_test.c src/index.c include/tevox.h | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(WARNFLAGS) $(LDFLAGS) tests/index_test.c src/index.c -o $@
-build/delta_test: tests/delta_test.c src/aln_mummer_delta.c src/io.c src/util.c include/tevox.h | build
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(WARNFLAGS) $(LDFLAGS) tests/delta_test.c src/aln_mummer_delta.c src/io.c src/util.c $(LDLIBS) -o $@
+build/delta_test: tests/delta_test.c src/aln_mummer_delta.c src/io.c src/sha256.c src/util.c include/tevox.h include/sha256.h | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(WARNFLAGS) $(LDFLAGS) tests/delta_test.c src/aln_mummer_delta.c src/io.c src/sha256.c src/util.c $(LDLIBS) -o $@
 check test: $(TARGET) build/index_test build/delta_test
 	./build/index_test
 	./build/delta_test tests/data/conflict/A.fa tests/data/conflict/A.gff3 tests/data/conflict/B.fa tests/data/reverse/B.gff3 tests/data/v04/delta/plus.delta tests/data/v04/delta/reverse.delta
@@ -36,5 +36,8 @@ install: $(TARGET)
 	install -m 0755 $(TARGET) "$(DESTDIR)$(PREFIX)/bin/tevox"
 	install -m 0755 scripts/tevox_phylo.py "$(DESTDIR)$(PREFIX)/bin/tevox-phylo"
 	install -m 0755 scripts/tevox_score_audit.py "$(DESTDIR)$(PREFIX)/bin/tevox-score-audit"
+	install -m 0755 scripts/tevox_benchmark.py "$(DESTDIR)$(PREFIX)/bin/tevox-benchmark"
+	install -m 0755 scripts/tevox_export_training.py "$(DESTDIR)$(PREFIX)/bin/tevox-export-training"
+	install -m 0755 scripts/tevox_split_audit.py "$(DESTDIR)$(PREFIX)/bin/tevox-split-audit"
 clean:
 	$(RM) -r build $(TARGET)

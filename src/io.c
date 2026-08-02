@@ -577,6 +577,11 @@ void tv_run_free(TvRun *run)
     }
     for (index = 0; index < run->n_synteny_source_paths; index++) {
         free(run->synteny_source_paths[index]);
+        free(run->synteny_gene_paths[index]);
+    }
+    for (index = 0; index < run->n_input_digests; index++) {
+        free(run->input_digests[index].role);
+        free(run->input_digests[index].path);
     }
     free(run->genomes);
     free(run->nodes);
@@ -597,6 +602,8 @@ void tv_run_free(TvRun *run)
     free(run->context_scratch_left);
     free(run->context_scratch_right);
     free(run->synteny_source_paths);
+    free(run->synteny_gene_paths);
+    free(run->input_digests);
     free(run->paf_interval_index);
     free(run->te_interval_index);
     free(run->components);
@@ -611,6 +618,10 @@ int tv_add_genome(TvRun *run, const char *id, const char *fasta,
 
     if (id == NULL || *id == '\0' || tv_genome_id(run, id) >= 0 || copies < 1) {
         tv_print_error("genome IDs must be unique and copy quota positive");
+        return -1;
+    }
+    if (tv_register_input(run, "assembly", fasta) != 0
+        || tv_register_input(run, "te_annotation", annotation_path) != 0) {
         return -1;
     }
     if (run->n_genomes == run->cap_genomes) {
@@ -641,13 +652,17 @@ static int compare_genome(const void *left, const void *right)
 
 int tv_load_manifest(TvRun *run, const char *path)
 {
-    FILE *stream = fopen(path, "r");
+    FILE *stream;
     char *base;
     char *line = NULL;
     size_t capacity = 0;
     ssize_t length;
     int line_number = 0;
 
+    if (tv_register_input(run, "genome_manifest", path) != 0) {
+        return -1;
+    }
+    stream = fopen(path, "r");
     if (stream == NULL) {
         tv_print_error("cannot open manifest '%s'", path);
         return -1;
@@ -1048,6 +1063,9 @@ int tv_add_paf_file(TvRun *run, int query_genome, int target_genome,
         || target_genome >= (int)run->n_genomes) {
         return -1;
     }
+    if (tv_register_input(run, "alignment", path) != 0) {
+        return -1;
+    }
     stream = fopen(path, "r");
     if (stream == NULL) {
         tv_print_error("cannot open PAF '%s'", path);
@@ -1200,7 +1218,7 @@ fail:
 
 int tv_load_alignments(TvRun *run, const char *path)
 {
-    FILE *stream = fopen(path, "r");
+    FILE *stream;
     char *base;
     char *line = NULL;
     size_t capacity = 0;
@@ -1208,6 +1226,10 @@ int tv_load_alignments(TvRun *run, const char *path)
     int line_number = 0;
     int pairs = 0;
 
+    if (tv_register_input(run, "alignment_manifest", path) != 0) {
+        return -1;
+    }
+    stream = fopen(path, "r");
     if (stream == NULL) {
         tv_print_error("cannot open alignments table '%s'", path);
         return -1;

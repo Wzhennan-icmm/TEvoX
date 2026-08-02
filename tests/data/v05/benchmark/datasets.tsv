@@ -1,0 +1,2 @@
+benchmark_schema_version	dataset_id	genome_truth	candidate_truth	locus_truth	instance_truth	candidate_truth_scope	candidate_sampling_design	candidate_inclusion_probability	locus_truth_scope
+1.0.0	D_GLOBAL	truth.genomes.tsv	truth.candidates.tsv	truth.members.tsv	truth.instances.tsv	EXHAUSTIVE	CENSUS	1	EXHAUSTIVE

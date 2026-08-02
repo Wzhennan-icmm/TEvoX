@@ -5,7 +5,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define TEVOX_VERSION "0.5.0-alpha.1"
+#include "sha256.h"
+
+#define TEVOX_VERSION "0.5.0-alpha.2"
 #define TEVOX_SCHEMA_VERSION "1.2.0"
 #define TEVOX_MODEL_ID "BUILTIN_UNCALIBRATED_V1"
 #define TEVOX_CALIBRATION_STATUS "UNCALIBRATED"
@@ -15,6 +17,12 @@ typedef struct {
     int64_t start;
     int64_t end;
 } TvGapRun;
+
+typedef struct {
+    char *role;
+    char *path;
+    char sha256[TV_SHA256_HEX_LENGTH + 1];
+} TvInputDigest;
 
 typedef struct {
     char *name;
@@ -564,6 +572,7 @@ typedef struct {
     int *context_scratch_right;
     size_t context_scratch_capacity;
     char **synteny_source_paths;
+    char **synteny_gene_paths;
     size_t n_synteny_source_paths;
     size_t cap_synteny_source_paths;
     TvIntervalEntry *paf_interval_index;
@@ -572,6 +581,9 @@ typedef struct {
     size_t n_te_interval_index;
     int *components;
     int n_loci;
+    TvInputDigest *input_digests;
+    size_t n_input_digests;
+    size_t cap_input_digests;
     TvPerformanceCounters performance;
     TvConfig cfg;
 } TvRun;
@@ -581,6 +593,10 @@ void tv_run_free(TvRun *run);
 int tv_load_manifest(TvRun *run, const char *path);
 int tv_load_alignments(TvRun *run, const char *path);
 int tv_load_synteny_sources(TvRun *run, const char *path);
+int tv_register_input(TvRun *run, const char *role, const char *path);
+int tv_verify_inputs(const TvRun *run);
+const char *tv_input_path(const TvRun *run, const char *path);
+const char *tv_input_sha256(const TvRun *run, const char *path);
 int tv_add_genome(TvRun *run, const char *id, const char *fasta,
                   const char *annotation, int copies);
 int tv_add_paf_file(TvRun *run, int query_genome, int target_genome,
@@ -614,6 +630,7 @@ TvIndexRange tv_paf_index_range(TvRun *run, int query_genome,
 TvIndexRange tv_te_index_range(TvRun *run, int genome, int contig_index,
                                int64_t start, int64_t end);
 int tv_analyze(TvRun *run);
+int tv_validate_output_prefix(const TvRun *run, const char *prefix);
 int tv_write_outputs(TvRun *run, const char *prefix);
 void tv_score_inference(TvRun *run);
 int tv_infer_loci(TvRun *run);

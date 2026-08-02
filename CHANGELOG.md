@@ -1,5 +1,46 @@
 # Changelog
 
+## 0.5.0-alpha.2 — 2026-08-02
+
+- added a run-independent semantic truth contract and multi-run evaluator for
+  candidate generation/scores, B-cubed/ARI/pairwise locus reconstruction,
+  three-axis states, empty sites, breakpoints and callability–accuracy;
+- froze dataset genome/taxon truth and pre-parse FASTA, annotation, alignment,
+  manifest and MCScanX gene/collinearity SHA-256 values; inputs are rechecked
+  before analysis/output, recorded with canonical absolute paths, and
+  benchmark runs fail on assembly drift;
+- made candidate truth scope/sampling explicit, counted partial-truth
+  prediction-only pairs, accepted zero-prediction methods as all-missing, and
+  prevented missing nodes/classes and tied score bins from inflating metrics;
+- gated state scoring on reciprocal unique-majority locus mappings, retained
+  missing calls as `NO_PREDICTION`, excluded biological `UNKNOWN` from empty
+  FDR, and fail closed on unsupported multi-copy state coordinates;
+- added safe untruncated raw-feature export with candidate-generator,
+  assembly, annotation and input checksums, while excluding downstream model,
+  selection, solver and locus fields; export schema 1.1 rebuilds raw features,
+  preserves unlabelled candidates and commits hashed TSVs via a JSON marker;
+- added partition/fold leakage auditing that binds shared TEs, reciprocal
+  pairs, ancestral events, loci, homology groups, validation batches and
+  clades, with strict candidate/locus-truth cross-checks and external taxon
+  isolation by default;
+- expanded the run-local uncalibrated score audit with AUPRC, equal-mass ECE,
+  diagnostic calibration intercept/slope, truth coverage and deterministic
+  group-bootstrap confidence intervals;
+- corrected direct relation rows to use final component membership even when
+  the direct edge was not selected, and stopped classifying nested/overlapping
+  annotations as tandem copies;
+- blocked distinct same-genome/same-contig TEs—including adjacent, overlapping
+  and nested annotations—from entering one locus through a third-node bridge,
+  except under explicit distinct strong contexts in one known HMG/WGD node and
+  known distinct subgenomes; allelic haplotypes cannot invoke the exception,
+  and gated WGD pairs cannot be relabelled tandem by proximity;
+- rejected input/output and output/output path, symlink and hard-link aliases,
+  checked every output close, and made `run.json` an atomic last-written marker
+  so failed reruns cannot retain a stale completion record;
+- documented the reserved `.tvm` frozen-model contract without fitting,
+  loading or shipping a calibrated model; schema 1.2.0 and
+  `BUILTIN_UNCALIBRATED_V1` remain unchanged.
+
 ## 0.5.0-alpha.1 — 2026-08-01
 
 - added missing-aware candidate features and normalized three-axis observation

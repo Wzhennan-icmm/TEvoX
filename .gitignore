@@ -17,6 +17,8 @@
 *.ancestral_states.tsv
 !tests/golden/
 !tests/golden/*.states.tsv
+!tests/data/v05/benchmark/
+!tests/data/v05/benchmark/*.tsv
 .idea/
 .vscode/
 .DS_Store

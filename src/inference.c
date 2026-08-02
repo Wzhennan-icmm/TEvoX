@@ -169,7 +169,11 @@ static uint64_t hash_separator(uint64_t hash)
 
 static uint64_t hash_u64(uint64_t hash, uint64_t value)
 {
-    return tv_hash_bytes(hash, &value, sizeof(value));
+    char buffer[32];
+
+    (void)snprintf(buffer, sizeof(buffer), "%016llx",
+                   (unsigned long long)value);
+    return tv_hash_text(hash, buffer);
 }
 
 static uint64_t pair_hash(const TvRun *run, const char *kind, int left,
@@ -823,6 +827,46 @@ static bool node_has_strong_context(const TvRun *run, int node)
     return false;
 }
 
+static bool metadata_value_known(const char *value)
+{
+    return value != NULL && value[0] != '\0' && strcmp(value, ".") != 0
+        && strcasecmp(value, "unknown") != 0;
+}
+
+static bool copy_contexts_are_allelic(const TvCopyContext *left,
+                                      const TvCopyContext *right)
+{
+    return metadata_value_known(left->haplotype_id)
+        && metadata_value_known(right->haplotype_id)
+        && strcmp(left->haplotype_id, right->haplotype_id) != 0
+        && (!metadata_value_known(left->subgenome_id)
+            || !metadata_value_known(right->subgenome_id)
+            || strcmp(left->subgenome_id, right->subgenome_id) == 0);
+}
+
+static bool explicit_wgd_pair(const TvRun *run, int left, int right)
+{
+    int left_context = strong_context_for_group(run, left, 0);
+    int right_context = strong_context_for_group(run, right, 0);
+
+    if (left_context < 0 || right_context < 0
+        || left_context == right_context) {
+        return false;
+    }
+    const TvCopyContext *a = &run->contexts[left_context];
+    const TvCopyContext *b = &run->contexts[right_context];
+
+    return a->homology_group_id != 0
+        && a->homology_group_id == b->homology_group_id
+        && metadata_value_known(a->subgenome_id)
+        && metadata_value_known(b->subgenome_id)
+        && strcmp(a->subgenome_id, b->subgenome_id) != 0
+        && metadata_value_known(a->wgd_node)
+        && metadata_value_known(b->wgd_node)
+        && strcmp(a->wgd_node, b->wgd_node) == 0
+        && !copy_contexts_are_allelic(a, b);
+}
+
 static bool local_merge_allowed(const TvRun *run, const int *nodes,
                                 int node_count, const int *parents,
                                 int left_root, int right_root)
@@ -841,6 +885,11 @@ static bool local_merge_allowed(const TvRun *run, const int *nodes,
             bool b_known = family_known_text(b->family);
             if (a_known && b_known
                 && strcasecmp(a->family, b->family) != 0) {
+                return false;
+            }
+            if (a->genome == b->genome
+                && strcmp(a->contig, b->contig) == 0
+                && !explicit_wgd_pair(run, nodes[left], nodes[right])) {
                 return false;
             }
         }
@@ -1327,11 +1376,6 @@ static int solve_components(TvRun *run)
     return status;
 }
 
-static bool text_known(const char *text)
-{
-    return text != NULL && text[0] != '\0' && strcmp(text, ".") != 0;
-}
-
 static void relation_normalize(TvRelation *relation)
 {
     double total = 0.0;
@@ -1387,14 +1431,14 @@ static void classify_relation(const TvRun *run, TvRelation *relation)
                   == run->contexts[context_b].homology_group_id) {
         const TvCopyContext *left = &run->contexts[context_a];
         const TvCopyContext *right = &run->contexts[context_b];
-        bool allelic = text_known(left->haplotype_id)
-            && text_known(right->haplotype_id)
+        bool allelic = metadata_value_known(left->haplotype_id)
+            && metadata_value_known(right->haplotype_id)
             && strcmp(left->haplotype_id, right->haplotype_id) != 0
-            && (!text_known(left->subgenome_id)
-                || !text_known(right->subgenome_id)
+            && (!metadata_value_known(left->subgenome_id)
+                || !metadata_value_known(right->subgenome_id)
                 || strcmp(left->subgenome_id, right->subgenome_id) == 0);
-        bool wgd = text_known(left->wgd_node)
-            && text_known(right->wgd_node)
+        bool wgd = metadata_value_known(left->wgd_node)
+            && metadata_value_known(right->wgd_node)
             && strcmp(left->wgd_node, right->wgd_node) == 0;
 
         if (allelic) {
@@ -1408,10 +1452,12 @@ static void classify_relation(const TvRun *run, TvRelation *relation)
         }
     } else if (!same_locus && a->genome == b->genome
                && strcmp(a->contig, b->contig) == 0) {
+        bool non_overlapping = a->end <= b->start || b->end <= a->start;
         int64_t distance = a->end <= b->start
             ? b->start - a->end : (b->end <= a->start
                 ? a->start - b->end : 0);
-        if (distance <= run->cfg.tandem_distance) {
+        if (non_overlapping && distance <= run->cfg.tandem_distance
+            && !explicit_wgd_pair(run, relation->a, relation->b)) {
             relation->scores[TV_RELATION_TANDEM_PARALOG] = 0.70;
             relation->scores[TV_RELATION_UNKNOWN] = 0.22;
         }
@@ -1478,7 +1524,8 @@ static void build_relations(TvRun *run)
 {
     for (size_t index = 0; index < run->n_edges; index++) {
         TvEdge *edge = &run->edges[index];
-        int locus = edge->selected ? run->components[edge->a] : -1;
+        int locus = run->components[edge->a] == run->components[edge->b]
+            ? run->components[edge->a] : -1;
         append_relation(run, edge->a, edge->b, (int)index, locus);
     }
     size_t *locus_offsets = checked_alloc((size_t)run->n_loci + 1,
@@ -1521,8 +1568,10 @@ static void build_relations(TvRun *run)
                 if (strcmp(a->contig, b->contig) != 0) {
                     break;
                 }
-                int64_t distance = a->end <= b->start
-                    ? b->start - a->end : 0;
+                if (b->start < a->end) {
+                    continue;
+                }
+                int64_t distance = b->start - a->end;
                 if (distance > run->cfg.tandem_distance) {
                     break;
                 }

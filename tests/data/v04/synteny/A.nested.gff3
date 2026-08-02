@@ -1,0 +1,4 @@
+##gff-version 3
+chrA	fixture	transposable_element	181	220	.	+	.	ID=A_TE;family=Fam1
+chrA	fixture	transposable_element	191	210	.	+	.	ID=A_TE_nested;family=Fam1
+chrA	fixture	transposable_element	231	250	.	+	.	ID=A_TE_same_context;family=Fam1

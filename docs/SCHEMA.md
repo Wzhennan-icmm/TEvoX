@@ -175,7 +175,16 @@ missing context are neutral; ambiguous context cannot be converted to support.
 - `summary.tsv` counts compatibility states by genome.
 - `run.json` records versions, parameters, provider groups, row counts,
   inference model/calibration status, performance counters and the complete
-  output inventory.
+  output inventory. Each genome entry freezes `fasta_sha256` and
+  `te_annotation_sha256`; every alignment/synteny evidence entry freezes its
+  provider `path_sha256`. Its `input_files` inventory also freezes genome,
+  alignment and synteny manifests plus MCScanX gene/collinearity inputs, while
+  `synteny_inputs` binds both provider tables explicitly. Inputs are hashed
+  before parsing and rechecked before analysis and output; drift is fatal.
+  Recorded input paths are canonical absolute paths, so later validation does
+  not depend on the process working directory.
+  Output/input and output/output aliases are rejected before writing, and
+  `run.json` is an atomic last-written completion marker.
 
 `run.json` distinguishes the exact-window `candidate_observations`, union
 `internal_candidates`, `graph_candidates`, and reported `candidates` counts.
@@ -186,6 +195,12 @@ Strong copy-context constraints replace the legacy quota for assigned TEs:
 one ancestral locus may contain at most one member per `context_id`, while
 different contexts in the same HMG can be retained as WGD copies. TEs without
 a strong context still use the manifest fallback quota.
+
+The fallback quota cannot merge two distinct TEs on one genome/contig,
+including adjacent, overlapping or nested annotations. That conflict is
+lifted only for different unique strong contexts in the same known HMG and
+explicit WGD node. Explicit WGD pairs that fail locus membership gates remain
+`UNKNOWN`; proximity alone cannot relabel them as tandem copies.
 
 ## Claimability invariants
 
@@ -206,3 +221,10 @@ keys, provider-specific missing semantics, score normalization, logits,
 prediction sets, matching/solver state, context chains, ambiguity links,
 edge-group deduplication, row counts and the zero-FASTA-reopen invariant. It is
 executed by `make check` and under ASan/UBSan by `make asan`.
+
+Schema 1.2.0 prediction IDs are stable within their documented evidence and
+input contract, but they are not valid primary keys for independent truth.
+Publication benchmarking joins `(dataset_id, genome_id, te_id)` semantic nodes
+and truth locus IDs as specified in [BENCHMARK.md](BENCHMARK.md). Generated
+`CAN`, `EVD`, `DEC`, `TEL` and `INS` values are used only as foreign keys inside
+one prediction bundle.

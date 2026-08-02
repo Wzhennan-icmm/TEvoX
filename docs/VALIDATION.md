@@ -10,6 +10,10 @@
 - missing MAPQ 255, contig-edge flanks and derived reverse provenance;
 - rejection of zero-overlap candidates, family bridges and inconsistent
   query/target direction, plus non-finite numeric options;
+- rejection of real reciprocal=0.5 adjacent and nested/overlapping TE bridges
+  under a permissive copy quota, with a separately validated explicit
+  same-HMG/WGD exception and an allelic same-subgenome/haplotype negative
+  control;
 - near-best projection ambiguity and stable output under PAF/GFF/manifest order;
 - MUMmer NUCMER plus/reverse operation normalization, exact half-open
   coordinates, 7/9 indel-aware aggregate identity, shared reverse provenance,
@@ -32,10 +36,32 @@
   oversized-block fallback;
 - exact component objective/bound/gap reporting and a controlled graph where
   the exact partition beats the greedy fallback;
-- independent-truth score auditing for Brier/log-loss/ECE/AUROC and group-wise
-  evaluation without upgrading the built-in model's calibration status;
+- run-local score auditing for coverage, Brier/log-loss, AUROC/AUPRC,
+  equal-width/equal-mass ECE, diagnostic intercept/slope and deterministic
+  group-bootstrap intervals without upgrading calibration status;
+- one semantic truth bundle evaluating exact and heuristic runs, with the
+  controlled greedy failure detected by B-cubed and ARI;
+- frozen assembly/annotation hashes, exhaustive/partial candidate scope,
+  prediction-only accounting and zero-prediction end-to-end B-cubed behavior;
+- pre-parse and rechecked hashes for all raw/control inputs, input/output and
+  output/output alias rejection (including symlink/hard-link cases), output
+  close failures, cross-working-directory export and atomic last-written
+  `run.json` recovery;
+- sparse exact truth/prediction locus matching with reciprocal-majority gates,
+  three-axis state accuracy, explicit `NO_PREDICTION`, UNKNOWN-safe assessed
+  empty FDR, breakpoint error and monotone quality-selective callability;
+- split leakage acceptance/rejection across TE/event/locus/HMG/batch/clade/fold
+  bindings, strict failure without locus truth and explicit no-model-fitted
+  reports;
+- raw training-feature export from an untruncated run, with every generated
+  view retained, reverse endpoint truth oriented correctly, feature/evidence
+  reconstruction, run-time input-hash verification, commit-marker output
+  hashes, forbidden downstream fields absent and fail-closed tamper/truncation
+  checks;
 - explicit WGD-homeolog and tandem relation rows plus stable edge, matching,
   relation and solver foreign keys;
+- final-locus relation labelling for a weak direct edge connected through a
+  third node, and no tandem label for nested/overlapping annotations;
 - standalone alignment and TE interval-index boundary/counter tests;
 - schema `1.2.0` primary/foreign keys, provider-specific missing semantics,
   score/logit normalization, matching/solver invariants, context chains, row

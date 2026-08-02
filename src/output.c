@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 typedef struct {
     TvState state;
@@ -21,17 +23,197 @@ typedef struct {
     char claimability_reason[96];
 } InstanceCall;
 
+static const char *const output_suffixes[] = {
+    ".evidence.tsv", ".observation_scores.tsv", ".candidates.tsv",
+    ".candidate_features.tsv", ".candidate_contexts.tsv", ".decisions.tsv",
+    ".edges.tsv", ".relations.tsv", ".solver.tsv", ".loci.tsv",
+    ".instances.tsv", ".states.tsv", ".summary.tsv",
+    ".synteny.blocks.tsv", ".synteny.anchors.tsv", ".contexts.tsv",
+    ".te_contexts.tsv", ".run.json"
+};
+
+static char *output_path(const char *prefix, const char *suffix)
+{
+    size_t length = strlen(prefix) + strlen(suffix) + 1U;
+    char *path = malloc(length);
+
+    if (path != NULL) {
+        (void)snprintf(path, length, "%s%s", prefix, suffix);
+    }
+    return path;
+}
+
+static char *canonical_path(const char *path)
+{
+    char *resolved = realpath(path, NULL);
+    char *directory;
+    char *resolved_directory;
+    const char *slash;
+    const char *base;
+    char *result;
+    size_t length;
+    const char *separator;
+
+    if (resolved != NULL) {
+        return resolved;
+    }
+    directory = tv_directory(path);
+    resolved_directory = realpath(directory, NULL);
+    free(directory);
+    if (resolved_directory == NULL) {
+        return NULL;
+    }
+    slash = strrchr(path, '/');
+    base = slash == NULL ? path : slash + 1;
+    separator = strcmp(resolved_directory, "/") == 0 ? "" : "/";
+    length = strlen(resolved_directory) + strlen(separator) + strlen(base) + 1U;
+    result = malloc(length);
+    if (result != NULL) {
+        (void)snprintf(result, length, "%s%s%s", resolved_directory,
+                       separator, base);
+    }
+    free(resolved_directory);
+    return result;
+}
+
+int tv_validate_output_prefix(const TvRun *run, const char *prefix)
+{
+    if (run == NULL || prefix == NULL || *prefix == '\0') {
+        tv_print_error("output prefix must be non-empty");
+        return -1;
+    }
+    for (size_t suffix_index = 0;
+         suffix_index < sizeof(output_suffixes) / sizeof(output_suffixes[0]);
+         suffix_index++) {
+        char *candidate = output_path(prefix, output_suffixes[suffix_index]);
+        char *canonical_output;
+        struct stat output_status;
+        struct stat output_link_status;
+        bool output_exists;
+        bool output_entry_exists;
+
+        if (candidate == NULL) {
+            tv_print_error("out of memory while validating output paths");
+            return -1;
+        }
+        errno = 0;
+        output_entry_exists = lstat(candidate, &output_link_status) == 0;
+        if (!output_entry_exists && errno != ENOENT) {
+            tv_print_error("cannot inspect output path '%s': %s", candidate,
+                           strerror(errno));
+            free(candidate);
+            return -1;
+        }
+        if (output_entry_exists && !S_ISREG(output_link_status.st_mode)) {
+            tv_print_error("existing output '%s' is not a regular file",
+                           candidate);
+            free(candidate);
+            return -1;
+        }
+        canonical_output = canonical_path(candidate);
+        output_exists = stat(candidate, &output_status) == 0;
+        if (canonical_output == NULL) {
+            tv_print_error("cannot resolve output path '%s': %s", candidate,
+                           strerror(errno));
+            free(candidate);
+            return -1;
+        }
+        for (size_t input_index = 0; input_index < run->n_input_digests;
+             input_index++) {
+            const char *input = run->input_digests[input_index].path;
+            char *canonical_input = realpath(input, NULL);
+            struct stat input_status;
+            bool same_inode = output_exists
+                && stat(input, &input_status) == 0
+                && output_status.st_dev == input_status.st_dev
+                && output_status.st_ino == input_status.st_ino;
+            bool same_path = canonical_input != NULL
+                && strcmp(canonical_output, canonical_input) == 0;
+
+            free(canonical_input);
+            if (same_path || same_inode) {
+                tv_print_error("output '%s' would overwrite input '%s'",
+                               candidate, input);
+                free(canonical_output);
+                free(candidate);
+                return -1;
+            }
+        }
+        for (size_t previous_index = 0; previous_index < suffix_index;
+             previous_index++) {
+            char *previous = output_path(prefix, output_suffixes[previous_index]);
+            char *canonical_previous;
+            struct stat previous_status;
+            bool previous_exists;
+            bool same_inode;
+            bool same_path;
+
+            if (previous == NULL) {
+                tv_print_error("out of memory while validating output paths");
+                free(canonical_output);
+                free(candidate);
+                return -1;
+            }
+            canonical_previous = canonical_path(previous);
+            previous_exists = stat(previous, &previous_status) == 0;
+            if (canonical_previous == NULL) {
+                tv_print_error("cannot resolve output path '%s': %s", previous,
+                               strerror(errno));
+                free(previous);
+                free(canonical_output);
+                free(candidate);
+                return -1;
+            }
+            same_inode = output_exists && previous_exists
+                && output_status.st_dev == previous_status.st_dev
+                && output_status.st_ino == previous_status.st_ino;
+            same_path = canonical_previous != NULL
+                && strcmp(canonical_output, canonical_previous) == 0;
+            if (same_path || same_inode) {
+                tv_print_error("outputs '%s' and '%s' alias the same file",
+                               candidate, previous);
+                free(canonical_previous);
+                free(previous);
+                free(canonical_output);
+                free(candidate);
+                return -1;
+            }
+            free(canonical_previous);
+            free(previous);
+        }
+        free(canonical_output);
+        free(candidate);
+    }
+    return 0;
+}
+
+static int invalidate_run_marker(const char *prefix)
+{
+    char *path = output_path(prefix, ".run.json");
+
+    if (path == NULL) {
+        tv_print_error("out of memory while invalidating the run marker");
+        return -1;
+    }
+    if (unlink(path) != 0 && errno != ENOENT) {
+        tv_print_error("cannot invalidate prior run marker '%s': %s", path,
+                       strerror(errno));
+        free(path);
+        return -1;
+    }
+    free(path);
+    return 0;
+}
+
 static FILE *open_output(const char *prefix, const char *suffix, char **path)
 {
-    size_t length = strlen(prefix) + strlen(suffix) + 1;
     FILE *stream;
 
-    *path = malloc(length);
+    *path = output_path(prefix, suffix);
     if (*path == NULL) {
         tv_print_error("out of memory");
         return NULL;
     }
-    (void)snprintf(*path, length, "%s%s", prefix, suffix);
     stream = fopen(*path, "w");
     if (stream == NULL) {
         tv_print_error("cannot write '%s': %s", *path, strerror(errno));
@@ -39,6 +221,89 @@ static FILE *open_output(const char *prefix, const char *suffix, char **path)
         *path = NULL;
     }
     return stream;
+}
+
+static int finish_output(FILE *stream, const char *path)
+{
+    int saved_errno = ferror(stream) ? (errno != 0 ? errno : EIO) : 0;
+
+    if (fclose(stream) != 0 && saved_errno == 0) {
+        saved_errno = errno != 0 ? errno : EIO;
+    }
+    if (saved_errno != 0) {
+        tv_print_error("cannot finish output '%s': %s", path,
+                       strerror(saved_errno));
+        return -1;
+    }
+    return 0;
+}
+
+static FILE *open_run_marker(const char *prefix, char **temporary_path,
+                             char **final_path)
+{
+    int descriptor;
+    FILE *stream;
+
+    *final_path = output_path(prefix, ".run.json");
+    *temporary_path = output_path(prefix, ".run.json.tmp.XXXXXX");
+    if (*final_path == NULL || *temporary_path == NULL) {
+        tv_print_error("out of memory while creating the run marker");
+        free(*final_path);
+        free(*temporary_path);
+        *final_path = NULL;
+        *temporary_path = NULL;
+        return NULL;
+    }
+    descriptor = mkstemp(*temporary_path);
+    if (descriptor < 0) {
+        tv_print_error("cannot create run marker near '%s': %s", *final_path,
+                       strerror(errno));
+        free(*final_path);
+        free(*temporary_path);
+        *final_path = NULL;
+        *temporary_path = NULL;
+        return NULL;
+    }
+    stream = fdopen(descriptor, "w");
+    if (stream == NULL) {
+        int saved_errno = errno;
+
+        (void)close(descriptor);
+        (void)unlink(*temporary_path);
+        tv_print_error("cannot open run marker near '%s': %s", *final_path,
+                       strerror(saved_errno));
+        free(*final_path);
+        free(*temporary_path);
+        *final_path = NULL;
+        *temporary_path = NULL;
+    }
+    return stream;
+}
+
+static int finish_run_marker(FILE *stream, const char *temporary_path,
+                             const char *final_path)
+{
+    int saved_errno = 0;
+
+    if (fflush(stream) != 0 || ferror(stream)) {
+        saved_errno = errno != 0 ? errno : EIO;
+    } else if (fsync(fileno(stream)) != 0) {
+        saved_errno = errno != 0 ? errno : EIO;
+    }
+    if (fclose(stream) != 0 && saved_errno == 0) {
+        saved_errno = errno != 0 ? errno : EIO;
+    }
+    if (saved_errno == 0 && rename(temporary_path, final_path) != 0) {
+        saved_errno = errno != 0 ? errno : EIO;
+    }
+    if (saved_errno != 0) {
+        (void)unlink(temporary_path);
+        (void)unlink(final_path);
+        tv_print_error("cannot commit run marker '%s': %s", final_path,
+                       strerror(saved_errno));
+        return -1;
+    }
+    return 0;
 }
 
 static void print_bool(FILE *stream, bool value)
@@ -536,7 +801,8 @@ static int write_evidence(TvRun *run, const char *prefix)
                       "\t%lld\t%lld\t%s\t%lld\t%lld\t%s\t%lld\t%lld"
                       "\t%s\t%lld\t%lld\t",
                       tv_alignment_provider_name(paf->provider),
-                      paf->source_path, paf->source_record, paf->source_line,
+                      tv_input_path(run, paf->source_path),
+                      paf->source_record, paf->source_line,
                       tv_evidence_origin_name(paf->origin),
                       paf->origin == TV_EVIDENCE_NATIVE
                           ? "INDEPENDENT" : "DERIVED_SAME_GROUP",
@@ -610,9 +876,9 @@ static int write_evidence(TvRun *run, const char *prefix)
         (void)fprintf(stream, "\t%s\t%s\n", projection->decision_code,
                       projection->claimability_reason);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_observation_scores(TvRun *run, const char *prefix)
@@ -677,9 +943,9 @@ static int write_observation_scores(TvRun *run, const char *prefix)
                              run->cfg.prediction_set_mass);
         (void)fprintf(stream, "\t%.8f\n", projection->annotation_entropy);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static void print_missing_features(FILE *stream, uint32_t observed)
@@ -793,9 +1059,9 @@ static int write_candidate_features(TvRun *run, const char *prefix)
         print_bool(stream, candidate->eligible);
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_candidates(TvRun *run, const char *prefix)
@@ -848,9 +1114,9 @@ static int write_candidates(TvRun *run, const char *prefix)
         print_bool(stream, candidate->selected);
         (void)fprintf(stream, "\t%s\n", candidate->decision_code);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_synteny_blocks(TvRun *run, const char *prefix)
@@ -879,7 +1145,8 @@ static int write_synteny_blocks(TvRun *run, const char *prefix)
         print_homology_group_id(stream, block->homology_group_id);
         (void)fprintf(stream, "\tMCScanX\t%s\t%s\t%d\t%d\t%s\t%s\t%lld\t%lld"
                       "\t%s\t%s\t%lld\t%lld\t%c\t%d\t",
-                      block->source_id, block->source_path,
+                      block->source_id,
+                      tv_input_path(run, block->source_path),
                       block->source_record, block->source_line,
                       run->genomes[block->genome_a].id, block->contig_a,
                       (long long)block->start_a, (long long)block->end_a,
@@ -901,9 +1168,9 @@ static int write_synteny_blocks(TvRun *run, const char *prefix)
         print_text(stream, block->reason);
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_synteny_anchors(TvRun *run, const char *prefix)
@@ -935,9 +1202,9 @@ static int write_synteny_anchors(TvRun *run, const char *prefix)
         print_number(stream, anchor->reported_evalue);
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_contexts(TvRun *run, const char *prefix)
@@ -972,9 +1239,9 @@ static int write_contexts(TvRun *run, const char *prefix)
         print_text(stream, context->status);
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_te_contexts(TvRun *run, const char *prefix)
@@ -1017,9 +1284,9 @@ static int write_te_contexts(TvRun *run, const char *prefix)
         }
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static void print_node_contexts(FILE *stream, const TvRun *run, int node)
@@ -1084,9 +1351,9 @@ static int write_candidate_contexts(TvRun *run, const char *prefix)
         print_node_contexts(stream, run, candidate->target_te);
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_decisions(TvRun *run, const char *prefix)
@@ -1131,9 +1398,9 @@ static int write_decisions(TvRun *run, const char *prefix)
         (void)fprintf(stream, "\t%s\t%s\n", decision->decision_code,
                       decision->claimability_reason);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_edges(TvRun *run, const char *prefix)
@@ -1198,9 +1465,9 @@ static int write_edges(TvRun *run, const char *prefix)
         print_bool(stream, edge->selected);
         (void)fprintf(stream, "\t%s\n", edge->selection_reason);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_relations(TvRun *run, const char *prefix)
@@ -1260,9 +1527,9 @@ static int write_relations(TvRun *run, const char *prefix)
         print_bool(stream, relation->out_of_domain);
         fputc('\n', stream);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_solver(TvRun *run, const char *prefix)
@@ -1290,9 +1557,9 @@ static int write_solver(TvRun *run, const char *prefix)
                       component->relative_gap,
                       (unsigned long long)component->states_explored);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_loci(TvRun *run, const char *prefix)
@@ -1332,9 +1599,9 @@ static int write_loci(TvRun *run, const char *prefix)
         print_locus_members(stream, run, locus, 2);
         (void)fprintf(stream, "\t%.2f\n", quality / (double)run->n_genomes);
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_instances(TvRun *run, const char *prefix)
@@ -1393,9 +1660,9 @@ static int write_instances(TvRun *run, const char *prefix)
             (void)fprintf(stream, "\t%s\n", call.decision_code);
         }
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_states(TvRun *run, const char *prefix)
@@ -1468,9 +1735,9 @@ static int write_states(TvRun *run, const char *prefix)
             (void)fprintf(stream, "\t%s\n", TEVOX_SCHEMA_VERSION);
         }
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static int write_summary(TvRun *run, const char *prefix)
@@ -1495,9 +1762,9 @@ static int write_summary(TvRun *run, const char *prefix)
                           tv_state_name((TvState)state), counts[state]);
         }
     }
-    fclose(stream);
+    int close_status = finish_output(stream, path);
     free(path);
-    return 0;
+    return close_status;
 }
 
 static void json_string(FILE *stream, const char *text)
@@ -1526,8 +1793,9 @@ static void json_string(FILE *stream, const char *text)
 
 static int write_run_json(TvRun *run, const char *prefix)
 {
-    char *path = NULL;
-    FILE *stream = open_output(prefix, ".run.json", &path);
+    char *temporary_path = NULL;
+    char *final_path = NULL;
+    FILE *stream;
     size_t native_groups = 0;
     size_t candidate_observations = 0;
     size_t output_candidates = 0;
@@ -1554,6 +1822,7 @@ static int write_run_json(TvRun *run, const char *prefix)
         }
     }
 
+    stream = open_run_marker(prefix, &temporary_path, &final_path);
     if (stream == NULL) {
         return -1;
     }
@@ -1599,10 +1868,12 @@ static int write_run_json(TvRun *run, const char *prefix)
                   run->cfg.tandem_distance);
     (void)fprintf(stream,
                   "  \"counts\": {\n"
+                  "    \"input_files\": %zu,\n"
                   "    \"genomes\": %zu,\n    \"tes\": %zu,\n"
                   "    \"alignment_views\": %zu,\n"
                   "    \"native_evidence_groups\": %zu,\n"
                   "    \"synteny_evidence_groups\": %zu,\n"
+                  "    \"synteny_provider_inputs\": %zu,\n"
                   "    \"evidence_observations\": %zu,\n"
                   "    \"observation_score_rows\": %zu,\n"
                   "    \"candidate_observations\": %zu,\n"
@@ -1620,8 +1891,10 @@ static int write_run_json(TvRun *run, const char *prefix)
                   "    \"solver_components\": %zu,\n"
                   "    \"loci\": %d\n  },\n"
                   "  \"genomes\": [\n",
-                  run->n_genomes, run->n_nodes, run->n_pafs, native_groups,
-                  run->n_synteny_blocks, run->n_projections,
+                  run->n_input_digests, run->n_genomes, run->n_nodes,
+                  run->n_pafs, native_groups,
+                  run->n_synteny_blocks, run->n_synteny_source_paths,
+                  run->n_projections,
                   run->n_projections, candidate_observations,
                   run->n_candidates, graph_candidates,
                   output_candidates, output_candidates, run->n_decisions,
@@ -1635,12 +1908,29 @@ static int write_run_json(TvRun *run, const char *prefix)
         fputs("    {\"genome_id\": ", stream);
         json_string(stream, genome->id);
         fputs(", \"fasta\": ", stream);
-        json_string(stream, genome->fasta_path);
+        json_string(stream, tv_input_path(run, genome->fasta_path));
+        fputs(", \"fasta_sha256\": ", stream);
+        json_string(stream, tv_input_sha256(run, genome->fasta_path));
         fputs(", \"te_annotation\": ", stream);
-        json_string(stream, genome->te_path);
+        json_string(stream, tv_input_path(run, genome->te_path));
+        fputs(", \"te_annotation_sha256\": ", stream);
+        json_string(stream, tv_input_sha256(run, genome->te_path));
         (void)fprintf(stream, ", \"legacy_max_locus_copies\": %d}%s\n",
                       genome->max_locus_copies,
                       index + 1 == run->n_genomes ? "" : ",");
+    }
+    fputs("  ],\n  \"input_files\": [\n", stream);
+    for (size_t index = 0; index < run->n_input_digests; index++) {
+        const TvInputDigest *input = &run->input_digests[index];
+
+        fputs("    {\"role\": ", stream);
+        json_string(stream, input->role);
+        fputs(", \"path\": ", stream);
+        json_string(stream, input->path);
+        fputs(", \"sha256\": ", stream);
+        json_string(stream, input->sha256);
+        (void)fprintf(stream, "}%s\n",
+                      index + 1 == run->n_input_digests ? "" : ",");
     }
     fputs("  ],\n  \"alignment_evidence\": [\n", stream);
     size_t emitted = 0;
@@ -1658,7 +1948,9 @@ static int write_run_json(TvRun *run, const char *prefix)
         fputs(", \"provider\": ", stream);
         json_string(stream, tv_alignment_provider_name(paf->provider));
         fputs(", \"path\": ", stream);
-        json_string(stream, paf->source_path);
+        json_string(stream, tv_input_path(run, paf->source_path));
+        fputs(", \"path_sha256\": ", stream);
+        json_string(stream, tv_input_sha256(run, paf->source_path));
         (void)fprintf(stream,
                       ", \"record\": %d, \"line\": %d, \"query_genome_id\": ",
                       paf->source_record, paf->source_line);
@@ -1685,10 +1977,30 @@ static int write_run_json(TvRun *run, const char *prefix)
         fputs(", \"provider\": \"MCScanX\", \"source_id\": ", stream);
         json_string(stream, block->source_id);
         fputs(", \"path\": ", stream);
-        json_string(stream, block->source_path);
+        json_string(stream, tv_input_path(run, block->source_path));
+        fputs(", \"path_sha256\": ", stream);
+        json_string(stream, tv_input_sha256(run, block->source_path));
         (void)fprintf(stream, ", \"record\": %d, \"line\": %d}%s\n",
                       block->source_record, block->source_line,
                       index + 1 == run->n_synteny_blocks ? "" : ",");
+    }
+    fputs("  ],\n  \"synteny_inputs\": [\n", stream);
+    for (size_t index = 0; index < run->n_synteny_source_paths; index++) {
+        fputs("    {\"provider\": \"MCScanX\", \"collinearity_path\": ",
+              stream);
+        json_string(stream, tv_input_path(
+            run, run->synteny_source_paths[index]));
+        fputs(", \"collinearity_sha256\": ", stream);
+        json_string(stream, tv_input_sha256(
+            run, run->synteny_source_paths[index]));
+        fputs(", \"gene_table_path\": ", stream);
+        json_string(stream, tv_input_path(
+            run, run->synteny_gene_paths[index]));
+        fputs(", \"gene_table_sha256\": ", stream);
+        json_string(stream, tv_input_sha256(
+            run, run->synteny_gene_paths[index]));
+        (void)fprintf(stream, "}%s\n",
+                      index + 1 == run->n_synteny_source_paths ? "" : ",");
     }
     (void)fprintf(stream,
                   "  ],\n  \"performance\": {\n"
@@ -1715,14 +2027,20 @@ static int write_run_json(TvRun *run, const char *prefix)
           "\"summary.tsv\", \"synteny.blocks.tsv\", "
           "\"synteny.anchors.tsv\", \"contexts.tsv\", "
           "\"te_contexts.tsv\"]\n}\n", stream);
-    fclose(stream);
-    free(path);
-    return 0;
+    int close_status = finish_run_marker(stream, temporary_path, final_path);
+    free(temporary_path);
+    free(final_path);
+    return close_status;
 }
 
 int tv_write_outputs(TvRun *run, const char *prefix)
 {
-    if (prefix == NULL || *prefix == '\0') {
+    if (prefix == NULL || *prefix == '\0'
+        || tv_verify_inputs(run) != 0
+        || tv_validate_output_prefix(run, prefix) != 0) {
+        return -1;
+    }
+    if (invalidate_run_marker(prefix) != 0) {
         return -1;
     }
     if (write_evidence(run, prefix) != 0

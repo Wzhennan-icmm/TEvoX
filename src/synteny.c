@@ -1044,11 +1044,18 @@ int tv_load_synteny_sources(TvRun *run, const char *path)
         tv_print_error("synteny sources require loaded genomes and one load");
         return -1;
     }
+    if (tv_register_input(run, "synteny_manifest", path) != 0) {
+        return -1;
+    }
     if (load_source_specs(path, &sources, &source_count) != 0) {
         return -1;
     }
     for (size_t index = 0; index < source_count; index++) {
-        if (load_gene_table(run, sources[index].genes_path) != 0) {
+        if (tv_register_input(run, "synteny_gene_table",
+                              sources[index].genes_path) != 0
+            || tv_register_input(run, "synteny_collinearity",
+                                 sources[index].collinearity_path) != 0
+            || load_gene_table(run, sources[index].genes_path) != 0) {
             free_sources(sources, source_count);
             return -1;
         }
@@ -1097,9 +1104,15 @@ int tv_load_synteny_sources(TvRun *run, const char *path)
             run->synteny_source_paths = tv_grow(
                 run->synteny_source_paths, run->cap_synteny_source_paths,
                 sizeof(*run->synteny_source_paths));
+            run->synteny_gene_paths = tv_grow(
+                run->synteny_gene_paths, run->cap_synteny_source_paths,
+                sizeof(*run->synteny_gene_paths));
         }
-        run->synteny_source_paths[run->n_synteny_source_paths++] =
+        run->synteny_source_paths[run->n_synteny_source_paths] =
             tv_dupstr(sources[index].collinearity_path);
+        run->synteny_gene_paths[run->n_synteny_source_paths] =
+            tv_dupstr(sources[index].genes_path);
+        run->n_synteny_source_paths++;
     }
     free_sources(sources, source_count);
     return canonicalize_blocks(run);

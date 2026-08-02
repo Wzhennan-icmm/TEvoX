@@ -1,6 +1,6 @@
 # TEvoX 0.5 inference design
 
-This document freezes the architecture of `0.5.0-alpha.1` and schema `1.2.0`.
+This document freezes the architecture of `0.5.0-alpha.2` and schema `1.2.0`.
 The evidence/state safety layer remains deterministic. v0.5 adds an explicitly
 uncalibrated score model plus constrained matching and component optimization;
 it does not claim calibrated posterior inference.
@@ -135,6 +135,13 @@ locus partition must:
 5. satisfy the legacy per-genome fallback quota only for nodes without a strong
    context.
 
+Component merges treat any two distinct TEs from the same genome and contig,
+including adjacent, overlapping and nested annotations, as a hard negative.
+The only exception requires both TEs to have
+unique strong contexts with different context IDs, the same nonzero HMG and
+the same explicit non-missing WGD node. This blocks half-overlap candidates from
+bridging distinct annotations while retaining a testable WGD copy case.
+
 Thus two WGD contexts in one HMG can remain co-orthologous copies, while two TEs
 bracketed by the same context are not treated as WGD copies. Components up to
 the configured edge limit use exhaustive constrained partition search. Larger
@@ -142,6 +149,16 @@ ones use deterministic greedy optimization with a reported upper bound and
 gap. Relation rows expose seven normalized class scores, prediction sets,
 entropy and OOD; they are not posteriors. The full equations and exact/fallback
 contract are in [V05_INFERENCE.md](V05_INFERENCE.md).
+
+The exact component status is conditional on the graph remaining after
+candidate pruning and block-level matching. Hungarian selection is currently
+an irreversible prefilter, not a joint matching/partition optimization, so
+`OPTIMAL` must not be described as the optimum over every raw candidate.
+
+Run-independent truth, sparse exact truth/prediction locus matching, safe raw
+feature export and leakage auditing are specified in
+[BENCHMARK.md](BENCHMARK.md). They prepare independent calibration but do not
+change the built-in score's `UNCALIBRATED` status.
 
 ## Performance model
 

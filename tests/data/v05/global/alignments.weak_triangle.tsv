@@ -1,0 +1,4 @@
+query_id	target_id	paf
+A	B	A_B.paf
+B	C	B_C.paf
+A	C	A_C_weak.paf
