@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased integration — 2026-10-05
+
+- reject invalid GFF coordinates before converting a one-based start, so
+  `INT64_MIN` cannot overflow; preserve diagnostics and completion-marker gates;
+- normalize native negative-strand PAF cg/cs operations to query-forward
+  traversal, fixing asymmetric indel projection;
+- index per-locus output rows and long CIGAR paths; differential tests compare
+  all 17 TSVs with linear traversal on both strands;
+- stream TSV output through checked gzip child processes and teach Python
+  readers to read compressed tables without materializing them;
+- support isolated builds, read-only sources, Python 3.8+, staged helper
+  installation and native Intel/ARM/Universal macOS packages;
+- retain the Hungarian exact threshold: **both sides** must contain at most
+  `--exact-match-nodes` nodes, not merely one side.
+
 ## 0.5.0-alpha.2 — 2026-08-02
 
 - added a run-independent semantic truth contract and multi-run evaluator for

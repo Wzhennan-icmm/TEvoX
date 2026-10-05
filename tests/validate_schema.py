@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import gzip
+
 import csv
 import hashlib
 import json
@@ -15,8 +17,23 @@ from pathlib import Path
 SCHEMA = "1.2.0"
 
 
+def table_path(path):
+    path = Path(path)
+    compressed = Path(str(path) + ".gz")
+    if path.suffix == ".tsv" and compressed.is_file():
+        if path.is_file():
+            raise ValueError("ambiguous plain/compressed table: " + str(path))
+        return compressed
+    return path
+
+
+def open_table(path):
+    path = table_path(path)
+    return gzip.open(path, "rt", newline="", encoding="utf-8") if path.suffix == ".gz" else path.open(newline="", encoding="utf-8")
+
+
 def rows(path: Path) -> list[dict[str, str]]:
-    with path.open(newline="", encoding="utf-8") as handle:
+    with open_table(path) as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
 
 
@@ -50,17 +67,17 @@ def prediction_members(value: str) -> set[str]:
 
 def main(prefix_text: str) -> None:
     prefix = Path(prefix_text)
-    evidence = rows(Path(f"{prefix}.evidence.tsv"))
+    evidence = rows(table_path(Path(f"{prefix}.evidence.tsv")))
     observation_scores = rows(Path(f"{prefix}.observation_scores.tsv"))
-    candidates = rows(Path(f"{prefix}.candidates.tsv"))
-    candidate_features = rows(Path(f"{prefix}.candidate_features.tsv"))
+    candidates = rows(table_path(Path(f"{prefix}.candidates.tsv")))
+    candidate_features = rows(table_path(Path(f"{prefix}.candidate_features.tsv")))
     candidate_contexts = rows(Path(f"{prefix}.candidate_contexts.tsv"))
     decisions = rows(Path(f"{prefix}.decisions.tsv"))
-    edges = rows(Path(f"{prefix}.edges.tsv"))
-    relations = rows(Path(f"{prefix}.relations.tsv"))
+    edges = rows(table_path(Path(f"{prefix}.edges.tsv")))
+    relations = rows(table_path(Path(f"{prefix}.relations.tsv")))
     solver = rows(Path(f"{prefix}.solver.tsv"))
-    loci = rows(Path(f"{prefix}.loci.tsv"))
-    instances = rows(Path(f"{prefix}.instances.tsv"))
+    loci = rows(table_path(Path(f"{prefix}.loci.tsv")))
+    instances = rows(table_path(Path(f"{prefix}.instances.tsv")))
     blocks = rows(Path(f"{prefix}.synteny.blocks.tsv"))
     anchors = rows(Path(f"{prefix}.synteny.anchors.tsv"))
     contexts = rows(Path(f"{prefix}.contexts.tsv"))
@@ -568,7 +585,7 @@ def main(prefix_text: str) -> None:
     assert {
         "observation_scores.tsv", "candidate_features.tsv", "relations.tsv",
         "solver.tsv",
-    } <= set(run["outputs"])
+    } <= {name[:-3] if name.endswith(".gz") else name for name in run["outputs"]}
 
 
 if __name__ == "__main__":

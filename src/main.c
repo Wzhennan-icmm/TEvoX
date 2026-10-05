@@ -42,6 +42,7 @@ static void usage(FILE *stream)
         "  nucmer likewise takes reference/target first: nucmer -p out B.fa A.fa\n\n"
         "Options:\n"
         "  -o, --output PREFIX       output prefix (default: tevox)\n"
+        "  --gzip-output             stream TSV outputs through gzip (requires gzip)\n"
         "  --flank INT               flank length (100)\n"
         "  --candidate-window INT    candidate window (100)\n"
         "  --min-mapq INT            minimum observed MAPQ (20; 255 is missing)\n"
@@ -111,6 +112,10 @@ static int parse_options(int argc, char **argv, Arguments *arguments,
         }
         if (strcmp(option, "-v") == 0 || strcmp(option, "--verbose") == 0) {
             config->verbose = true;
+            continue;
+        }
+        if (strcmp(option, "--gzip-output") == 0) {
+            config->gzip_output = true;
             continue;
         }
         value = option_value(argc, argv, &index);

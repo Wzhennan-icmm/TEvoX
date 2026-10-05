@@ -38,6 +38,13 @@ layer on top of the v0.5 inference engine:
 
 ## Build and test
 
+This integration branch includes coordinate validation, negative-strand PAF
+corrections, large-output performance improvements and streaming compressed
+tables (`--gzip-output`). See [platform build instructions](docs/PLATFORMS.md)
+for CentOS 7/8, Rocky 8/9/10, Ubuntu 20.04+ and native/Universal macOS builds.
+Python 3.8+ is required for tests and helpers; the C core has no Python
+dependency. The alpha version string is retained until a release is made.
+
 ```bash
 make
 make check

@@ -1,12 +1,18 @@
 #include "tevox.h"
 
 #include <errno.h>
+#include <fcntl.h>
 #include <math.h>
+#include <signal.h>
+#include <spawn.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
+
+extern char **environ;
 
 typedef struct {
     TvState state;
@@ -22,6 +28,74 @@ typedef struct {
     char decision_code[96];
     char claimability_reason[96];
 } InstanceCall;
+
+/* Stable sparse grouping removes full graph scans per output locus. */
+typedef struct TvOutputIndex {
+    size_t *node_offsets;
+    size_t *decision_offsets;
+    size_t *nodes;
+    size_t *decisions;
+    double *best_edge_score;
+} TvOutputIndex;
+
+static void build_output_index(TvRun *run)
+{
+    size_t count = (size_t)run->n_loci;
+    TvOutputIndex *index = tv_grow(NULL, 1, sizeof(*index));
+    size_t *cursor = tv_grow(NULL, count + 1, sizeof(*cursor));
+    index->node_offsets = tv_grow(NULL, count + 1, sizeof(size_t));
+    index->decision_offsets = tv_grow(NULL, count + 1, sizeof(size_t));
+    index->nodes = tv_grow(NULL, run->n_nodes, sizeof(size_t));
+    index->decisions = tv_grow(NULL, run->n_decisions, sizeof(size_t));
+    index->best_edge_score = tv_grow(NULL, count, sizeof(double));
+    memset(index->node_offsets, 0, (count + 1) * sizeof(size_t));
+    memset(index->decision_offsets, 0, (count + 1) * sizeof(size_t));
+    memset(index->best_edge_score, 0, count * sizeof(double));
+    for (size_t node = 0; node < run->n_nodes; node++) {
+        index->node_offsets[(size_t)run->components[node] + 1]++;
+    }
+    for (size_t decision = 0; decision < run->n_decisions; decision++) {
+        int node = run->decisions[decision].source_te;
+        index->decision_offsets[(size_t)run->components[node] + 1]++;
+    }
+    for (size_t locus = 0; locus < count; locus++) {
+        index->node_offsets[locus + 1] += index->node_offsets[locus];
+        index->decision_offsets[locus + 1] += index->decision_offsets[locus];
+    }
+    memcpy(cursor, index->node_offsets, (count + 1) * sizeof(size_t));
+    for (size_t node = 0; node < run->n_nodes; node++) {
+        index->nodes[cursor[run->components[node]]++] = node;
+    }
+    memcpy(cursor, index->decision_offsets, (count + 1) * sizeof(size_t));
+    for (size_t decision = 0; decision < run->n_decisions; decision++) {
+        int node = run->decisions[decision].source_te;
+        index->decisions[cursor[run->components[node]]++] = decision;
+    }
+    for (size_t edge = 0; edge < run->n_edges; edge++) {
+        const TvEdge *item = &run->edges[edge];
+        if (item->selected) {
+            int a = run->components[item->a];
+            int b = run->components[item->b];
+            if (item->score > index->best_edge_score[a]) index->best_edge_score[a] = item->score;
+            if (item->score > index->best_edge_score[b]) index->best_edge_score[b] = item->score;
+        }
+    }
+    free(cursor);
+    run->output_index = index;
+}
+
+static void free_output_index(TvRun *run)
+{
+    TvOutputIndex *index = run->output_index;
+    if (index == NULL) return;
+    free(index->node_offsets);
+    free(index->decision_offsets);
+    free(index->nodes);
+    free(index->decisions);
+    free(index->best_edge_score);
+    free(index);
+    run->output_index = NULL;
+}
 
 static const char *const output_suffixes[] = {
     ".evidence.tsv", ".observation_scores.tsv", ".candidates.tsv",
@@ -41,6 +115,16 @@ static char *output_path(const char *prefix, const char *suffix)
         (void)snprintf(path, length, "%s%s", prefix, suffix);
     }
     return path;
+}
+
+static char *table_output_path(const TvRun *run, const char *prefix,
+                                const char *suffix)
+{
+    char *plain = output_path(prefix, suffix);
+    if (plain == NULL || !run->cfg.gzip_output || strcmp(suffix, ".run.json") == 0) return plain;
+    char *compressed = output_path(plain, ".gz");
+    free(plain);
+    return compressed;
 }
 
 static char *canonical_path(const char *path)
@@ -85,7 +169,7 @@ int tv_validate_output_prefix(const TvRun *run, const char *prefix)
     for (size_t suffix_index = 0;
          suffix_index < sizeof(output_suffixes) / sizeof(output_suffixes[0]);
          suffix_index++) {
-        char *candidate = output_path(prefix, output_suffixes[suffix_index]);
+        char *candidate = table_output_path(run, prefix, output_suffixes[suffix_index]);
         char *canonical_output;
         struct stat output_status;
         struct stat output_link_status;
@@ -141,7 +225,7 @@ int tv_validate_output_prefix(const TvRun *run, const char *prefix)
         }
         for (size_t previous_index = 0; previous_index < suffix_index;
              previous_index++) {
-            char *previous = output_path(prefix, output_suffixes[previous_index]);
+            char *previous = table_output_path(run, prefix, output_suffixes[previous_index]);
             char *canonical_previous;
             struct stat previous_status;
             bool previous_exists;
@@ -205,34 +289,72 @@ static int invalidate_run_marker(const char *prefix)
     return 0;
 }
 
-static FILE *open_output(const char *prefix, const char *suffix, char **path)
+static FILE *open_output(TvRun *run, const char *prefix,
+                          const char *suffix, char **path)
 {
-    FILE *stream;
-
-    *path = output_path(prefix, suffix);
-    if (*path == NULL) {
-        tv_print_error("out of memory");
-        return NULL;
+    FILE *stream = NULL;
+    *path = table_output_path(run, prefix, suffix);
+    if (*path == NULL) return NULL;
+    if (!run->cfg.gzip_output) {
+        stream = fopen(*path, "w");
+    } else {
+        int pipes[2];
+        int destination = open(*path, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+        if (destination >= 0) {
+            if (pipe(pipes) == 0) {
+                posix_spawn_file_actions_t actions;
+                pid_t child;
+                char *arguments[] = {"gzip", "-1", "-n", "-c", NULL};
+                int status = posix_spawn_file_actions_init(&actions);
+                bool initialized = status == 0;
+                if (status == 0) status = posix_spawn_file_actions_adddup2(&actions, destination, STDOUT_FILENO);
+                if (status == 0) status = posix_spawn_file_actions_adddup2(&actions, pipes[0], STDIN_FILENO);
+                if (status == 0) status = posix_spawn_file_actions_addclose(&actions, pipes[1]);
+                if (status == 0 && pipes[0] > STDERR_FILENO) status = posix_spawn_file_actions_addclose(&actions, pipes[0]);
+                if (status == 0 && destination > STDERR_FILENO) status = posix_spawn_file_actions_addclose(&actions, destination);
+                if (status == 0) status = posix_spawnp(&child, "gzip", &actions, NULL, arguments, environ);
+                if (initialized) (void)posix_spawn_file_actions_destroy(&actions);
+                (void)close(pipes[0]);
+                if (status == 0) {
+                    run->output_child_pid = (int)child;
+                    stream = fdopen(pipes[1], "w");
+                    if (stream == NULL) {
+                        (void)close(pipes[1]);
+                        while (waitpid(child, NULL, 0) < 0 && errno == EINTR) {}
+                        run->output_child_pid = 0;
+                    }
+                } else {
+                    (void)close(pipes[1]);
+                    errno = status;
+                }
+            }
+            (void)close(destination);
+        }
     }
-    stream = fopen(*path, "w");
     if (stream == NULL) {
-        tv_print_error("cannot write '%s': %s", *path, strerror(errno));
+        tv_print_error("cannot write '%s' (gzip must be installed for compressed output): %s", *path, strerror(errno));
         free(*path);
         *path = NULL;
     }
     return stream;
 }
 
-static int finish_output(FILE *stream, const char *path)
+static int finish_output(TvRun *run, FILE *stream, const char *path)
 {
     int saved_errno = ferror(stream) ? (errno != 0 ? errno : EIO) : 0;
-
-    if (fclose(stream) != 0 && saved_errno == 0) {
-        saved_errno = errno != 0 ? errno : EIO;
+    if (fclose(stream) != 0 && saved_errno == 0) saved_errno = errno != 0 ? errno : EIO;
+    if (run->output_child_pid > 0) {
+        int status = 0;
+        pid_t waited;
+        do { waited = waitpid((pid_t)run->output_child_pid, &status, 0); } while (waited < 0 && errno == EINTR);
+        run->output_child_pid = 0;
+        if (waited < 0 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+            tv_print_error("gzip failed while writing '%s'", path);
+            saved_errno = EIO;
+        }
     }
     if (saved_errno != 0) {
-        tv_print_error("cannot finish output '%s': %s", path,
-                       strerror(saved_errno));
+        tv_print_error("cannot finish output '%s': %s", path, strerror(saved_errno));
         return -1;
     }
     return 0;
@@ -482,7 +604,9 @@ static InstanceCall instance_call(TvRun *run, int locus, int genome)
     };
     double best_edge_score = 0.0;
 
-    for (size_t node = 0; node < run->n_nodes; node++) {
+    for (size_t slot = run->output_index->node_offsets[locus];
+         slot < run->output_index->node_offsets[(size_t)locus + 1]; slot++) {
+        size_t node = run->output_index->nodes[slot];
         if (run->components[node] == locus
             && run->nodes[node].genome == genome) {
             call.copies++;
@@ -496,16 +620,7 @@ static InstanceCall instance_call(TvRun *run, int locus, int genome)
         call.claim_type = TV_CLAIM_PRESENCE;
         call.claimable = true;
         call.evidence_completeness = 1.0;
-        for (size_t edge_index = 0; edge_index < run->n_edges; edge_index++) {
-            TvEdge *edge = &run->edges[edge_index];
-
-            if (edge->selected
-                && (run->components[edge->a] == locus
-                    || run->components[edge->b] == locus)
-                && edge->score > best_edge_score) {
-                best_edge_score = edge->score;
-            }
-        }
+        best_edge_score = run->output_index->best_edge_score[locus];
         call.quality = best_edge_score > 0.0
             ? 70.0 + 0.30 * best_edge_score : 70.0;
         (void)snprintf(call.decision_code, sizeof(call.decision_code),
@@ -515,7 +630,9 @@ static InstanceCall instance_call(TvRun *run, int locus, int genome)
                        "DIRECT_ANNOTATION_PRESENT");
         return call;
     }
-    for (size_t index = 0; index < run->n_decisions; index++) {
+    for (size_t slot = run->output_index->decision_offsets[locus];
+         slot < run->output_index->decision_offsets[(size_t)locus + 1]; slot++) {
+        size_t index = run->output_index->decisions[slot];
         TvDecision *decision = &run->decisions[index];
 
         if (decision->target_genome != genome
@@ -570,7 +687,9 @@ static InstanceCall instance_call(TvRun *run, int locus, int genome)
         }
     }
     bool component_decisions_conflict = false;
-    for (size_t index = 0; index < run->n_decisions; index++) {
+    for (size_t slot = run->output_index->decision_offsets[locus];
+         slot < run->output_index->decision_offsets[(size_t)locus + 1]; slot++) {
+        size_t index = run->output_index->decisions[slot];
         TvDecision *decision = &run->decisions[index];
 
         if (decision != call.decision
@@ -604,7 +723,9 @@ static void print_locus_members(FILE *stream, TvRun *run, int locus, int field)
 {
     bool first = true;
 
-    for (size_t index = 0; index < run->n_nodes; index++) {
+    for (size_t slot = run->output_index->node_offsets[locus];
+         slot < run->output_index->node_offsets[(size_t)locus + 1]; slot++) {
+        size_t index = run->output_index->nodes[slot];
         TvTE *te;
 
         if (run->components[index] != locus) {
@@ -635,7 +756,9 @@ static void print_present(FILE *stream, TvRun *run, int locus, int genome,
 {
     bool first = true;
 
-    for (size_t index = 0; index < run->n_nodes; index++) {
+    for (size_t slot = run->output_index->node_offsets[locus];
+         slot < run->output_index->node_offsets[(size_t)locus + 1]; slot++) {
+        size_t index = run->output_index->nodes[slot];
         TvTE *te = &run->nodes[index];
 
         if (run->components[index] != locus || te->genome != genome) {
@@ -688,7 +811,9 @@ static void print_instance_decisions(FILE *stream, TvRun *run, int locus,
 {
     bool first = true;
 
-    for (size_t index = 0; index < run->n_decisions; index++) {
+    for (size_t slot = run->output_index->decision_offsets[locus];
+         slot < run->output_index->decision_offsets[(size_t)locus + 1]; slot++) {
+        size_t index = run->output_index->decisions[slot];
         TvDecision *decision = &run->decisions[index];
 
         if (decision->target_genome != genome
@@ -760,7 +885,7 @@ static void print_edge_support(FILE *stream, const TvRun *run,
 static int write_evidence(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".evidence.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".evidence.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -876,7 +1001,7 @@ static int write_evidence(TvRun *run, const char *prefix)
         (void)fprintf(stream, "\t%s\t%s\n", projection->decision_code,
                       projection->claimability_reason);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -893,7 +1018,7 @@ static int write_observation_scores(TvRun *run, const char *prefix)
         "MATCHED", "MISSING", "FAMILY_CONFLICT", "NOT_APPLICABLE", "UNKNOWN"
     };
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".observation_scores.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".observation_scores.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -943,7 +1068,7 @@ static int write_observation_scores(TvRun *run, const char *prefix)
                              run->cfg.prediction_set_mass);
         (void)fprintf(stream, "\t%.8f\n", projection->annotation_entropy);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -986,7 +1111,7 @@ static int write_candidate_features(TvRun *run, const char *prefix)
         "SAME_LOCUS", "DIFFERENT_LOCUS"
     };
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".candidate_features.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".candidate_features.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1059,7 +1184,7 @@ static int write_candidate_features(TvRun *run, const char *prefix)
         print_bool(stream, candidate->eligible);
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1067,7 +1192,7 @@ static int write_candidate_features(TvRun *run, const char *prefix)
 static int write_candidates(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".candidates.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".candidates.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1114,7 +1239,7 @@ static int write_candidates(TvRun *run, const char *prefix)
         print_bool(stream, candidate->selected);
         (void)fprintf(stream, "\t%s\n", candidate->decision_code);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1122,7 +1247,7 @@ static int write_candidates(TvRun *run, const char *prefix)
 static int write_synteny_blocks(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".synteny.blocks.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".synteny.blocks.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1168,7 +1293,7 @@ static int write_synteny_blocks(TvRun *run, const char *prefix)
         print_text(stream, block->reason);
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1176,7 +1301,7 @@ static int write_synteny_blocks(TvRun *run, const char *prefix)
 static int write_synteny_anchors(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".synteny.anchors.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".synteny.anchors.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1202,7 +1327,7 @@ static int write_synteny_anchors(TvRun *run, const char *prefix)
         print_number(stream, anchor->reported_evalue);
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1210,7 +1335,7 @@ static int write_synteny_anchors(TvRun *run, const char *prefix)
 static int write_contexts(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".contexts.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".contexts.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1239,7 +1364,7 @@ static int write_contexts(TvRun *run, const char *prefix)
         print_text(stream, context->status);
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1247,7 +1372,7 @@ static int write_contexts(TvRun *run, const char *prefix)
 static int write_te_contexts(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".te_contexts.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".te_contexts.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1284,7 +1409,7 @@ static int write_te_contexts(TvRun *run, const char *prefix)
         }
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1315,7 +1440,7 @@ static void print_node_contexts(FILE *stream, const TvRun *run, int node)
 static int write_candidate_contexts(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".candidate_contexts.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".candidate_contexts.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1351,7 +1476,7 @@ static int write_candidate_contexts(TvRun *run, const char *prefix)
         print_node_contexts(stream, run, candidate->target_te);
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1359,7 +1484,7 @@ static int write_candidate_contexts(TvRun *run, const char *prefix)
 static int write_decisions(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".decisions.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".decisions.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1398,7 +1523,7 @@ static int write_decisions(TvRun *run, const char *prefix)
         (void)fprintf(stream, "\t%s\t%s\n", decision->decision_code,
                       decision->claimability_reason);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1406,7 +1531,7 @@ static int write_decisions(TvRun *run, const char *prefix)
 static int write_edges(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".edges.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".edges.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1465,7 +1590,7 @@ static int write_edges(TvRun *run, const char *prefix)
         print_bool(stream, edge->selected);
         (void)fprintf(stream, "\t%s\n", edge->selection_reason);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1477,7 +1602,7 @@ static int write_relations(TvRun *run, const char *prefix)
         "SEGMENTAL_PARALOG", "TRANSPOSED_PARALOG", "UNKNOWN"
     };
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".relations.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".relations.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1527,7 +1652,7 @@ static int write_relations(TvRun *run, const char *prefix)
         print_bool(stream, relation->out_of_domain);
         fputc('\n', stream);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1535,7 +1660,7 @@ static int write_relations(TvRun *run, const char *prefix)
 static int write_solver(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".solver.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".solver.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1557,7 +1682,7 @@ static int write_solver(TvRun *run, const char *prefix)
                       component->relative_gap,
                       (unsigned long long)component->states_explored);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1565,7 +1690,7 @@ static int write_solver(TvRun *run, const char *prefix)
 static int write_loci(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".loci.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".loci.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1577,11 +1702,8 @@ static int write_loci(TvRun *run, const char *prefix)
         int genome_count = 0;
         double quality = 0.0;
 
-        for (size_t node = 0; node < run->n_nodes; node++) {
-            if (run->components[node] == locus) {
-                members++;
-            }
-        }
+        members = (int)(run->output_index->node_offsets[(size_t)locus + 1]
+                        - run->output_index->node_offsets[locus]);
         for (size_t genome = 0; genome < run->n_genomes; genome++) {
             InstanceCall call = instance_call(run, locus, (int)genome);
 
@@ -1599,7 +1721,7 @@ static int write_loci(TvRun *run, const char *prefix)
         print_locus_members(stream, run, locus, 2);
         (void)fprintf(stream, "\t%.2f\n", quality / (double)run->n_genomes);
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1607,7 +1729,7 @@ static int write_loci(TvRun *run, const char *prefix)
 static int write_instances(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".instances.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".instances.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1660,7 +1782,7 @@ static int write_instances(TvRun *run, const char *prefix)
             (void)fprintf(stream, "\t%s\n", call.decision_code);
         }
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1668,7 +1790,7 @@ static int write_instances(TvRun *run, const char *prefix)
 static int write_states(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".states.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".states.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1735,7 +1857,7 @@ static int write_states(TvRun *run, const char *prefix)
             (void)fprintf(stream, "\t%s\n", TEVOX_SCHEMA_VERSION);
         }
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -1743,7 +1865,7 @@ static int write_states(TvRun *run, const char *prefix)
 static int write_summary(TvRun *run, const char *prefix)
 {
     char *path = NULL;
-    FILE *stream = open_output(prefix, ".summary.tsv", &path);
+    FILE *stream = open_output(run, prefix, ".summary.tsv", &path);
 
     if (stream == NULL) {
         return -1;
@@ -1762,7 +1884,7 @@ static int write_summary(TvRun *run, const char *prefix)
                           tv_state_name((TvState)state), counts[state]);
         }
     }
-    int close_status = finish_output(stream, path);
+    int close_status = finish_output(run, stream, path);
     free(path);
     return close_status;
 }
@@ -2019,14 +2141,15 @@ static int write_run_json(TvRun *run, const char *prefix)
                   (unsigned long long)run->performance.gap_queries,
                   (unsigned long long)run->performance.fasta_reopens_after_index,
                   (unsigned long long)run->performance.edge_support_records);
-    fputs("  \"outputs\": [\"evidence.tsv\", \"observation_scores.tsv\", "
-          "\"candidates.tsv\", \"candidate_features.tsv\", "
-          "\"candidate_contexts.tsv\", \"decisions.tsv\", \"edges.tsv\", "
-          "\"relations.tsv\", \"solver.tsv\", \"loci.tsv\", "
-          "\"instances.tsv\", \"states.tsv\", "
-          "\"summary.tsv\", \"synteny.blocks.tsv\", "
-          "\"synteny.anchors.tsv\", \"contexts.tsv\", "
-          "\"te_contexts.tsv\"]\n}\n", stream);
+    (void)fprintf(stream, "  \"output_compression\": \"%s\",\n  \"outputs\": [",
+                  run->cfg.gzip_output ? "gzip" : "none");
+    size_t output_count = sizeof(output_suffixes) / sizeof(output_suffixes[0]) - 1;
+    for (size_t index = 0; index < output_count; index++) {
+        if (index > 0) fputs(", ", stream);
+        (void)fprintf(stream, "\"%s%s\"", output_suffixes[index] + 1,
+                      run->cfg.gzip_output ? ".gz" : "");
+    }
+    fputs("]\n}\n", stream);
     int close_status = finish_run_marker(stream, temporary_path, final_path);
     free(temporary_path);
     free(final_path);
@@ -2043,6 +2166,17 @@ int tv_write_outputs(TvRun *run, const char *prefix)
     if (invalidate_run_marker(prefix) != 0) {
         return -1;
     }
+    struct sigaction previous_pipe;
+    bool restore_pipe = false;
+    if (run->cfg.gzip_output) {
+        struct sigaction ignore_pipe;
+        memset(&ignore_pipe, 0, sizeof(ignore_pipe));
+        ignore_pipe.sa_handler = SIG_IGN;
+        (void)sigemptyset(&ignore_pipe.sa_mask);
+        if (sigaction(SIGPIPE, &ignore_pipe, &previous_pipe) != 0) return -1;
+        restore_pipe = true;
+    }
+    build_output_index(run);
     if (write_evidence(run, prefix) != 0
         || write_observation_scores(run, prefix) != 0
         || write_candidates(run, prefix) != 0
@@ -2061,7 +2195,11 @@ int tv_write_outputs(TvRun *run, const char *prefix)
         || write_states(run, prefix) != 0
         || write_summary(run, prefix) != 0
         || write_run_json(run, prefix) != 0) {
+        free_output_index(run);
+        if (restore_pipe) (void)sigaction(SIGPIPE, &previous_pipe, NULL);
         return -1;
     }
+    free_output_index(run);
+    if (restore_pipe) (void)sigaction(SIGPIPE, &previous_pipe, NULL);
     return 0;
 }

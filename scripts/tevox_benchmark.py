@@ -8,6 +8,8 @@ and seeds without copying truth rows or relying on TEvoX-generated IDs.
 
 from __future__ import annotations
 
+import gzip
+
 import argparse
 import csv
 import hashlib
@@ -65,11 +67,26 @@ class Run:
     prefix: Path
 
 
+def table_path(path):
+    path = Path(path)
+    compressed = Path(str(path) + ".gz")
+    if path.suffix == ".tsv" and compressed.is_file():
+        if path.is_file():
+            raise ValueError("ambiguous plain/compressed table: " + str(path))
+        return compressed
+    return path
+
+
+def open_table(path):
+    path = table_path(path)
+    return gzip.open(path, "rt", newline="", encoding="utf-8") if path.suffix == ".gz" else path.open(newline="", encoding="utf-8")
+
+
 def read_tsv(
     path: Path, required: set[str], label: str, *, allow_empty: bool = False
 ) -> list[dict[str, str]]:
     try:
-        with path.open(newline="", encoding="utf-8") as handle:
+        with open_table(path) as handle:
             reader = csv.DictReader(handle, delimiter="\t")
             if reader.fieldnames is None:
                 raise ContractError(f"{label} {path} has no header")
@@ -764,9 +781,9 @@ def predicted_candidate_scores(
 ) -> tuple[
     dict[tuple[tuple[str, str], tuple[str, str]], float], dict[str, object]
 ]:
-    evidence_path = Path(f"{prefix}.evidence.tsv")
-    candidates_path = Path(f"{prefix}.candidates.tsv")
-    features_path = Path(f"{prefix}.candidate_features.tsv")
+    evidence_path = table_path(Path(f"{prefix}.evidence.tsv"))
+    candidates_path = table_path(Path(f"{prefix}.candidates.tsv"))
+    features_path = table_path(Path(f"{prefix}.candidate_features.tsv"))
     evidence_rows = read_tsv(
         evidence_path,
         {"schema_version", "evidence_id", "query_genome_id", "source_te_id",
@@ -1009,7 +1026,7 @@ def load_locus_truth(path: Path, dataset_id: str) -> tuple[
 def predicted_loci(prefix: Path) -> tuple[
     dict[tuple[str, str], str], dict[str, set[tuple[str, str]]], Path
 ]:
-    path = Path(f"{prefix}.instances.tsv")
+    path = table_path(Path(f"{prefix}.instances.tsv"))
     rows = read_tsv(
         path, {"schema_version", "locus_id", "genome_id", "copy_count", "member_ids"},
         "instance output", allow_empty=True,
@@ -1619,7 +1636,7 @@ def evaluate_instances(
     locus_mapping, mapping_summary = maximum_overlap_locus_mapping(
         truth_assignment, predicted_assignment
     )
-    instance_path = Path(f"{prefix}.instances.tsv")
+    instance_path = table_path(Path(f"{prefix}.instances.tsv"))
     predicted_rows = read_tsv(
         instance_path,
         {"schema_version", "locus_id", "genome_id", "technical_state", "biological_state",

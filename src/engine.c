@@ -179,12 +179,61 @@ static bool consumes_both(char code)
     return strchr("M=X", code) != NULL;
 }
 
+static TvCigarCheckpoint *cigar_checkpoints(const TvPaf *paf,
+                                           const TvCigarOp *ops, size_t count)
+{
+    if (count < TV_CIGAR_CHECKPOINT_STRIDE) return NULL;
+    size_t blocks = (count - 1) / TV_CIGAR_CHECKPOINT_STRIDE + 1;
+    TvCigarCheckpoint *result = grow(NULL, blocks, sizeof(*result));
+    int64_t query = paf->qstart;
+    int64_t target = paf->strand == '+' ? paf->tstart : paf->tend;
+    for (size_t index = 0; index < count; index++) {
+        size_t block = index / TV_CIGAR_CHECKPOINT_STRIDE;
+        if (index % TV_CIGAR_CHECKPOINT_STRIDE == 0) {
+            result[block].query = query;
+            result[block].target = target;
+        }
+        if (consumes_query(ops[index].code)) query += ops[index].length;
+        if (consumes_target(ops[index].code)) {
+            target += paf->strand == '+' ? ops[index].length : -ops[index].length;
+        }
+        result[block].query_end = query;
+    }
+    return result;
+}
+
+/* Start at the first block whose inclusive query end reaches the request.
+ * Inclusive comparison preserves left-boundary behavior around deletions. */
+static size_t cigar_seek(const TvCigarCheckpoint *checkpoints, size_t count,
+                         int64_t position, int64_t *query, int64_t *target)
+{
+#ifdef TEVOX_LINEAR_CIGAR
+    (void)checkpoints; (void)count; (void)position; (void)query; (void)target;
+    return 0;
+#else
+    if (checkpoints == NULL || count == 0) return 0;
+    size_t low = 0;
+    size_t high = (count - 1) / TV_CIGAR_CHECKPOINT_STRIDE + 1;
+    size_t blocks = high;
+    while (low < high) {
+        size_t middle = low + (high - low) / 2;
+        if (checkpoints[middle].query_end < position) low = middle + 1;
+        else high = middle;
+    }
+    if (low == blocks) low--;
+    *query = checkpoints[low].query;
+    if (target != NULL) *target = checkpoints[low].target;
+    return low * TV_CIGAR_CHECKPOINT_STRIDE;
+#endif
+}
+
 static int64_t aligned_bases(const TvPaf *paf, int64_t start, int64_t end)
 {
     int64_t query = paf->qstart;
     int64_t aligned = 0;
 
-    for (size_t index = 0; index < paf->n_ops; index++) {
+    size_t first = cigar_seek(paf->op_checkpoints, paf->n_ops, start, &query, NULL);
+    for (size_t index = first; index < paf->n_ops && query < end; index++) {
         TvCigarOp operation = paf->ops[index];
 
         if (consumes_both(operation.code)) {
@@ -202,7 +251,8 @@ static int64_t inserted_bases(const TvPaf *paf, int64_t start, int64_t end)
     int64_t query = paf->qstart;
     int64_t inserted = 0;
 
-    for (size_t index = 0; index < paf->n_ops; index++) {
+    size_t first = cigar_seek(paf->op_checkpoints, paf->n_ops, start, &query, NULL);
+    for (size_t index = first; index < paf->n_ops && query < end; index++) {
         TvCigarOp operation = paf->ops[index];
 
         if (operation.code == 'I') {
@@ -225,7 +275,9 @@ static double local_identity(const TvPaf *paf, int64_t start, int64_t end)
         || paf->n_identity_ops == 0) {
         return NAN;
     }
-    for (size_t index = 0; index < paf->n_identity_ops; index++) {
+    size_t first = cigar_seek(paf->identity_checkpoints, paf->n_identity_ops,
+                              start, &query, NULL);
+    for (size_t index = first; index < paf->n_identity_ops && query < end; index++) {
         TvCigarOp operation = paf->identity_ops[index];
 
         if (operation.code == '=' || operation.code == 'X') {
@@ -257,7 +309,9 @@ static int map_boundary(const TvPaf *paf, int64_t query_position,
     if (query_position < paf->qstart || query_position > paf->qend) {
         return 0;
     }
-    for (size_t index = 0; index < paf->n_ops; index++) {
+    size_t first = cigar_seek(paf->op_checkpoints, paf->n_ops,
+                              query_position, &query, &target);
+    for (size_t index = first; index < paf->n_ops; index++) {
         TvCigarOp operation = paf->ops[index];
         int64_t next_query = query
             + (consumes_query(operation.code) ? operation.length : 0);
@@ -725,7 +779,7 @@ static TvProjection evaluate(TvRun *run, int source_index, int target_genome,
     int internal_candidate_limit;
     int best_target = -1;
     uint64_t best_candidate_id = 0;
-    TvCandidate best_candidate;
+    TvCandidate best_candidate = {0};
     bool have_best_candidate = false;
     double best_score = -1.0;
     double second_score = -1.0;
@@ -1591,6 +1645,12 @@ int tv_analyze(TvRun *run)
     }
     if (run->n_pafs > 1) {
         qsort(run->pafs, run->n_pafs, sizeof(*run->pafs), compare_paf);
+    }
+    for (size_t index = 0; index < run->n_pafs; index++) {
+        TvPaf *paf = &run->pafs[index];
+        paf->op_checkpoints = cigar_checkpoints(paf, paf->ops, paf->n_ops);
+        paf->identity_checkpoints = cigar_checkpoints(
+            paf, paf->identity_ops, paf->n_identity_ops);
     }
     for (size_t genome = 0; genome < run->n_genomes; genome++) {
         if (node_count > SIZE_MAX - run->genomes[genome].n_tes) {
