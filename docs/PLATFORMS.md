@@ -37,6 +37,11 @@ of life: this records a compatibility baseline, not a maintained security
 runtime. Use a maintained Python version provided for your deployment when
 available. To reproduce that legacy baseline from a verified CPython source:
 
+Install `zlib-devel` before configuring CPython, and verify that `import
+gzip, zlib` works afterward. Compression readers require this standard-library
+extension. The container test scratch directory must permit execution of
+the deliberately failing compressor used by the regression suite.
+
 ```sh
 ./configure --prefix="$HOME/.local/tevox-python" --without-ensurepip
 make -j2 && make install

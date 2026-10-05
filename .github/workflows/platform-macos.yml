@@ -34,6 +34,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          report_failure() {
+            result=$?
+            python3 -c 'import os,pathlib; p=pathlib.Path(os.environ["RUNNER_TEMP"])/"package.log"; s="\n".join(p.read_text(errors="replace").splitlines()[-20:]); print("::error::"+s.replace("%","%25").replace("\r","%0D").replace("\n","%0A"))'
+            exit "$result"
+          }
+          trap report_failure ERR
+          exec > >(tee "$RUNNER_TEMP/package.log") 2>&1
+          set -x
           output="$RUNNER_TEMP/tevox packages"
           sh scripts/package-macos.sh --revision "$PACKAGE_REVISION" --output-dir "$output"
           sh scripts/package-macos.sh --universal --revision "$PACKAGE_REVISION" --output-dir "$output"
