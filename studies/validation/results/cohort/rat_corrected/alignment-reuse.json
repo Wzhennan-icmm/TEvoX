@@ -1,0 +1,84 @@
+{
+  "status": "VERIFIED_EXACT_ALIGNMENT_CACHE_REUSE",
+  "source_run": "/workspace/tevox-v05-study/results/rat_corrected",
+  "utc": "2026-10-06T16:49:00.636449+00:00",
+  "converter_sha256": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+  "exact_alignment": {
+    "records": 7028,
+    "source_sha256": "99e54e9a4bdfd42c2fb7942b6e4186a4526f6b133e1e2c6a49d788a0087d6d5d",
+    "output_sha256": "d01def9d46bcaa916281504563d421d7759d45390ece2b7c3623e1f3e493140c",
+    "method": "Exact =/X reconstructed from the unchanged PAF indel path and both FASTAs; no independent reciprocal support added",
+    "ambiguous_bases": "non-ACGT treated as mismatches",
+    "numpy_version": "2.3.5"
+  },
+  "archive_record": {
+    "plain": "/workspace/tevox-v05-study/results/rat_corrected/alignment.eqx.paf",
+    "plain_sha256": "d01def9d46bcaa916281504563d421d7759d45390ece2b7c3623e1f3e493140c",
+    "plain_bytes": 52520975,
+    "restore_from": "/workspace/tevox-v05-study/results/rat_corrected/alignment.eqx.paf.gz",
+    "restore_method": "gzip_decompress",
+    "source_sha256": "401c891f390f619baca0ad2d64e40eb155ad2e71a743faa4872e0dc4600dd9b1",
+    "compressed_bytes": 21285652
+  },
+  "fasta_archive_bindings": [
+    {
+      "plain": "/workspace/tevox-v05-study/results/rat_corrected/bn/genome.fa",
+      "plain_sha256": "980de5d0a313b78351b70084d8cef062b58fdfb59c0ebe1f194e6c8df8a7081c",
+      "restore_from": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "3b9ae168e5c680ce0afb3401d1a1a306a5373098a49219cda63598bc44943a69"
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/results/rat_corrected/shrsp/genome.fa",
+      "plain_sha256": "802561e3097940ba8aba54d86800dac9dc14fc20889d128aeb74d9b7d4ac9f87",
+      "restore_from": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "88bc0dd2422beff05e30e16c9c2a761427982d9904893b7961ead1ba283a83dd"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "role": "fasta",
+      "genome": "bn",
+      "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+      "bytes": 875872536,
+      "sha256": "3b9ae168e5c680ce0afb3401d1a1a306a5373098a49219cda63598bc44943a69"
+    },
+    {
+      "role": "repeats",
+      "genome": "bn",
+      "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz",
+      "bytes": 141528731,
+      "sha256": "cc033b3f572821a9d97bf501278a5a4ef100d7cb2bebc1e6458de25955cdf2ff"
+    },
+    {
+      "role": "genes",
+      "genome": "bn",
+      "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+      "bytes": 37442693,
+      "sha256": "fbb27c7cf14deae80d24959449d4b1c6f58f0ac3dd188f3e00da21081b259901"
+    },
+    {
+      "role": "fasta",
+      "genome": "shrsp",
+      "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+      "bytes": 874852829,
+      "sha256": "88bc0dd2422beff05e30e16c9c2a761427982d9904893b7961ead1ba283a83dd"
+    },
+    {
+      "role": "repeats",
+      "genome": "shrsp",
+      "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz",
+      "bytes": 186333603,
+      "sha256": "8e640708e26c41ec179c52762267e1662211b370c495b73ad263c20420afee3f"
+    },
+    {
+      "role": "genes",
+      "genome": "shrsp",
+      "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+      "bytes": 41562811,
+      "sha256": "828d12749401c4c0844ac9721430198c3809c1667696e409a826c4e59e21db74"
+    }
+  ],
+  "note": "Only unchanged source-derived EQX alignment reused; final TEvoX inference and all postprocessing rerun."
+}

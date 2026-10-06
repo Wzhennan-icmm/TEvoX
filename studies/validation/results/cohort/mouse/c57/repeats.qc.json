@@ -1,0 +1,49 @@
+{
+  "classes": {
+    "DNA": 103631,
+    "LINE": 794120,
+    "LTR": 935037,
+    "RC": 189,
+    "SINE": 1183392,
+    "Unknown": 131331
+  },
+  "configuration": {
+    "bed_class_column": null,
+    "bed_coordinates": null,
+    "bed_family_column": null,
+    "bed_id_column": null,
+    "bed_name_column": 4,
+    "bed_strand_column": null,
+    "class_attribute": "Classification",
+    "class_map": null,
+    "family_attribute": null,
+    "family_policy": "repeat-name",
+    "format": "repeatmasker-out",
+    "gff_feature": [],
+    "id_prefix": "c57",
+    "lengths": "/workspace/tevox-v05-study/final/mouse/c57/lengths.tsv",
+    "name_attribute": "Name",
+    "output_prefix": "/workspace/tevox-v05-study/final/mouse/c57/repeats"
+  },
+  "counts": {
+    "header_records": 2,
+    "parsed_fragments": 4653345,
+    "rejected_excluded_non_te": 1489696,
+    "rejected_unresolved_class": 15949,
+    "retained_fragments": 3147700,
+    "source_records": 4653347,
+    "unknown_class_fragments": 131331
+  },
+  "format": "repeatmasker-out",
+  "input": "/workspace/tevox-study/data/mouse/c57/primary.repeatMasker.out.gz",
+  "input_coordinate_system": "one-based-inclusive",
+  "interpretation": "Annotation fragments only; not reconstructed elements or proven insertion/deletion events. Unknown class retained explicitly with uncertainty.",
+  "lengths": "/workspace/tevox-v05-study/final/mouse/c57/lengths.tsv",
+  "output_coordinate_system": "zero-based-half-open",
+  "outputs": {
+    "bed": "/workspace/tevox-v05-study/final/mouse/c57/repeats.bed",
+    "metadata": "/workspace/tevox-v05-study/final/mouse/c57/repeats.metadata.tsv",
+    "qc": "/workspace/tevox-v05-study/final/mouse/c57/repeats.qc.json",
+    "rejected": "/workspace/tevox-v05-study/final/mouse/c57/repeats.rejected.tsv"
+  }
+}

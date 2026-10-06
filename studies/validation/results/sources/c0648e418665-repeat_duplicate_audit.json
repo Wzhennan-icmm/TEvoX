@@ -1,0 +1,14 @@
+{
+  "input": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz",
+  "comparison": "All whitespace-canonical full fields including ID and optional overlap marker; exact records only",
+  "source_records": 4661101,
+  "header_or_empty_lines": 3,
+  "unique_records": 4661101,
+  "duplicate_record_groups": 0,
+  "extra_duplicate_records": 0,
+  "multiplicity_distribution_duplicate_groups": {},
+  "duplicate_examples": [],
+  "canonical_sorted_stream_sha256": "546b9f07e9f25608e31affb23d5505abdee5266dec6637133578f8594d7943e0",
+  "status": "no_exact_duplicates",
+  "source_modified": false
+}

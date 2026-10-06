@@ -1,0 +1,66 @@
+WARNING: The directory '/home/agent/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Requirement already satisfied: numpy==2.3.5 in ./tevox-build/study-env/lib/python3.12/site-packages (2.3.5)
+Requirement already satisfied: openpyxl==3.1.5 in ./tevox-build/study-env/lib/python3.12/site-packages (3.1.5)
+Requirement already satisfied: et-xmlfile in ./tevox-build/study-env/lib/python3.12/site-packages (from openpyxl==3.1.5) (2.0.0)
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: python -m pip install --upgrade pip
+/workspace/tevox-build/study-env/bin/python -c 'import sys; sys.exit("Python 3.8+ is required for tests and helper commands" if sys.version_info < (3, 8) else 0)'
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/aln_mummer_delta.c" -o "/workspace/tevox-build/cloud-v05/obj/aln_mummer_delta.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/engine.c" -o "/workspace/tevox-build/cloud-v05/obj/engine.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/index.c" -o "/workspace/tevox-build/cloud-v05/obj/index.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/inference.c" -o "/workspace/tevox-build/cloud-v05/obj/inference.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/io.c" -o "/workspace/tevox-build/cloud-v05/obj/io.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/main.c" -o "/workspace/tevox-build/cloud-v05/obj/main.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/output.c" -o "/workspace/tevox-build/cloud-v05/obj/output.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/sha256.c" -o "/workspace/tevox-build/cloud-v05/obj/sha256.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/synteny.c" -o "/workspace/tevox-build/cloud-v05/obj/synteny.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/util.c" -o "/workspace/tevox-build/cloud-v05/obj/util.o"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow  tests/index_test.c src/index.c -o "/workspace/tevox-build/cloud-v05/obj/index_test"
+mkdir -p "/workspace/tevox-build/cloud-v05/obj/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow  tests/delta_test.c src/aln_mummer_delta.c src/io.c src/sha256.c src/util.c -lm -o "/workspace/tevox-build/cloud-v05/obj/delta_test"
+mkdir -p "/workspace/tevox-build/cloud-v05/"
+gcc -O2 -g  /workspace/tevox-build/cloud-v05/obj/aln_mummer_delta.o /workspace/tevox-build/cloud-v05/obj/engine.o /workspace/tevox-build/cloud-v05/obj/index.o /workspace/tevox-build/cloud-v05/obj/inference.o /workspace/tevox-build/cloud-v05/obj/io.o /workspace/tevox-build/cloud-v05/obj/main.o /workspace/tevox-build/cloud-v05/obj/output.o /workspace/tevox-build/cloud-v05/obj/sha256.o /workspace/tevox-build/cloud-v05/obj/synteny.o /workspace/tevox-build/cloud-v05/obj/util.o -lm -o "/workspace/tevox-build/cloud-v05/tevox"
+"/workspace/tevox-build/cloud-v05/obj/index_test"
+"/workspace/tevox-build/cloud-v05/obj/delta_test" tests/data/conflict/A.fa tests/data/conflict/A.gff3 tests/data/conflict/B.fa tests/data/reverse/B.gff3 tests/data/v04/delta/plus.delta tests/data/v04/delta/reverse.delta
+TEVOX_BIN="/workspace/tevox-build/cloud-v05/tevox" PYTHON="/workspace/tevox-build/study-env/bin/python" bash ./tests/run_tests.sh
+All TEvoX tests passed.
+install -d "/workspace/tevox-build/cloud-v05/stage/usr/bin"
+install -m 0755 "/workspace/tevox-build/cloud-v05/tevox" "/workspace/tevox-build/cloud-v05/stage/usr/bin/tevox"
+install -m 0755 scripts/tevox_phylo.py "/workspace/tevox-build/cloud-v05/stage/usr/bin/tevox-phylo"
+install -m 0755 scripts/tevox_score_audit.py "/workspace/tevox-build/cloud-v05/stage/usr/bin/tevox-score-audit"
+install -m 0755 scripts/tevox_benchmark.py "/workspace/tevox-build/cloud-v05/stage/usr/bin/tevox-benchmark"
+install -m 0755 scripts/tevox_export_training.py "/workspace/tevox-build/cloud-v05/stage/usr/bin/tevox-export-training"
+install -m 0755 scripts/tevox_split_audit.py "/workspace/tevox-build/cloud-v05/stage/usr/bin/tevox-split-audit"
+tevox 0.5.0-alpha.2 (schema 1.2.0)
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 1.343s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+OK

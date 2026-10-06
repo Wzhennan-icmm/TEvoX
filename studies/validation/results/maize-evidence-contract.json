@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "status": "PASS",
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.evidence.tsv.gz",
+      "rows": 1818168,
+      "local_identity_methods": {
+        "EQX": 1738335,
+        "MISSING": 79833
+      },
+      "scope": "streamed per-row evidence invariants; not full relational schema"
+    }
+  ]
+}

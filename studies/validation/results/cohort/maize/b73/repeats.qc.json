@@ -1,0 +1,48 @@
+{
+  "classes": {
+    "DNA": 189093,
+    "LINE": 22796,
+    "LTR": 868979,
+    "RC": 35092,
+    "SINE": 2748,
+    "Unknown": 1711
+  },
+  "configuration": {
+    "bed_class_column": null,
+    "bed_coordinates": null,
+    "bed_family_column": null,
+    "bed_id_column": null,
+    "bed_name_column": 4,
+    "bed_strand_column": null,
+    "class_attribute": "Classification",
+    "class_map": null,
+    "family_attribute": null,
+    "family_policy": "repeat-name",
+    "format": "repeatmasker-out",
+    "gff_feature": [],
+    "id_prefix": "b73",
+    "lengths": "/workspace/tevox-v05-study/final/maize/b73/lengths.tsv",
+    "name_attribute": "Name",
+    "output_prefix": "/workspace/tevox-v05-study/final/maize/b73/repeats"
+  },
+  "counts": {
+    "header_records": 2,
+    "parsed_fragments": 1340546,
+    "rejected_excluded_non_te": 220127,
+    "retained_fragments": 1120419,
+    "source_records": 1340548,
+    "unknown_class_fragments": 1711
+  },
+  "format": "repeatmasker-out",
+  "input": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.repeatMasker.out.gz",
+  "input_coordinate_system": "one-based-inclusive",
+  "interpretation": "Annotation fragments only; not reconstructed elements or proven insertion/deletion events. Unknown class retained explicitly with uncertainty.",
+  "lengths": "/workspace/tevox-v05-study/final/maize/b73/lengths.tsv",
+  "output_coordinate_system": "zero-based-half-open",
+  "outputs": {
+    "bed": "/workspace/tevox-v05-study/final/maize/b73/repeats.bed",
+    "metadata": "/workspace/tevox-v05-study/final/maize/b73/repeats.metadata.tsv",
+    "qc": "/workspace/tevox-v05-study/final/maize/b73/repeats.qc.json",
+    "rejected": "/workspace/tevox-v05-study/final/maize/b73/repeats.rejected.tsv"
+  }
+}

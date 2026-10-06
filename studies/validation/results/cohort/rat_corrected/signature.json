@@ -1,0 +1,71 @@
+{
+  "manifest": {
+    "path": "/workspace/tevox-study/results/rat_corrected/manifest.json",
+    "bytes": 2728,
+    "sha256": "52efe069f0c502587fc6a0e3087b46430a1e262232af6cc482b8167643b0afdd"
+  },
+  "binary": {
+    "path": "/workspace/tevox-v05-validation-20261006/tevox-final",
+    "bytes": 678000,
+    "sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7"
+  },
+  "alignment": {
+    "path": "/workspace/tevox-study/results/rat_corrected/alignment.paf.gz",
+    "bytes": 21612329,
+    "sha256": "99e54e9a4bdfd42c2fb7942b6e4186a4526f6b133e1e2c6a49d788a0087d6d5d"
+  },
+  "source_inputs": [
+    {
+      "role": "fasta",
+      "genome": "bn",
+      "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+      "bytes": 875872536,
+      "sha256": "3b9ae168e5c680ce0afb3401d1a1a306a5373098a49219cda63598bc44943a69"
+    },
+    {
+      "role": "repeats",
+      "genome": "bn",
+      "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz",
+      "bytes": 141528731,
+      "sha256": "cc033b3f572821a9d97bf501278a5a4ef100d7cb2bebc1e6458de25955cdf2ff"
+    },
+    {
+      "role": "genes",
+      "genome": "bn",
+      "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+      "bytes": 37442693,
+      "sha256": "fbb27c7cf14deae80d24959449d4b1c6f58f0ac3dd188f3e00da21081b259901"
+    },
+    {
+      "role": "fasta",
+      "genome": "shrsp",
+      "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+      "bytes": 874852829,
+      "sha256": "88bc0dd2422beff05e30e16c9c2a761427982d9904893b7961ead1ba283a83dd"
+    },
+    {
+      "role": "repeats",
+      "genome": "shrsp",
+      "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz",
+      "bytes": 186333603,
+      "sha256": "8e640708e26c41ec179c52762267e1662211b370c495b73ad263c20420afee3f"
+    },
+    {
+      "role": "genes",
+      "genome": "shrsp",
+      "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+      "bytes": 41562811,
+      "sha256": "828d12749401c4c0844ac9721430198c3809c1667696e409a826c4e59e21db74"
+    }
+  ],
+  "family_policy": "repeat-name",
+  "scripts": {
+    "annotate_candidates.py": "45ded3f62ba22abc75b758de25fa88cb23d2b6bdae66e9fe791a8054df96e6a7",
+    "archive_run.py": "8275cd5c6bc9ac83286bedcd72613edcb2cd4ed22141d76f8b3610a04bdfc20d",
+    "normalize_annotations.py": "3ef9740365a26ab02d52ef17b0c5123e66f0c67826d7b49a5f8b626fb4d562e9",
+    "paf_exact.py": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+    "run_pair.py": "474f66229331396be1331538aa23d99c3bdf9b63680ba0448ec3a308d1a326b0",
+    "test_inputs.py": "6806ee0085898ed077e15c785914dfce28d803f7490b385b780b3f3bc72bf2c2",
+    "test_run_integrity.py": "c4d3704875e669d4101926ff1aa9e3407020272d6e5b9f297457da408fc24aeb"
+  }
+}

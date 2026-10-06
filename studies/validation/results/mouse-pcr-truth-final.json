@@ -1,0 +1,298 @@
+{
+  "status": "EXTERNAL_PCR_STATE_SUBSET",
+  "counts": {
+    "candidates": 15,
+    "unique_reference_transfer": 14,
+    "no_reference_transfer": 1,
+    "matched_te_fragments": 10
+  },
+  "truth": [
+    {
+      "pcr_id": "chr1-134436505-DEL-201",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000000235251",
+      "target_genome_id": "cast",
+      "chrom": "OW971552.1",
+      "te_start": 131365545,
+      "te_end": 131365735,
+      "deletion_start": 131365537,
+      "deletion_end": 131365738,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "B2"
+    },
+    {
+      "pcr_id": "chr10-44516914-DEL-341",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000000419135",
+      "target_genome_id": "cast",
+      "chrom": "OW971553.1",
+      "te_start": 41311617,
+      "te_end": 41311953,
+      "deletion_start": 41311611,
+      "deletion_end": 41311952,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "ERVK"
+    },
+    {
+      "pcr_id": "chr11-106782620-DEL-105",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000000800823",
+      "target_genome_id": "cast",
+      "chrom": "OW971554.1",
+      "te_start": 103628371,
+      "te_end": 103628463,
+      "deletion_start": 103628358,
+      "deletion_end": 103628463,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "L1"
+    },
+    {
+      "pcr_id": "chr17-63245561-DEL-198",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000001701955",
+      "target_genome_id": "cast",
+      "chrom": "OW971559.1",
+      "te_start": 58632005,
+      "te_end": 58632193,
+      "deletion_start": 58631995,
+      "deletion_end": 58632193,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "B2"
+    },
+    {
+      "pcr_id": "chr2-80387834-DEL-204",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000002166180",
+      "target_genome_id": "cast",
+      "chrom": "OW971562.1",
+      "te_start": 77509392,
+      "te_end": 77509581,
+      "deletion_start": 77509376,
+      "deletion_end": 77509580,
+      "mapping_strand": "+",
+      "CAST_pcr": 0,
+      "expected_biological_state": "PRESENT",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "B2"
+    },
+    {
+      "pcr_id": "chr3-62224725-DEL-331",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000002450991",
+      "target_genome_id": "cast",
+      "chrom": "OW971563.1",
+      "te_start": 59419110,
+      "te_end": 59419435,
+      "deletion_start": 59419104,
+      "deletion_end": 59419435,
+      "mapping_strand": "+",
+      "CAST_pcr": 0,
+      "expected_biological_state": "PRESENT",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "ERVK"
+    },
+    {
+      "pcr_id": "chr6-112511320-DEL-399",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000002814435",
+      "target_genome_id": "cast",
+      "chrom": "OW971564.1",
+      "te_start": 109590299,
+      "te_end": 109590693,
+      "deletion_start": 109590294,
+      "deletion_end": 109590693,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "ERVL-MaLR"
+    },
+    {
+      "pcr_id": "chr7-23162099-DEL-170",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000002914786",
+      "target_genome_id": "cast",
+      "chrom": "OW971565.1",
+      "te_start": 13167440,
+      "te_end": 13167588,
+      "deletion_start": 13167424,
+      "deletion_end": 13167594,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "B1"
+    },
+    {
+      "pcr_id": "chr7-39709865-DEL-493",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000002948282",
+      "target_genome_id": "cast",
+      "chrom": "OW971565.1",
+      "te_start": 27975001,
+      "te_end": 27975474,
+      "deletion_start": 27974986,
+      "deletion_end": 27975479,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "L1"
+    },
+    {
+      "pcr_id": "chr5-21910665-DEL-196",
+      "source_genome_id": "c57",
+      "source_te_id": "c57_F000003954875",
+      "target_genome_id": "cast",
+      "chrom": "OW971569.1",
+      "te_start": 17444390,
+      "te_end": 17444576,
+      "deletion_start": 17444387,
+      "deletion_end": 17444583,
+      "mapping_strand": "+",
+      "CAST_pcr": 1,
+      "expected_biological_state": "EMPTY",
+      "pcr_sheet": "PCR_validations",
+      "external_te_type": "B2"
+    }
+  ],
+  "transfer_hits": {
+    "chr1-134436505-DEL-201": [
+      [
+        "OW971552.1",
+        131365537,
+        131365738,
+        "+"
+      ]
+    ],
+    "chr2-26888304-DEL-6026": [
+      [
+        "OW971562.1",
+        23997156,
+        24003182,
+        "+"
+      ]
+    ],
+    "chr2-80387834-DEL-204": [
+      [
+        "OW971562.1",
+        77509376,
+        77509580,
+        "+"
+      ]
+    ],
+    "chr2-180451531-DEL-107": [
+      [
+        "OW971562.1",
+        174613031,
+        174613138,
+        "+"
+      ]
+    ],
+    "chr3-62224725-DEL-331": [
+      [
+        "OW971563.1",
+        59419104,
+        59419435,
+        "+"
+      ]
+    ],
+    "chr5-21910665-DEL-196": [
+      [
+        "OW971569.1",
+        17444387,
+        17444583,
+        "+"
+      ]
+    ],
+    "chr6-112511320-DEL-399": [
+      [
+        "OW971564.1",
+        109590294,
+        109590693,
+        "+"
+      ]
+    ],
+    "chr7-6179037-DEL-152": [
+      [
+        "OW971565.1",
+        2914290,
+        2914442,
+        "+"
+      ]
+    ],
+    "chr7-23162099-DEL-170": [
+      [
+        "OW971565.1",
+        13167424,
+        13167594,
+        "+"
+      ]
+    ],
+    "chr7-39709865-DEL-493": [
+      [
+        "OW971565.1",
+        27974986,
+        27975479,
+        "+"
+      ]
+    ],
+    "chr10-44516914-DEL-341": [
+      [
+        "OW971553.1",
+        41311611,
+        41311952,
+        "+"
+      ]
+    ],
+    "chr11-106782620-DEL-105": [
+      [
+        "OW971554.1",
+        103628358,
+        103628463,
+        "+"
+      ]
+    ],
+    "chr14-54213572-DEL-397": [
+      [
+        "OW971556.1",
+        42535839,
+        42536236,
+        "+"
+      ]
+    ],
+    "chr17-63245561-DEL-198": [
+      [
+        "OW971559.1",
+        58631995,
+        58632193,
+        "+"
+      ]
+    ],
+    "chr19-15933885-DEL-1906": []
+  },
+  "protocol": "PCR DEL with TE_TYPE; CAST observed 0/1; 50 bp flanks; exact unique full REF+flank transfer; >=.95 TE coverage and >=.8 DEL coverage; selected without inspecting predictions",
+  "input_sha256": {
+    "candidates": "dd8904bdc2313ffbc5aff054cfecd6ccdfc542f39147c4d10c1c42de50ba5eb8",
+    "fasta": "be21737995f8598f635fd35f534ddaa6667d08bc38fb23604f9acbde9933ce4a",
+    "te": "cff14ec761846139cc6b552831766d2d6841911750398c6a565ef0c4fce24c70"
+  },
+  "limitations": [
+    "Small selected PCR SV subset; not a random genome-wide TE sample.",
+    "Reference allele in C57BL/6NJ is supported by exact assembly sequence, not C57BL/6NJ PCR.",
+    "CAST PCR establishes SV state, not fragment-to-fragment candidate membership.",
+    "No transfer to other strains, assembly releases or subgenomes is implied."
+  ]
+}

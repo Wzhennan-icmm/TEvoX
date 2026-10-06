@@ -1,0 +1,45 @@
+{
+  "status": "BLOCKED_MISSING_INDEPENDENT_MEMBERSHIP_TRUTH",
+  "fitted_model_created": false,
+  "active_model": "BUILTIN_UNCALIBRATED_V1",
+  "calibration_status": "UNCALIBRATED",
+  "task": "candidate same-locus versus different-locus membership",
+  "criteria": [
+    {
+      "name": "export_and_split_audit_implementation",
+      "status": "TESTED"
+    },
+    {
+      "name": "independent_positive_and_negative_membership_labels",
+      "status": "MISSING",
+      "reason": "GIAB absence and CAST PCR SV labels describe biological state, not pairs of candidate TE fragments."
+    },
+    {
+      "name": "sampling_frame_and_weights",
+      "status": "MISSING"
+    },
+    {
+      "name": "untruncated_candidate_generation",
+      "status": "NOT_RUN_FOR_CALIBRATION",
+      "reason": "Five routine pair analyses retain default max_candidates=64 and max_graph_candidates=64; both must be 0 for compliant training export."
+    },
+    {
+      "name": "leakage_safe_development_calibration_test_split",
+      "status": "NOT_ESTABLISHED"
+    },
+    {
+      "name": "clade_or_species_pair_holdout",
+      "status": "NOT_ESTABLISHED"
+    },
+    {
+      "name": "heldout_probability_reliability_brier_and_logloss",
+      "status": "NOT_ASSESSABLE_WITH_CURRENT_LABELS"
+    }
+  ],
+  "minimum_next_experiment": "Obtain adjudicated candidate-pair positive/negative labels with locus/homology/batch/taxon identifiers; freeze independent split and sampling design; rerun untruncated generator; audit splits; fit on training/calibration sets and evaluate once on heldout data.",
+  "polyploid_biological_validation": {
+    "status": "NOT_COMPLETE",
+    "completed": "36 controlled synthetic copy-context runs",
+    "missing": "matched independently validated multi-copy locus membership and subgenome assignments on real polyploid assemblies"
+  }
+}

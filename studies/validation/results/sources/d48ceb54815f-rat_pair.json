@@ -1,0 +1,34 @@
+{
+  "pair_id": "rat_bn_shrsp",
+  "species": "Rattus norvegicus",
+  "preset": "asm10",
+  "threads": 4,
+  "source_manifest": "/workspace/tevox-study/discovery/rat_sources.json",
+  "genomes": [
+    {
+      "id": "bn",
+      "material": "BN/NHsdMcwi",
+      "assembly": "GCF_036323735.1_GRCr8",
+      "fasta": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+      "genes": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+      "repeats": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz",
+      "repeat_format": "repeatmasker-out",
+      "normalize_args": []
+    },
+    {
+      "id": "shrsp",
+      "material": "SHRSP/BbbUtx",
+      "assembly": "GCF_021556685.1_SHRSP_T2T",
+      "fasta": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+      "genes": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+      "repeats": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+      "repeat_format": "repeatmasker-out",
+      "normalize_args": []
+    }
+  ],
+  "limitations": [
+    "Two strains, not population frequencies",
+    "Annotation fragments are not reconstructed TE insertion events",
+    "Genome-wide alignment gaps require reciprocal flank validation"
+  ]
+}

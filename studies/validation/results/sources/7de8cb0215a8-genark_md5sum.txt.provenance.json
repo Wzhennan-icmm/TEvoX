@@ -1,0 +1,28 @@
+{
+  "checksum_source": null,
+  "completed_at": "2026-10-03T08:20:49.749215+00:00",
+  "curl_log": "/workspace/tevox-study/data/mouse/cast/genark_md5sum.txt.provenance.json.curl.log",
+  "effective_url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+  "observed": {
+    "bytes": 11258,
+    "md5": "1d85c921fcd45aceef81a4028d072244",
+    "sha256": "4bae983be0663ecf9f2b2ae1f282fc5c0caca8397d47f0716a9da1a38c65df52"
+  },
+  "original_url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+  "output": "/workspace/tevox-study/data/mouse/cast/genark_md5sum.txt",
+  "request": {
+    "expected_bytes": 11258,
+    "expected_md5": null,
+    "expected_sha256": "4bae983be0663ecf9f2b2ae1f282fc5c0caca8397d47f0716a9da1a38c65df52",
+    "original_url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+    "url_sha256": "577b6e5fd91bb2cdd0b4070479db42a31424734001065afd977b11cfcf63c96c"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:20:49.345305+00:00",
+  "verification": "provided_checksum_verified",
+  "verified_algorithms": [
+    "sha256"
+  ]
+}

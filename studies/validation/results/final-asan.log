@@ -1,0 +1,12 @@
+ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 make OBJDIR=build/asan TARGET=build/asan/tevox CFLAGS="-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer" LDFLAGS="-fsanitize=address,undefined" check
+make[1]: Entering directory '/workspace/tevox-review-20261003/early-development/v0.5-source'
+python3 -c 'import sys; sys.exit("Python 3.8+ is required for tests and helper commands" if sys.version_info < (3, 8) else 0)'
+mkdir -p "build/asan/"
+cc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/output.c" -o "build/asan/output.o"
+mkdir -p "build/asan/"
+cc -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fsanitize=address,undefined build/asan/aln_mummer_delta.o build/asan/engine.o build/asan/index.o build/asan/inference.o build/asan/io.o build/asan/main.o build/asan/output.o build/asan/sha256.o build/asan/synteny.o build/asan/util.o -lm -o "build/asan/tevox"
+"/workspace/tevox-review-20261003/early-development/v0.5-source/build/asan/index_test"
+"/workspace/tevox-review-20261003/early-development/v0.5-source/build/asan/delta_test" tests/data/conflict/A.fa tests/data/conflict/A.gff3 tests/data/conflict/B.fa tests/data/reverse/B.gff3 tests/data/v04/delta/plus.delta tests/data/v04/delta/reverse.delta
+TEVOX_BIN="/workspace/tevox-review-20261003/early-development/v0.5-source/build/asan/tevox" PYTHON="python3" bash ./tests/run_tests.sh
+All TEvoX tests passed.
+make[1]: Leaving directory '/workspace/tevox-review-20261003/early-development/v0.5-source'

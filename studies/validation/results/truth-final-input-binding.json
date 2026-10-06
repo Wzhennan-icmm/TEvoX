@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "giab": {
+    "fasta_sha256": "9374c0c1ae3d228786ae49db85e4c770007e6cd8e7574303f93369a16601c76b",
+    "te_annotation_sha256": "110fbf8d16cb3b1da6953c474b962437da8283d2821bdcbaa4386583807c9c5b",
+    "truth_inputs_identical_to_final_run": true
+  },
+  "mouse_pcr": {
+    "source_compressed_fasta_sha256": "be21737995f8598f635fd35f534ddaa6667d08bc38fb23604f9acbde9933ce4a",
+    "te_annotation_sha256": "cff14ec761846139cc6b552831766d2d6841911750398c6a565ef0c4fce24c70",
+    "truth_inputs_identical_to_final_run": true
+  },
+  "giab_truth_fragments_and_distinct_sv_ids": 42,
+  "mouse_truth_fragments_and_distinct_sv_ids": 10
+}

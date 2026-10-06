@@ -1,0 +1,16 @@
+{
+  "truth_fragments": 42,
+  "matched_decisions": 42,
+  "missing_decisions": 0,
+  "decision_states": {
+    "UNCALLABLE": 1,
+    "EMPTY_SITE_CONFIRMED": 41
+  },
+  "claimable_empty": 41,
+  "positive_subset_recall": 0.9761904761904762,
+  "precision": null,
+  "false_discovery_rate": null,
+  "calibration_status": "NOT_ASSESSABLE_POSITIVE_ONLY",
+  "truth_sha256": "78316bb7ae13da1bfbb5795b3b5e63da9a98d4c05f72c92f8267ac928558cbaa",
+  "decisions_sha256": "d7f1d27f7fcec34582b82ed4b9a1cab46f76015b14cb8a072c8d3c7c44e02f77"
+}

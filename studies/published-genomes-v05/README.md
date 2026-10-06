@@ -10,6 +10,30 @@ The C core and its five public Python helpers do not require NumPy. Large
 analyses need substantial RAM and disk space; see the measured figures in
 [the integration report](../../docs/INTEGRATION_VALIDATION.zh-CN.md).
 
+## Reproduce the source inputs
+
+The [source preparation snapshot](../validation/results/source-preparation-snapshot.tar.gz)
+preserves the earlier download catalogs and exact selection/conversion code,
+including HG002 bigRmsk fragment extraction and SHRSP duplicate-row removal.
+Unpack it outside this checkout and run its `initialize_study.py` to create a
+new study workspace. Its README documents species-specific downloads and
+the pinned minimap2 build; initialization itself downloads nothing.
+
+Use that workspace's `scripts/run_pair.py` only for `--phase prepare` and
+`--phase align` when reproducing the original alignments. Its historical
+`finish`/`all` commands target the earlier engine. Pass the resulting directory
+to the **current** v0.5 workflow:
+
+```sh
+python3 studies/published-genomes-v05/run_pair.py \
+  --legacy-result /data/public-genomes/results/PAIR \
+  --tevox ./tevox --output /results/v05/PAIR
+```
+
+For the Arabidopsis pair, add `--family-policy classification`. The snapshot
+is source/provenance only and contains no downloaded genome or completed
+inference outputs. Local file paths must be initialized before download.
+
 ## Run a pair
 
 ```sh
@@ -71,6 +95,12 @@ annotation/alignment bundle.
    defaults; these runs are not an untruncated model-training export.
 5. Commit `complete.json` only after the pipeline checks succeed. Native
    `.run.json` alone signifies core success, not completed gene postprocessing.
+
+The 17 native TEvoX tables and normalized BED8 use **0-based half-open**
+coordinates. The supplementary `empty_site_source_fragments.tsv` and
+`empty_site_genes.tsv` explicitly use `start1`/`end1`, which are **1-based
+inclusive**; the gene-context QC JSON records this convention. Do not pass
+those start1/end1 columns directly to a BED consumer without conversion.
 
 An `EMPTY_SITE_CONFIRMED` decision is an evidence-gated absence at the
 counterpart locus. Counts refer to **source annotation fragments**, which

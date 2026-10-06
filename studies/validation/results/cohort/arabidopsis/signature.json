@@ -1,0 +1,71 @@
+{
+  "manifest": {
+    "path": "/workspace/tevox-study/results/arabidopsis/manifest.json",
+    "bytes": 40273,
+    "sha256": "82f424b10bd3ac343a29467f5c2f60bcea51d371970f06e6679edbce9edbcc64"
+  },
+  "binary": {
+    "path": "/workspace/tevox-v05-validation-20261006/tevox-final",
+    "bytes": 678000,
+    "sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7"
+  },
+  "alignment": {
+    "path": "/workspace/tevox-study/results/arabidopsis/alignment.paf.gz",
+    "bytes": 1938646,
+    "sha256": "153f44848e1e23e947be6c8427f2c5502dc25287b9667c548a9540b785abf4da"
+  },
+  "source_inputs": [
+    {
+      "role": "fasta",
+      "genome": "nyl7",
+      "path": "/workspace/tevox-study/data/arabidopsis/nyl7/6069.scaffolds_corrected.v2.1.fasta.gz",
+      "bytes": 36848589,
+      "sha256": "9d49c90c6832ed5316337b0db674b88122c6e3a302486749da337058489ea968"
+    },
+    {
+      "role": "repeats",
+      "genome": "nyl7",
+      "path": "/workspace/tevox-study/data/arabidopsis/nyl7/primary.repeats.gff3.gz",
+      "bytes": 661433,
+      "sha256": "fc94890bbc9589ed95f259ae73f9d9d1ffabe94c4733771277e351a25a39f869"
+    },
+    {
+      "role": "genes",
+      "genome": "nyl7",
+      "path": "/workspace/tevox-study/data/arabidopsis/nyl7/primary.genes.gff3.gz",
+      "bytes": 2475140,
+      "sha256": "33a86bac2d67ae21bf5474eaeb8389089289049d538b7fe6066d5e4f68b45b21"
+    },
+    {
+      "role": "fasta",
+      "genome": "sq1",
+      "path": "/workspace/tevox-study/data/arabidopsis/sq1/6966.scaffolds_corrected.v2.1.fasta.gz",
+      "bytes": 37121959,
+      "sha256": "5402c511b465072bec35e3810fc9f56fc3065abefb8ed6d855c12f1546b15da9"
+    },
+    {
+      "role": "repeats",
+      "genome": "sq1",
+      "path": "/workspace/tevox-study/data/arabidopsis/sq1/primary.repeats.gff3.gz",
+      "bytes": 632402,
+      "sha256": "13760b552f9253e456820b8e857cdf61a9db45e59725fb9f42dc731ea5088857"
+    },
+    {
+      "role": "genes",
+      "genome": "sq1",
+      "path": "/workspace/tevox-study/data/arabidopsis/sq1/primary.genes.gff3.gz",
+      "bytes": 2496047,
+      "sha256": "69753a3c5e7af0c3f6ca334afb6bce9c0cc4f3ae5be29d4232a65e8fb5c80c89"
+    }
+  ],
+  "family_policy": "classification",
+  "scripts": {
+    "annotate_candidates.py": "45ded3f62ba22abc75b758de25fa88cb23d2b6bdae66e9fe791a8054df96e6a7",
+    "archive_run.py": "8275cd5c6bc9ac83286bedcd72613edcb2cd4ed22141d76f8b3610a04bdfc20d",
+    "normalize_annotations.py": "3ef9740365a26ab02d52ef17b0c5123e66f0c67826d7b49a5f8b626fb4d562e9",
+    "paf_exact.py": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+    "run_pair.py": "474f66229331396be1331538aa23d99c3bdf9b63680ba0448ec3a308d1a326b0",
+    "test_inputs.py": "6806ee0085898ed077e15c785914dfce28d803f7490b385b780b3f3bc72bf2c2",
+    "test_run_integrity.py": "c4d3704875e669d4101926ff1aa9e3407020272d6e5b9f297457da408fc24aeb"
+  }
+}

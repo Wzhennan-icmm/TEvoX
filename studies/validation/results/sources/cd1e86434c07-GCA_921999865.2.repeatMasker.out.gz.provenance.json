@@ -1,0 +1,28 @@
+{
+  "checksum_source": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/md5sum.txt",
+  "completed_at": "2026-10-03T08:21:17.541750+00:00",
+  "curl_log": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz.provenance.json.curl.log",
+  "effective_url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.repeatMasker.out.gz",
+  "observed": {
+    "bytes": 147025938,
+    "md5": "c695318cc936b90860eb4eb4eb085c5a",
+    "sha256": "ecb7d394a82dcd225a0e153d2abc783bcf20e46a46f20cc157bcf54644cad6be"
+  },
+  "original_url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.repeatMasker.out.gz",
+  "output": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz",
+  "request": {
+    "expected_bytes": 147025938,
+    "expected_md5": "c695318cc936b90860eb4eb4eb085c5a",
+    "expected_sha256": null,
+    "original_url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.repeatMasker.out.gz",
+    "url_sha256": "a197c1f3c1c4abc90ec1746e3e170a273297db216dbfa1a31cf394d7b3aff57b"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:21:14.386710+00:00",
+  "verification": "source_checksum_verified",
+  "verified_algorithms": [
+    "md5"
+  ]
+}

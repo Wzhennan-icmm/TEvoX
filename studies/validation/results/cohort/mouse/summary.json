@@ -1,0 +1,154 @@
+{
+  "source_pair": "/workspace/tevox-study/results/mouse",
+  "counts": {
+    "input_files": 5,
+    "genomes": 2,
+    "tes": 6295781,
+    "alignment_views": 38536,
+    "native_evidence_groups": 19268,
+    "synteny_evidence_groups": 0,
+    "synteny_provider_inputs": 0,
+    "evidence_observations": 6198150,
+    "observation_score_rows": 6198150,
+    "candidate_observations": 12454764,
+    "internal_candidates": 12454121,
+    "graph_candidates": 12454121,
+    "candidates": 12454121,
+    "candidate_feature_rows": 12454121,
+    "decisions": 6295781,
+    "genes": 0,
+    "synteny_blocks": 0,
+    "synteny_anchors": 0,
+    "copy_contexts": 0,
+    "te_context_assignments": 0,
+    "edges": 2950247,
+    "relations": 15737858,
+    "solver_components": 3604241,
+    "loci": 3656990
+  },
+  "state_counts": [
+    {
+      "genome_id": "c57",
+      "state": "ASSEMBLY_GAP",
+      "claimable": "false",
+      "count": 10
+    },
+    {
+      "genome_id": "c57",
+      "state": "EMPTY_SITE_CONFIRMED",
+      "claimable": "true",
+      "count": 21545
+    },
+    {
+      "genome_id": "c57",
+      "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+      "claimable": "true",
+      "count": 125374
+    },
+    {
+      "genome_id": "c57",
+      "state": "PRESENT_ANNOTATED",
+      "claimable": "true",
+      "count": 3147700
+    },
+    {
+      "genome_id": "c57",
+      "state": "PRESENT_UNANNOTATED",
+      "claimable": "true",
+      "count": 172468
+    },
+    {
+      "genome_id": "c57",
+      "state": "PROJECTION_AMBIGUOUS",
+      "claimable": "false",
+      "count": 14589
+    },
+    {
+      "genome_id": "c57",
+      "state": "STRUCTURAL_ALTERNATIVE",
+      "claimable": "true",
+      "count": 1858
+    },
+    {
+      "genome_id": "c57",
+      "state": "UNCALLABLE",
+      "claimable": "false",
+      "count": 173446
+    },
+    {
+      "genome_id": "cast",
+      "state": "ASSEMBLY_GAP",
+      "claimable": "false",
+      "count": 3
+    },
+    {
+      "genome_id": "cast",
+      "state": "EMPTY_SITE_CONFIRMED",
+      "claimable": "true",
+      "count": 24475
+    },
+    {
+      "genome_id": "cast",
+      "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+      "claimable": "true",
+      "count": 125454
+    },
+    {
+      "genome_id": "cast",
+      "state": "PRESENT_ANNOTATED",
+      "claimable": "true",
+      "count": 3148081
+    },
+    {
+      "genome_id": "cast",
+      "state": "PRESENT_UNANNOTATED",
+      "claimable": "true",
+      "count": 174129
+    },
+    {
+      "genome_id": "cast",
+      "state": "PROJECTION_AMBIGUOUS",
+      "claimable": "false",
+      "count": 15910
+    },
+    {
+      "genome_id": "cast",
+      "state": "STRUCTURAL_ALTERNATIVE",
+      "claimable": "true",
+      "count": 1676
+    },
+    {
+      "genome_id": "cast",
+      "state": "UNCALLABLE",
+      "claimable": "false",
+      "count": 167262
+    }
+  ],
+  "empty_site_source_fragments": {
+    "c57": 24727,
+    "cast": 21759
+  },
+  "row_counts": {
+    "evidence.tsv.gz": 6198150,
+    "observation_scores.tsv.gz": 6198150,
+    "candidates.tsv.gz": 12454121,
+    "candidate_features.tsv.gz": 12454121,
+    "candidate_contexts.tsv.gz": 12454121,
+    "decisions.tsv.gz": 6295781,
+    "edges.tsv.gz": 2950247,
+    "relations.tsv.gz": 15737858,
+    "solver.tsv.gz": 3604241,
+    "loci.tsv.gz": 3656990,
+    "instances.tsv.gz": 7313980,
+    "states.tsv.gz": 7313980,
+    "summary.tsv.gz": 16,
+    "synteny.blocks.tsv.gz": 0,
+    "synteny.anchors.tsv.gz": 0,
+    "contexts.tsv.gz": 0,
+    "te_contexts.tsv.gz": 0
+  },
+  "validation": "streaming counts/state gates; full schema validator separately required on bounded fixtures",
+  "family_policy": "repeat-name",
+  "calibration_status": "UNCALIBRATED",
+  "interpretation": "TE annotation fragments and reconstructed loci; no insertion/deletion evolutionary direction or independent accuracy claim"
+}

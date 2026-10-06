@@ -1,0 +1,16 @@
+{
+  "input": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz",
+  "identity_fields": [
+    "query_sequence",
+    "RepeatMasker_source_ID",
+    "query_begin_1based",
+    "query_end_inclusive"
+  ],
+  "source_records": 4661101,
+  "distinct_identities": 4661101,
+  "repeated_identity_groups": 0,
+  "identity_groups_with_different_full_records": 0,
+  "examples": [],
+  "source_modified": false,
+  "status": "unique_id_coordinate_identities"
+}

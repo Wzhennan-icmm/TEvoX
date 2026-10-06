@@ -1,0 +1,65 @@
+{
+  "status": "lossless_archive",
+  "files": [
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/nyl7/genome.fa",
+      "plain_sha256": "0f4690405f0371c4d2fd441302fbcf305aa93a6280a368157e74bc9e6240d3a3",
+      "restore_from": "/workspace/tevox-study/data/arabidopsis/nyl7/6069.scaffolds_corrected.v2.1.fasta.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "9d49c90c6832ed5316337b0db674b88122c6e3a302486749da337058489ea968"
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/sq1/genome.fa",
+      "plain_sha256": "659f29ff96756a7d753d327591030dfa40d071fa1b5f7072ea331a8a05fab692",
+      "restore_from": "/workspace/tevox-study/data/arabidopsis/sq1/6966.scaffolds_corrected.v2.1.fasta.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "5402c511b465072bec35e3810fc9f56fc3065abefb8ed6d855c12f1546b15da9"
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/alignment.eqx.paf",
+      "plain_sha256": "6bbb3ca6b12eb0db5a2535f77071dfa07f62a2f1f8bb1f30e819558b36ac8938",
+      "plain_bytes": 4679015,
+      "restore_from": "/workspace/tevox-v05-study/final/arabidopsis/alignment.eqx.paf.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "21c844133d76caafab64cfa8004cc87881ba4e3b78bfd1b749fc7046a5f24ef8",
+      "compressed_bytes": 1859555
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/nyl7/repeats.metadata.tsv",
+      "plain_sha256": "edd700c531363e978ca04ba822dd4317dc430d6e0744e6aa43e6c3a970ee662a",
+      "plain_bytes": 3108049,
+      "restore_from": "/workspace/tevox-v05-study/final/arabidopsis/nyl7/repeats.metadata.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "7961f28ec0aa2b891b5c40b86c483bfa3a3f5871a98ef6c8403c73310b4c1e01",
+      "compressed_bytes": 574201
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/nyl7/repeats.rejected.tsv",
+      "plain_sha256": "8ac9c4b61dde1d14ff20539f84fe8618dc82ae89bd43049396e3758f388a50e9",
+      "plain_bytes": 1492947,
+      "restore_from": "/workspace/tevox-v05-study/final/arabidopsis/nyl7/repeats.rejected.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "8a5438e023f5859f694a7567c5b4a6ad3ba52f4e51027fbcd3e325799d507660",
+      "compressed_bytes": 190273
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.metadata.tsv",
+      "plain_sha256": "a6d0259f687fc3e8def4a9cac638499c40deec1a7e467358850250842a844eec",
+      "plain_bytes": 2881842,
+      "restore_from": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.metadata.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "cde68e535023b2415f084a4082d849e4e8435bf7de214fb0ad1d595351e5afde",
+      "compressed_bytes": 535477
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.rejected.tsv",
+      "plain_sha256": "c9e2faccbc8cde690351cfab33c2d0d6040f4b8bbdf4716ca24bd5f07f5c3407",
+      "plain_bytes": 1500958,
+      "restore_from": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.rejected.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "86a0acd874db9fd34c85f20e6d29a54c1f1bf496bc0d3a285a5af9a75e64653a",
+      "compressed_bytes": 194306
+    }
+  ],
+  "note": "run.json retains original paths/hashes; use restore_from and restore_method to recover original bytes"
+}

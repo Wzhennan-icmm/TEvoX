@@ -1,0 +1,38 @@
+{
+  "anomaly_examples": [],
+  "checksum_interpretation": "Local integrity hashes; published source checksum verification is recorded separately",
+  "completed_at": "2026-10-03T08:31:34.760444+00:00",
+  "coordinate_order_policy": "Informational audit only; no resorting or coordinate changes",
+  "counts": {
+    "contig_reentry_events": 0,
+    "coordinate_order_violations": 0,
+    "header_or_blank_lines": 3,
+    "removed_consecutive_duplicate_rows": 4559500,
+    "retained_nonconsecutive_duplicate_rows": 0,
+    "retained_record_rows": 4559500,
+    "source_physical_lines": 9119003,
+    "source_record_rows": 9119000
+  },
+  "identity_rule": "All original record columns equal after splitting/joining whitespace; only consecutive record rows removed",
+  "multiplicity_histogram": {
+    "2": 4559500
+  },
+  "nonconsecutive_audit": "Disk SQLite SHA256 signatures across all retained original records; nonconsecutive matches retained and fail audit",
+  "output": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz",
+  "output_bytes": 186333603,
+  "output_sha256_local": "8e640708e26c41ec179c52762267e1662211b370c495b73ad263c20420afee3f",
+  "schema_version": 1,
+  "scientific_interpretation": "Duplicate source annotation rows removed; no TE fragments merged into insertion events",
+  "source": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+  "source_fingerprint": {
+    "ctime_ns": 1791015200287663982,
+    "device": 27,
+    "inode": 787941,
+    "mtime_ns": 1791015199935664576,
+    "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+    "size": 157958167
+  },
+  "source_groups": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz.source_groups.tsv.gz",
+  "source_sha256_local": "a59a2a5758eab7a34c6232ec69413409c39e75e1f83e57c5e8b8502144b1f85e",
+  "status": "passed"
+}

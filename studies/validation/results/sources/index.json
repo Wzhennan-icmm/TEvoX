@@ -1,0 +1,250 @@
+{
+  "/workspace/tevox-study/results/human/manifest.json": {
+    "file": "1501953ba7b0-manifest.json",
+    "sha256": "1501953ba7b01c0d39486af61babaa4766bf25ed5ac36ea9be0dc5b3542c8625"
+  },
+  "/workspace/tevox-study/metadata/human_pair.json": {
+    "file": "fcc14bb115cc-human_pair.json",
+    "sha256": "fcc14bb115cc31027e04152c2fce386c360cc65939b59f570a4331a63ff2006f"
+  },
+  "/workspace/tevox-study/discovery/human_sources.json": {
+    "file": "b14c7df9247f-human_sources.json",
+    "sha256": "b14c7df9247f73ac0ab7ea355967e0bd7e1dfc679a414110c0a5382a884a8eb0"
+  },
+  "/workspace/tevox-study/data/human/chm13/chm13v2.0.fa.gz.provenance.json": {
+    "file": "6affbd1bf79a-chm13v2.0.fa.gz.provenance.json",
+    "sha256": "6affbd1bf79a8ec36a910a09465fc393c32b56fc83e9a2890a3a8beafec589fb"
+  },
+  "/workspace/tevox-study/data/human/chm13/chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz.provenance.json": {
+    "file": "18266e6d02b5-chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz.provenance.json",
+    "sha256": "18266e6d02b5d4bbe08fe0283c66a39e7f0af12d6a2d79ee53970b9103127fff"
+  },
+  "/workspace/tevox-study/data/human/chm13/chm13v2.0_RepeatMasker_4.1.2p1.2022Apr14.bed.provenance.json": {
+    "file": "874c930fffd3-chm13v2.0_RepeatMasker_4.1.2p1.2022Apr14.bed.provenance.json",
+    "sha256": "874c930fffd35afa558975c76c2d85d14e1941ff57e8ee9202be3893c19e7104"
+  },
+  "/workspace/tevox-study/metadata/human/chm13_selection.json": {
+    "file": "273422ec7097-chm13_selection.json",
+    "sha256": "273422ec709786202135a6f405d0adcbd3911b5418ec166e17e2f5f237ba45d3"
+  },
+  "/workspace/tevox-study/metadata/human/chm13_repeat_duplicates.json": {
+    "file": "896f67ecc224-chm13_repeat_duplicates.json",
+    "sha256": "896f67ecc224f5cf0e43077192297a7cbae5ccd0c121b3b56eaebd2ce4faf785"
+  },
+  "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz.provenance.json": {
+    "file": "c7a7ba4ae25f-GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz.provenance.json",
+    "sha256": "c7a7ba4ae25f0398fd5760a2c3be80abea3c74ac3ba98d9703a34a9f50ff1ea2"
+  },
+  "/workspace/tevox-study/data/human/hg002_mat/hg002.v1.1.loff.v0.6.mat.gff.gz.provenance.json": {
+    "file": "96a5deebd926-hg002.v1.1.loff.v0.6.mat.gff.gz.provenance.json",
+    "sha256": "96a5deebd9269b9c552b7490b7865b5afc6e512eb9eb288f16d09a08e8d5f9e1"
+  },
+  "/workspace/tevox-study/data/human/hg002_mat/hg002v1.1.maternal.bb.provenance.json": {
+    "file": "97ff018bb8de-hg002v1.1.maternal.bb.provenance.json",
+    "sha256": "97ff018bb8de25cf2766f20eaf9fc551383e6eed2dbb9428921091daa55e8c3c"
+  },
+  "/workspace/tevox-study/metadata/human/hg002_mat_selection.json": {
+    "file": "88e4183b1c9d-hg002_mat_selection.json",
+    "sha256": "88e4183b1c9d0eaaf6838b8ece4de535ffcf48fd3995f495b95d0c8878db1c77"
+  },
+  "/workspace/tevox-study/metadata/human/hg002_mat_repeat_duplicates.json": {
+    "file": "62fea0d7eebd-hg002_mat_repeat_duplicates.json",
+    "sha256": "62fea0d7eebdedac627f770c463f182639e826c6264c73143f56bf0e89a58be8"
+  },
+  "/workspace/tevox-study/metadata/human_extracted_pair.json": {
+    "file": "fcc14bb115cc-human_extracted_pair.json",
+    "sha256": "fcc14bb115cc31027e04152c2fce386c360cc65939b59f570a4331a63ff2006f"
+  },
+  "/workspace/tevox-study/metadata/human/hg002_mat_fragment_extraction.json": {
+    "file": "b554354650e2-hg002_mat_fragment_extraction.json",
+    "sha256": "b554354650e220489a5f8db3eb4ed07983da747b46ba5d243ede6ac3e908efb5"
+  },
+  "/workspace/tevox-study/metadata/human/bigBedToBed.provenance.json": {
+    "file": "ce427f3948e1-bigBedToBed.provenance.json",
+    "sha256": "ce427f3948e1ffdda0b3f1584b1028d33fb936e28d9ef968317158fadb58dd59"
+  },
+  "/workspace/tevox-study/discovery/chm13_paper_crossref.json": {
+    "file": "5a4c8de6383a-chm13_paper_crossref.json",
+    "sha256": "5a4c8de6383a7c0147d730fb56df372c2f342bb885e00ef46514e903debb19e5"
+  },
+  "/workspace/tevox-study/discovery/hg002_paper_crossref.json": {
+    "file": "a18e7b7e0060-hg002_paper_crossref.json",
+    "sha256": "a18e7b7e00602706e59f8d05f8696837673e024f126755f4c241a98a1807c873"
+  },
+  "/workspace/tevox-study/results/mouse/manifest.json": {
+    "file": "dc089165ba20-manifest.json",
+    "sha256": "dc089165ba20c771b2f6eed894a950fa2d225e229588f659ae2793d0c6b5d8c3"
+  },
+  "/workspace/tevox-study/data/mouse/c57/primary_selection.provenance.json": {
+    "file": "a5cd56845e68-primary_selection.provenance.json",
+    "sha256": "a5cd56845e6809cc073f1482480042dcaba698c02e088d17b7dd750be96a479c"
+  },
+  "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz.provenance.json": {
+    "file": "26649a6d4d88-GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz.provenance.json",
+    "sha256": "26649a6d4d88cdd78135235089b52ffff8c272361ea4f5f373f4cf54bd080d16"
+  },
+  "/workspace/tevox-study/data/mouse/c57/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz.provenance.json": {
+    "file": "ba70f60e7088-Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz.provenance.json",
+    "sha256": "ba70f60e708806b991c966d3298c5624fdb2254b4bf73e46e43c0d6a016aea3c"
+  },
+  "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz.provenance.json": {
+    "file": "cd1e86434c07-GCA_921999865.2.repeatMasker.out.gz.provenance.json",
+    "sha256": "cd1e86434c07566d391f54597b36cf80d89e44504f5f5c806af925fbfc8d195e"
+  },
+  "/workspace/tevox-study/data/mouse/c57/primary.fasta_selection.json": {
+    "file": "e2ec2c40c65b-primary.fasta_selection.json",
+    "sha256": "e2ec2c40c65b4ec1bb61188046c9b1a0a28d56b738f6b9c8c7bcbfdf0309a8b0"
+  },
+  "/workspace/tevox-study/data/mouse/c57/repeat_duplicate_audit.json": {
+    "file": "c0648e418665-repeat_duplicate_audit.json",
+    "sha256": "c0648e4186657d07534426201bf4d4738b65a9500a64d166053b0bd320f13a47"
+  },
+  "/workspace/tevox-study/data/mouse/c57/repeat_identity_audit.json": {
+    "file": "e086be4e9630-repeat_identity_audit.json",
+    "sha256": "e086be4e963057838fe5276165d2b4b2a83d60e92cae2c3bddb1f05c98e087ef"
+  },
+  "/workspace/tevox-study/data/mouse/cast/primary_selection.provenance.json": {
+    "file": "558950100444-primary_selection.provenance.json",
+    "sha256": "5589501004442dceebfd723a6bce3a14fa24ceee396b65043288a2f9251499b1"
+  },
+  "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz.provenance.json": {
+    "file": "7d3a5d88c030-GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz.provenance.json",
+    "sha256": "7d3a5d88c030bb26f905f025e43223dd7dff3ea33ca47d189c5a40431cce9ce5"
+  },
+  "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz.provenance.json": {
+    "file": "521a606fe665-Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz.provenance.json",
+    "sha256": "521a606fe6659ed407983ba1af308847d04ec174149a1ce28f1180d7d88bfefa"
+  },
+  "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz.provenance.json": {
+    "file": "d1143ff1b87a-GCA_921999005.2.repeatMasker.out.gz.provenance.json",
+    "sha256": "d1143ff1b87a78923ea6fc2b037ec45cf343fdcc71a0088499ba5baf819830be"
+  },
+  "/workspace/tevox-study/data/mouse/cast/primary.fasta_selection.json": {
+    "file": "e2027b3a458d-primary.fasta_selection.json",
+    "sha256": "e2027b3a458d1679cfc16bd9eb2c20c15f6046fd35c4b8838bb9644a5ea0eb89"
+  },
+  "/workspace/tevox-study/data/mouse/cast/repeat_duplicate_audit.json": {
+    "file": "636416cbd624-repeat_duplicate_audit.json",
+    "sha256": "636416cbd62499e8b955a6937140ccec27554795293dd9b7c4c47cb32fed7f8d"
+  },
+  "/workspace/tevox-study/data/mouse/cast/repeat_identity_audit.json": {
+    "file": "a3577d66ed1b-repeat_identity_audit.json",
+    "sha256": "a3577d66ed1bbbb217310c33bc3ab4b9e4726ed75c1198d506ee60978ef6dea7"
+  },
+  "/workspace/tevox-study/discovery/mouse_sources.json": {
+    "file": "4897096d874b-mouse_sources.json",
+    "sha256": "4897096d874bfd35ddd86ac1dea4e7f338071930f35953a6fe0f43a3d8570f02"
+  },
+  "/workspace/tevox-study/data/mouse/download_manifest.json": {
+    "file": "bed0f1dbfc1e-download_manifest.json",
+    "sha256": "bed0f1dbfc1e1fbd32ddd0a6883f96b9913c499cd51e91dfad94fd15850f4ece"
+  },
+  "/workspace/tevox-study/data/mouse/c57/ncbi_md5checksums.txt.provenance.json": {
+    "file": "12ee6eb9b046-ncbi_md5checksums.txt.provenance.json",
+    "sha256": "12ee6eb9b046d75f11cd5f5be3cfaf42e37b0603a9c089f389fe8eb84d58bb2d"
+  },
+  "/workspace/tevox-study/data/mouse/c57/genark_md5sum.txt.provenance.json": {
+    "file": "d5340637b9b2-genark_md5sum.txt.provenance.json",
+    "sha256": "d5340637b9b25fd69fe94233094598383d20f3169b4726805dc3ac2263816b0c"
+  },
+  "/workspace/tevox-study/data/mouse/c57/ensembl_CHECKSUMS.provenance.json": {
+    "file": "14f7cac5497f-ensembl_CHECKSUMS.provenance.json",
+    "sha256": "14f7cac5497fc076f8463ef8278b88a103cbdf77224dcd0767c2adfeddc5af2a"
+  },
+  "/workspace/tevox-study/data/mouse/cast/ncbi_md5checksums.txt.provenance.json": {
+    "file": "91f2b2319bdd-ncbi_md5checksums.txt.provenance.json",
+    "sha256": "91f2b2319bddf879df2c78425b71efa7cc4a2ef9b56a23bc3deb3192dfce8c77"
+  },
+  "/workspace/tevox-study/data/mouse/cast/genark_md5sum.txt.provenance.json": {
+    "file": "7de8cb0215a8-genark_md5sum.txt.provenance.json",
+    "sha256": "7de8cb0215a85e8a2cb31a2c4cf57fbcb152a984bbaad94b4f40997f16bb81a8"
+  },
+  "/workspace/tevox-study/data/mouse/cast/ensembl_CHECKSUMS.provenance.json": {
+    "file": "822fb9f9441f-ensembl_CHECKSUMS.provenance.json",
+    "sha256": "822fb9f9441f7fa98c122ba809d1a80e1c72bc55352159fa6dea57de4de5ab0a"
+  },
+  "/workspace/tevox-study/metadata/mouse_pair.json": {
+    "file": "2c57b71086d3-mouse_pair.json",
+    "sha256": "2c57b71086d36ba77cfd9038bf77d5dd19fcee5b9445873bb81ad930e9c4d97a"
+  },
+  "/workspace/tevox-study/results/rat_corrected/manifest.json": {
+    "file": "52efe069f0c5-manifest.json",
+    "sha256": "52efe069f0c502587fc6a0e3087b46430a1e262232af6cc482b8167643b0afdd"
+  },
+  "/workspace/tevox-study/metadata/rat_pair.json": {
+    "file": "d48ceb54815f-rat_pair.json",
+    "sha256": "d48ceb54815fb3fe92a4bd03004b87fa063469e4563f7c10d621c99deba7cc84"
+  },
+  "/workspace/tevox-study/discovery/rat_sources.json": {
+    "file": "c9801c8fe6b5-rat_sources.json",
+    "sha256": "c9801c8fe6b5701c876d07ea5a67f33b6a05b9062d67df754f3b2c1fc0c7b2bf"
+  },
+  "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz.provenance.json": {
+    "file": "e229c108288f-GCF_036323735.1_GRCr8_genomic.fna.gz.provenance.json",
+    "sha256": "e229c108288f3cc94ab710a995e009906f6cee55790c0e1bf0a07988ec1e7589"
+  },
+  "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz.provenance.json": {
+    "file": "476bfff40e9f-GCF_036323735.1_GRCr8_genomic.gff.gz.provenance.json",
+    "sha256": "476bfff40e9f8d80287670f10bcf35b7c768ce7c182e6e928c664d4f5031f66e"
+  },
+  "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz.provenance.json": {
+    "file": "9b965e50d4d2-GCF_036323735.1_GRCr8_rm.out.gz.provenance.json",
+    "sha256": "9b965e50d4d2ae6e0cdbc3ae6c7474edaa0f54dcf331eaecdc88e0210be36296"
+  },
+  "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz.provenance.json": {
+    "file": "1b4b14012af2-GCF_021556685.1_SHRSP_T2T_genomic.fna.gz.provenance.json",
+    "sha256": "1b4b14012af29bd57e2fb7dc148ec867562d89020071cdcf88db7ea2d1079b04"
+  },
+  "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz.provenance.json": {
+    "file": "1c25798edd09-GCF_021556685.1_SHRSP_T2T_genomic.gff.gz.provenance.json",
+    "sha256": "1c25798edd09129482fad420d2962989d6ca47e193183e525f48deed26f498de"
+  },
+  "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz.provenance.json": {
+    "file": "926828658868-GCF_021556685.1_SHRSP_T2T_rm.out.gz.provenance.json",
+    "sha256": "9268286588683e133b3b5d27d356b28b42314a7f32c9a7d31b2a07d13cc04859"
+  },
+  "/workspace/tevox-study/data/rat/download_manifest.json": {
+    "file": "e387deb96082-download_manifest.json",
+    "sha256": "e387deb96082c692c0eda9cc2ba642aff615371b2cd76c1972c66b64e6629801"
+  },
+  "/workspace/tevox-study/data/rat/shrsp/md5checksums.txt.provenance.json": {
+    "file": "0b430798498e-md5checksums.txt.provenance.json",
+    "sha256": "0b430798498ea9768c1965bc47eda05ff331c19aa658639742fa650d5e7eca32"
+  },
+  "/workspace/tevox-study/data/rat/bn/md5checksums.txt.provenance.json": {
+    "file": "dc3d36c67761-md5checksums.txt.provenance.json",
+    "sha256": "dc3d36c677612c1d05967e8f90315cfc42d4fabc1acc4c69ce708a2df19d6f35"
+  },
+  "/workspace/tevox-study/metadata/rat_corrected_pair.json": {
+    "file": "52efe069f0c5-rat_corrected_pair.json",
+    "sha256": "52efe069f0c502587fc6a0e3087b46430a1e262232af6cc482b8167643b0afdd"
+  },
+  "/workspace/tevox-study/metadata/rat_shrsp_repeat_dedup.json": {
+    "file": "1425ee2644ad-rat_shrsp_repeat_dedup.json",
+    "sha256": "1425ee2644ad09e58179bfc7058ceda3ff7f267f638f30fed8b66f2edd168f8b"
+  },
+  "/workspace/tevox-study/results/arabidopsis/manifest.json": {
+    "file": "82f424b10bd3-manifest.json",
+    "sha256": "82f424b10bd3ac343a29467f5c2f60bcea51d371970f06e6679edbce9edbcc64"
+  },
+  "/workspace/tevox-study/discovery/arabidopsis_2025_primary_filter_qc.json": {
+    "file": "2367c866b16d-arabidopsis_2025_primary_filter_qc.json",
+    "sha256": "2367c866b16db5869d566635c094155d495297701339445a23bcdfa3e54a7ac6"
+  },
+  "/workspace/tevox-study/discovery/arabidopsis_2025_downloads.json": {
+    "file": "2b8f249312af-arabidopsis_2025_downloads.json",
+    "sha256": "2b8f249312af8612c7bc35eeb3e9bf878e5ed9152b036127e80a5c1fda402538"
+  },
+  "/workspace/tevox-study/results/maize/manifest.json": {
+    "file": "06974c6fa363-manifest.json",
+    "sha256": "06974c6fa363de2db40d462b9d8665dd388552bc84020b9e458dc21e3cab4ae2"
+  },
+  "/workspace/tevox-study/discovery/maize_repeat_coordinate_qc.json": {
+    "file": "e727579c5ef4-maize_repeat_coordinate_qc.json",
+    "sha256": "e727579c5ef43bd1db16de99aa44411c822c0c94e2213974bbf4322b6d3e395a"
+  },
+  "/workspace/tevox-study/discovery/maize_genark_downloads.json": {
+    "file": "791ddf056ee7-maize_genark_downloads.json",
+    "sha256": "791ddf056ee7190c36971c5cffc36f7be3e95c3821226ba341524ffa39d2dea6"
+  }
+}

@@ -270,6 +270,13 @@ applicable and never numeric zero. See [schema](docs/SCHEMA.md),
 [benchmark contract](docs/BENCHMARK.md),
 [validation](docs/VALIDATION.md) and [roadmap](docs/ROADMAP.md).
 
+The [integration validation report (中文)](docs/INTEGRATION_VALIDATION.zh-CN.md)
+records actual Linux/macOS checks, five published-genome pairs, external
+GIAB/PCR state subsets and controlled copy-context/scale results. It also
+states the remaining probability-calibration and biological polyploid
+validation requirements. See the [pair workflow](studies/published-genomes-v05/README.md)
+and [validation scripts](studies/validation/README.md) to reproduce the work.
+
 ## State and phylogeny
 
 The internal axes are:

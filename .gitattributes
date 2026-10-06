@@ -1,0 +1,5 @@
+# Evidence SHA-256 values bind exact bytes, including provider line endings.
+studies/validation/results/** -text
+# Preserve the frozen CSV writer CRLF and original UCSC response whitespace.
+studies/validation/results/truth/giab/truth.tsv -whitespace
+studies/validation/results/truth/mouse-reference/chr*.json -whitespace

@@ -1,0 +1,239 @@
+{
+  "taxon": "Homo sapiens",
+  "taxid": 9606,
+  "pair_id": "human_chm13_hg002_mat",
+  "status": "ready_for_analysis; source_identity, coordinates, exact-duplicate audits and sequence-preservation checks passed",
+  "verified_on": "2026-10-03",
+  "large_files_downloaded": true,
+  "selection": {
+    "nuclear_chromosomes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "X"
+    ],
+    "exclude": [
+      "Y",
+      "MT"
+    ],
+    "reason": "CHM13v2 Y is derived from HG002, not CHM13; HG002 maternal haplotype supplies X. Exclude mitochondrial sequence from nuclear TE comparison."
+  },
+  "assemblies": [
+    {
+      "id": "chm13",
+      "individual": "CHM13hTERT",
+      "assembly_accession": "GCA_009914755.4",
+      "assembly_name": "T2T-CHM13v2.0",
+      "biosample": "SAMN03255769",
+      "bioproject": "PRJNA559484",
+      "publication": {
+        "title": "The complete sequence of a human genome",
+        "doi": "10.1126/science.abj6987",
+        "pmid": "35357919",
+        "year": 2022
+      },
+      "assembly_report_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0_assembly_report.txt",
+      "files": {
+        "fasta": {
+          "filename": "chm13v2.0.fa.gz",
+          "url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/analysis_set/chm13v2.0.fa.gz",
+          "bytes": 981185361,
+          "head_status": 200,
+          "etag": "\"9b0b28db473ab635531081b609283fdc-117\"",
+          "md5": "06caded0055ec647a69acb708e13beff",
+          "checksum_source": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/analysis_set/README.txt",
+          "format": "FASTA bgzip",
+          "local_path": "/workspace/tevox-study/data/human/chm13/chm13v2.0.fa.gz",
+          "provenance_record": "/workspace/tevox-study/data/human/chm13/chm13v2.0.fa.gz.provenance.json",
+          "local_sha256": "f274b0ee8bc1bca18d231d0eb80d764650d7f02d1fe07c43819e21168224304d",
+          "checksum_verification": "source_checksum_verified"
+        },
+        "gene_gff3": {
+          "filename": "chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz",
+          "url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz",
+          "bytes": 56368414,
+          "head_status": 200,
+          "etag": "\"03dc61bf4e29c0322814943ca3688f9a-7\"",
+          "md5": null,
+          "checksum_source": null,
+          "format": "GFF3 gzip JHU RefSeq110 Liftoff5.2",
+          "local_path": "/workspace/tevox-study/data/human/chm13/chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz",
+          "provenance_record": "/workspace/tevox-study/data/human/chm13/chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz.provenance.json",
+          "local_sha256": "a1c8e61cb4e60a3af3a18599b7d5551a72a1b0317bdffad42ae7fa36e73da968",
+          "checksum_verification": "local_sha256_only"
+        },
+        "repeats": {
+          "filename": "chm13v2.0_RepeatMasker_4.1.2p1.2022Apr14.bed",
+          "url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_RepeatMasker_4.1.2p1.2022Apr14.bed",
+          "bytes": 342862439,
+          "head_status": 200,
+          "etag": "\"ae919a9cff39c88abf17e004dfb0f374-41\"",
+          "md5": null,
+          "checksum_source": null,
+          "format": "BED10 0-based-half-open",
+          "local_path": "/workspace/tevox-study/data/human/chm13/chm13v2.0_RepeatMasker_4.1.2p1.2022Apr14.bed",
+          "provenance_record": "/workspace/tevox-study/data/human/chm13/chm13v2.0_RepeatMasker_4.1.2p1.2022Apr14.bed.provenance.json",
+          "local_sha256": "abd319705cda7090d0c5b6ac002f0af6538ef22217965b38135f9185355fd285",
+          "checksum_verification": "local_sha256_only"
+        }
+      },
+      "selected_input_summary": {
+        "nuclear_chromosomes": 23,
+        "bases": 3054815472,
+        "gene_features": 60619,
+        "source_repeat_rows": 5512424,
+        "repeat_fragments": 5512424,
+        "provenance": "/workspace/tevox-study/metadata/human/chm13_selection.json",
+        "independent_sequence_verification": "passed",
+        "exact_repeat_duplicates": 0,
+        "repeat_duplicate_audit": "/workspace/tevox-study/metadata/human/chm13_repeat_duplicates.json"
+      }
+    },
+    {
+      "id": "hg002_mat",
+      "individual": "HG002/NA24385/GM24385, maternal haplotype",
+      "assembly_accession": "GCA_018852615.3",
+      "assembly_name": "hg002v1.1.mat",
+      "biosample": "SAMN03283347",
+      "bioproject": "PRJNA727431",
+      "publication": {
+        "title": "A complete diploid human genome benchmark for personalized genomics",
+        "doi": "10.1016/j.cell.2026.06.016",
+        "year": 2026
+      },
+      "assembly_report_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/GCA_018852615.3_hg002v1.1.mat_assembly_report.txt",
+      "files": {
+        "fasta": {
+          "filename": "GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+          "bytes": 919002270,
+          "head_status": 200,
+          "etag": null,
+          "md5": "84228143387a50fff1fc9110be2000ec",
+          "checksum_source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/md5checksums.txt",
+          "format": "FASTA gzip",
+          "local_path": "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+          "provenance_record": "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz.provenance.json",
+          "local_sha256": "9b8b2f9b9344ca025687b2b007665653e0a8e8ee723800001a20cf9d419265d1",
+          "checksum_verification": "source_checksum_verified"
+        },
+        "gene_gff3": {
+          "filename": "hg002.v1.1.loff.v0.6.mat.gff.gz",
+          "url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/HG002/assemblies/annotation/JHULiftoff/v0.6/hg002.v1.1.loff.v0.6.mat.gff.gz",
+          "bytes": 28060575,
+          "head_status": 200,
+          "etag": "\"db033b1d0fa634c9c7d1243fd99846e4-4\"",
+          "md5": null,
+          "checksum_source": null,
+          "format": "GFF3 gzip JHU Liftoff0.6",
+          "local_path": "/workspace/tevox-study/data/human/hg002_mat/hg002.v1.1.loff.v0.6.mat.gff.gz",
+          "provenance_record": "/workspace/tevox-study/data/human/hg002_mat/hg002.v1.1.loff.v0.6.mat.gff.gz.provenance.json",
+          "local_sha256": "7211fb16e9c23508d866767276c86dac777a62004c8c2f8804f6e9a753982e86",
+          "checksum_verification": "local_sha256_only"
+        },
+        "repeats": {
+          "filename": "hg002v1.1.maternal.bb",
+          "url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/HG002/assemblies/annotation/repeatmasker/hg002v1.1.maternal.bb",
+          "bytes": 355102813,
+          "head_status": 200,
+          "etag": "\"c97c82c1c8c178e3b8a0c94a8a83c4f3-43\"",
+          "md5": null,
+          "checksum_source": null,
+          "format": "bigRmsk bigBed14, original RepeatMasker fragments in description column14",
+          "local_path": "/workspace/tevox-study/data/human/hg002_mat/hg002v1.1.maternal.bb",
+          "provenance_record": "/workspace/tevox-study/data/human/hg002_mat/hg002v1.1.maternal.bb.provenance.json",
+          "local_sha256": "266769e74844ad380a9f4d57014d838efd646096d0f4f3dd2d8ee305804b6824",
+          "checksum_verification": "local_sha256_only"
+        }
+      },
+      "selected_input_summary": {
+        "nuclear_chromosomes": 23,
+        "bases": 3051512984,
+        "gene_features": 59555,
+        "source_repeat_rows": 4480264,
+        "repeat_fragments": 5422582,
+        "provenance": "/workspace/tevox-study/metadata/human/hg002_mat_selection.json",
+        "independent_sequence_verification": "passed",
+        "exact_repeat_duplicates": 0,
+        "repeat_duplicate_audit": "/workspace/tevox-study/metadata/human/hg002_mat_repeat_duplicates.json"
+      }
+    }
+  ],
+  "repeat_methods": {
+    "chm13": "RepeatMasker4.1.2p1.2022Apr14; T2T repeat library",
+    "hg002_mat": "RepeatMasker4.1.5, RMBlast2.13.0+, Dfam3.6 plus CHM13/HG002Y/apeXY repeat additions"
+  },
+  "limitations": [
+    "Different repeat-annotation software/library versions remain a confounder; differences are annotation-fragment candidates, not proven insertion polymorphisms.",
+    "GCA and GCF CHM13 assemblies are explicitly not identical. Use the selected GenBank/author analysis-set sequence only.",
+    "HG002 is one maternal haplotype of one donor, not a diploid/population comparison.",
+    "HG002 bigRmsk visualization spans include unaligned flanks/gaps; recover original fragment coordinates from description rows, never BED visualization extents.",
+    "Four annotation assets have no published full-object MD5 in reviewed metadata; multipart S3 ETags are not MD5. Fetch with HTTPS, record exact byte sizes and local SHA256; do not invent provider checksums.",
+    "HG002 v1.1 is deliberately pinned to the assembly version with matching Liftoff and repeat annotations; newer project assemblies are not substituted."
+  ],
+  "source_evidence": [
+    "https://github.com/marbl/CHM13",
+    "https://github.com/marbl/HG002",
+    "https://github.com/marbl/T2T-Browser",
+    "https://api.crossref.org/works/10.1126/science.abj6987",
+    "https://api.crossref.org/works/10.1016/j.cell.2026.06.016"
+  ],
+  "runner_manifest": "/workspace/tevox-study/metadata/human_extracted_pair.json",
+  "conversion_tool_provenance": "/workspace/tevox-study/metadata/human/bigBedToBed.provenance.json",
+  "source_evidence_snapshots": [
+    "/workspace/tevox-study/discovery/chm13_readme.md",
+    "/workspace/tevox-study/discovery/chm13_analysis_readme.txt",
+    "/workspace/tevox-study/discovery/chm13_paper_crossref.json",
+    "/workspace/tevox-study/discovery/chm13_report.txt",
+    "/workspace/tevox-study/discovery/hg002_readme.md",
+    "/workspace/tevox-study/discovery/hg002_mat_report.txt",
+    "/workspace/tevox-study/discovery/hg002_paper_crossref.json",
+    "/workspace/tevox-study/discovery/hg002_genes_readme.txt",
+    "/workspace/tevox-study/discovery/hg002_repeat_readme.txt",
+    "/workspace/tevox-study/discovery/hg002_repeat_schema.as"
+  ],
+  "preparation_scripts": {
+    "select_inputs": "/workspace/tevox-study/scripts/prepare_human_pair.py",
+    "verify_sequences": "/workspace/tevox-study/scripts/verify_selected_fasta.py",
+    "audit_repeats": "/workspace/tevox-study/scripts/audit_human_repeats.py",
+    "extract_bigrmsk_fragments": "/workspace/tevox-study/scripts/extract_bigrmsk_fragments.py"
+  },
+  "complex_browser_join_extraction": {
+    "provenance": "/workspace/tevox-study/metadata/human/hg002_mat_fragment_extraction.json",
+    "source_map": "/workspace/tevox-study/metadata/human/hg002_mat_fragment_sources.tsv.gz",
+    "output": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeatmasker.out.gz",
+    "counts": {
+      "source_browser_records": 4480264,
+      "query_length_verified_fragments": 5422582,
+      "output_fragment_records": 5422582,
+      "multi_fragment_source_records": 592731,
+      "mixed_strand_source_records": 12454,
+      "display_strand_mismatch_source_records": 12454,
+      "display_strand_mismatch_fragments": 13870,
+      "aligned_summary_mismatch_source_records": 1,
+      "fragments_outside_aligned_summary": 1,
+      "mixed_repeatmasker_id_source_records": 0
+    },
+    "canonical_fragment_sha256": "9f2060df71887f5f42b5d23027b7e5d32faff886f6593935359569ce7e5fe08c",
+    "all_original_query_lengths_match_selected_fasta": true
+  }
+}

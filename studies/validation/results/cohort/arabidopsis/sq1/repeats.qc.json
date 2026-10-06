@@ -1,0 +1,55 @@
+{
+  "classes": {
+    "DNA": 15622,
+    "LINE": 403,
+    "LTR": 7206
+  },
+  "configuration": {
+    "bed_class_column": null,
+    "bed_coordinates": null,
+    "bed_family_column": null,
+    "bed_id_column": null,
+    "bed_name_column": 4,
+    "bed_strand_column": null,
+    "class_attribute": "classification",
+    "class_map": null,
+    "family_attribute": null,
+    "family_policy": "classification",
+    "format": "repeat-gff3",
+    "gff_feature": [
+      "CACTA_TIR_transposon",
+      "Copia_LTR_retrotransposon",
+      "Gypsy_LTR_retrotransposon",
+      "LINE_element",
+      "LTR_retrotransposon",
+      "Mutator_TIR_transposon",
+      "PIF_Harbinger_TIR_transposon",
+      "Tc1_Mariner_TIR_transposon",
+      "hAT_TIR_transposon",
+      "helitron"
+    ],
+    "id_prefix": "sq1",
+    "lengths": "/workspace/tevox-v05-study/final/arabidopsis/sq1/lengths.tsv",
+    "name_attribute": "Name",
+    "output_prefix": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats"
+  },
+  "counts": {
+    "malformed_source_records": 7101,
+    "parsed_fragments": 23231,
+    "rejected_excluded_feature_type": 7101,
+    "retained_fragments": 23231,
+    "source_records": 30332
+  },
+  "format": "repeat-gff3",
+  "input": "/workspace/tevox-study/data/arabidopsis/sq1/primary.repeats.gff3.gz",
+  "input_coordinate_system": "one-based-inclusive",
+  "interpretation": "Annotation fragments only; not reconstructed elements or proven insertion/deletion events. Unknown class retained explicitly with uncertainty.",
+  "lengths": "/workspace/tevox-v05-study/final/arabidopsis/sq1/lengths.tsv",
+  "output_coordinate_system": "zero-based-half-open",
+  "outputs": {
+    "bed": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.bed",
+    "metadata": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.metadata.tsv",
+    "qc": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.qc.json",
+    "rejected": "/workspace/tevox-v05-study/final/arabidopsis/sq1/repeats.rejected.tsv"
+  }
+}
