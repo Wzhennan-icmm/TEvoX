@@ -43,3 +43,4 @@ jobs:
       - run: python studies/published-genomes-v05/test_inputs.py
       - run: python studies/published-genomes-v05/test_run_integrity.py
       - run: python studies/validation/test_truth_mapping.py
+      - run: python studies/validation/test_mouse_pcr_truth.py

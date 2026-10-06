@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased integration — 2026-10-05
+## Unreleased integration — 2026-10-06
 
 - reject invalid GFF coordinates before converting a one-based start, so
   `INT64_MIN` cannot overflow; preserve diagnostics and completion-marker gates;
@@ -17,6 +17,9 @@
   installation and native Intel/ARM/Universal macOS packages;
 - retain the Hungarian exact threshold: **both sides** must contain at most
   `--exact-match-nodes` nodes, not merely one side.
+- add version-bound published-genome preparation, resume-integrity checks,
+  lossless result archiving, external GIAB/PCR state evaluation and controlled
+  copy-context/scale studies; preserve uncalibrated model status.
 
 ## 0.5.0-alpha.2 — 2026-08-02
 

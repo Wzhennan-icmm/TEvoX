@@ -30,6 +30,48 @@ from a VCF becomes a negative label. The exported subset can measure
 positive recall/callability, **not precision, FDR or membership calibration**.
 Read overlap between benchmark and assembly construction is not excluded.
 
+## Mouse CAST PCR state subset
+
+`extract_mouse_pcr.py` reads Table S2 (`mmc3.xlsx`) and Table S3 (`mmc4.xlsx`)
+from [PMID 37228752](https://doi.org/10.1016/j.xgen.2023.100291). The public
+[Europe PMC supplementary ZIP](https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10203049/supplementaryFiles)
+contains both. Extraction requires `openpyxl`; the subsequent transfer and
+evaluation use only the standard library.
+
+```sh
+python3 studies/validation/extract_mouse_pcr.py \
+  --table-s2 mmc3.xlsx --table-s3 mmc4.xlsx --output truth/mouse-reference
+python3 studies/validation/mouse_pcr_truth.py prepare \
+  --candidates truth/mouse-reference/candidates.json \
+  --fasta c57.primary.fna.gz --te c57.repeats.bed --output truth/mouse.json
+python3 studies/validation/mouse_pcr_truth.py evaluate \
+  --truth truth/mouse.json --decisions results/tevox.decisions.tsv.gz \
+  --output truth/mouse-evaluation.json
+```
+
+The table contains 88 rows and 85 unique variant IDs; repeated PCR rows are
+preserved in the audit, and conflicting CAST labels fail closed. Eligibility
+uses the external TE annotation and observed CAST PCR state before reading
+any predictions. GRCm39 reference sequence plus 50 bp flanks must occur
+exactly once, unchanged, in the selected C57BL/6NJ assembly. TE and deletion
+coverage thresholds are 95% and 80%, respectively. This binds the NJ
+reference allele by sequence, while CAST SV status is supported by PCR.
+**B6 PCR is C57BL/6J, not C57BL/6NJ.** A missing VCF record or computational
+`MERGE_SAMPLES` entry never substitutes for a PCR label. These labels address
+biological state, not candidate membership or genome-wide accuracy.
+
+## Archived real-run verification
+
+`verify_completed.py RUN... --output integrity.json` checks recorded output
+and input hashes, the 17-table contract and lossless archive bindings. Add
+`--roundtrip` to recompute decompressed archive hashes as well. The ordinary
+check relies on previously verified uncompressed digests bound to unchanged
+compressed sources. `check_evidence_contract.py PREFIX... --output rows.json`
+streams identity, mapping and provenance invariants with bounded memory.
+It does not replace the full relational schema check used on small fixtures
+and the complete Arabidopsis run; restore archived input paths before running
+`tests/validate_schema.py` because that validator hashes the original inputs.
+
 ## Controlled copy-context and scale evaluation
 
 ```sh
