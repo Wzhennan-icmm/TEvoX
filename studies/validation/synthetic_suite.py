@@ -81,7 +81,11 @@ def evaluate(prefix,truth):
     with gzip.open(str(prefix)+'.instances.tsv.gz','rt') as handle:
         for row in csv.DictReader(handle,delimiter='\t'):
             for key in row['member_ids'].split(','):
-                if key not in {'','.'}:observed[(row['genome_id'],key)]=row['locus_id']
+                if key not in {'','.'}:
+                    member = (row['genome_id'], key)
+                    if member in observed:
+                        raise ValueError('TE member appears more than once in predicted loci')
+                    observed[member] = row['locus_id']
     if set(expected)!=set(observed):raise ValueError('truth/predicted membership universe mismatch')
     intersections=collections.Counter((expected[k],observed[k]) for k in expected)
     true_size=collections.Counter(expected.values());pred_size=collections.Counter(observed.values())
