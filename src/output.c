@@ -954,7 +954,8 @@ static int write_evidence(TvRun *run, const char *prefix)
         }
         print_double(stream, projection->identity, 6);
         (void)fprintf(stream, "\t%s\t",
-                      tv_identity_method_name(paf->identity_method));
+                      tv_identity_method_name(isfinite(projection->identity)
+                          ? paf->identity_method : TV_IDENTITY_MISSING));
         if (projection->mapq_observed) {
             (void)fprintf(stream, "%d\t%s\t", projection->mapq,
                           tv_mapq_status_name(paf->mapq_status));

@@ -109,6 +109,23 @@ for alignment in asym asym_cs; do
     "$python" "$repo/tests/validate_schema.py" "$work/$alignment"
 done
 
+# An exact CIGAR may have no aligned bases within a particular TE/flank
+# window. Local identity and its method must both be missing in that case.
+"$python" - "$work" <<'PYGAP'
+import pathlib,sys
+p=pathlib.Path(sys.argv[1])
+(p/'gap_A.fa').write_text('>chr1\n'+'A'*1000+'\n')
+(p/'gap_B.fa').write_text('>chr1\n'+'A'*600+'\n')
+(p/'gap_A.bed').write_text('chr1\t200\t240\tinside_gap\t0\t+\tFAM\tDNA\n')
+(p/'gap_B.bed').write_text('chr1\t300\t340\tother\t0\t+\tOTHER\tDNA\n')
+(p/'gap.paf').write_text('chr1\t1000\t0\t1000\t+\tchr1\t600\t0\t600\t600\t1000\t60\tcg:Z:100=400I500=\n')
+PYGAP
+run_pair "$work/local_gap" "$work/gap_A.fa" "$work/gap_A.bed" \
+    "$work/gap_B.fa" "$work/gap_B.bed" "$work/gap.paf"
+any_row "$work/local_gap.evidence.tsv" source_te_id inside_gap \
+    local_identity . identity_method MISSING legacy_state UNCALLABLE claimable false
+"$python" "$repo/tests/validate_schema.py" "$work/local_gap"
+
 # Streaming gzip must retain every byte of the 17 table contracts.
 "$bin" pair --genome-a A --fasta-a "$data/pair/A.fa" --te-a "$data/pair/A.gff3" \
     --genome-b B --fasta-b "$data/pair/B.fa" --te-b "$data/pair/B.gff3" \
