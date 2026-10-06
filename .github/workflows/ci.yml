@@ -26,3 +26,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: make asan
+  study_workflows:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - {python: "3.8", numpy: "1.24.4"}
+          - {python: "3.12", numpy: "2.2.6"}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install numpy==${{ matrix.numpy }}
+      - run: make
+      - run: python studies/published-genomes-v05/test_inputs.py
+      - run: python studies/published-genomes-v05/test_run_integrity.py
+      - run: python studies/validation/test_truth_mapping.py
