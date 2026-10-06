@@ -82,11 +82,11 @@ if [ "$universal" = yes ]; then
     build_slice x86_64
     build_slice arm64
     "$lipo" -create "$work/x86_64/tevox" "$work/arm64/tevox" -output "$work/tevox"
-    "$lipo" -verify_arch x86_64 arm64 "$work/tevox"
+    "$lipo" "$work/tevox" -verify_arch x86_64 arm64
 else
     build_slice "$native_arch"
     cp "$work/$native_arch/tevox" "$work/tevox"
-    "$lipo" -verify_arch "$native_arch" "$work/tevox"
+    "$lipo" "$work/tevox" -verify_arch "$native_arch"
 fi
 "$codesign" --force --sign - --timestamp=none "$work/tevox"
 "$codesign" --verify --strict --verbose=2 "$work/tevox"

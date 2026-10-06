@@ -76,7 +76,10 @@ elif name == 'lipo':
             merged.extend(archs(path))
         emit_binary(pathlib.Path(args[args.index('-output') + 1]), merged)
     elif '-verify_arch' in args:
-        assert set(args[1:-1]).issubset(archs(args[-1]))
+        # Apple lipo consumes every token after -verify_arch as an
+        # architecture; the input must precede that variable-length list.
+        assert args[1] == '-verify_arch'
+        assert set(args[2:]).issubset(archs(args[0]))
     elif '-archs' in args:
         print(' '.join(archs(args[-1])))
     else:
