@@ -142,6 +142,7 @@ for name in run['outputs']:
     with gzip.open(p/('compressed ; literal.'+name),'rb') as handle:
         assert handle.read()==(p/('pair.'+name[:-3])).read_bytes(), name
 PYGZIP
+TEVOX_BIN="$bin" "$python" "$repo/tests/check_output_modes.py"
 mkdir "$work/failed-compressor"
 printf '#!/bin/sh\nexit 7\n' > "$work/failed-compressor/gzip"
 chmod +x "$work/failed-compressor/gzip"

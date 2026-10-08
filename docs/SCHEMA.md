@@ -134,6 +134,12 @@ including trivial singletons. `EXACT_ENUMERATION/OPTIMAL` rows have
 report the sum of all positive edge weights as a valid, potentially loose upper
 bound. Matching and global fallbacks are never labelled optimal.
 
+`OPTIMAL` is conditional on the retained candidate graph and preceding block
+matching. Candidate pruning occurs before matching, and component constraints
+do not cause a rejected block-matching alternative to be reconsidered when a
+previously matched edge is blocked. A zero component gap therefore does not
+certify a joint optimum over all original candidates, matchings and partitions.
+
 ## Synteny and copy context
 
 ### `synteny.blocks.tsv`

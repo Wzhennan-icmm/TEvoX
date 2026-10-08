@@ -160,12 +160,53 @@ static char *canonical_path(const char *path)
     return result;
 }
 
+static int validate_output_compression(const TvRun *run, const char *prefix)
+{
+    for (size_t index = 0;
+         index < sizeof(output_suffixes) / sizeof(output_suffixes[0]); index++) {
+        const char *suffix = output_suffixes[index];
+        char *opposite;
+        struct stat status;
+
+        if (strcmp(suffix, ".run.json") == 0) continue;
+        opposite = output_path(prefix, suffix);
+        if (opposite != NULL && !run->cfg.gzip_output) {
+            char *compressed = output_path(opposite, ".gz");
+            free(opposite);
+            opposite = compressed;
+        }
+        if (opposite == NULL) {
+            tv_print_error("out of memory while validating output paths");
+            return -1;
+        }
+        /* Partial runs and dangling symlinks also reserve the other format.
+         * Reject before invalidating a prior marker or opening any output. */
+        if (lstat(opposite, &status) == 0) {
+            tv_print_error(
+                "output prefix '%s' has an existing path in the opposite "
+                "compression mode: '%s'; use a new output prefix or directory",
+                prefix, opposite);
+            free(opposite);
+            return -1;
+        }
+        if (errno != ENOENT) {
+            tv_print_error("cannot inspect output path '%s': %s", opposite,
+                           strerror(errno));
+            free(opposite);
+            return -1;
+        }
+        free(opposite);
+    }
+    return 0;
+}
+
 int tv_validate_output_prefix(const TvRun *run, const char *prefix)
 {
     if (run == NULL || prefix == NULL || *prefix == '\0') {
         tv_print_error("output prefix must be non-empty");
         return -1;
     }
+    if (validate_output_compression(run, prefix) != 0) return -1;
     for (size_t suffix_index = 0;
          suffix_index < sizeof(output_suffixes) / sizeof(output_suffixes[0]);
          suffix_index++) {

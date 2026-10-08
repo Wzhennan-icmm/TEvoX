@@ -78,6 +78,10 @@ each package. The native CI workflow also uploads packages as artifacts.
 large temporary plain TSVs. `.run.json` is committed only when every output
 and compressor succeeds, and lists the actual `.tsv.gz` names. Python
 readers accept compressed tables or resolve a missing `.tsv` to `.tsv.gz`.
-Use a fresh output prefix when changing compression mode; readers reject
-ambiguous pairs where both files exist. Compression reduces disk usage;
+Use a fresh output prefix when changing compression mode. TEvoX rejects an
+existing opposite-format table path before writing any output or invalidating
+the previous run marker, including partial results and dangling symlinks.
+It does not remove previous results. Rerunning in the same mode still replaces
+the existing regular output files. Readers also reject ambiguous pairs where
+both formats already exist. Compression reduces disk usage;
 the graph and evidence remain in memory, so it does not remove RAM limits.
