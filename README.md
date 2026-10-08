@@ -9,9 +9,11 @@ layer on top of the v0.5 inference engine:
 
 - explicit missing-aware candidate and three-axis observation feature tables;
 - a versioned `BUILTIN_UNCALIBRATED_V1` membership score;
-- exact Hungarian one-to-one matching within MCScanX copy-context pairs;
-- exact constrained component optimization for small graphs and a labelled
-  deterministic fallback for larger graphs;
+- exact Hungarian one-to-one matching within MCScanX copy-context pairs when
+  both sides fit the configured threshold, with a labelled fallback otherwise;
+- exact constrained component optimization for small retained graphs, conditional
+  on prior candidate pruning and block matching, and a labelled deterministic
+  fallback for larger graphs;
 - semantic truth and multi-run benchmark manifests that never join truth by a
   generated TEvoX ID;
 - B-cubed/ARI locus, three-axis state, empty-site, breakpoint,
@@ -36,7 +38,20 @@ layer on top of the v0.5 inference engine:
 > benchmarks remain future work. Bundled truth fixtures verify the
 > evaluator and optimizer; they are not independent biological validation.
 
+See the [integration validation report](docs/INTEGRATION_VALIDATION.zh-CN.md)
+for the completed platform, five-pair and limited external-truth evaluations,
+and the [merge and release gates](docs/MERGE_RELEASE_GATES.zh-CN.md) for the
+remaining requirements. `OPTIMAL` does not certify a joint optimum over
+discarded candidates and all matching/partition decisions.
+
 ## Build and test
+
+This integration branch includes coordinate validation, negative-strand PAF
+corrections, large-output performance improvements and streaming compressed
+tables (`--gzip-output`). See [platform build instructions](docs/PLATFORMS.md)
+for CentOS 7/8, Rocky 8/9/10, Ubuntu 20.04+ and native/Universal macOS builds.
+Python 3.8+ is required for tests and helpers; the C core has no Python
+dependency. The alpha version string is retained until a release is made.
 
 ```bash
 make
@@ -262,6 +277,13 @@ applicable and never numeric zero. See [schema](docs/SCHEMA.md),
 [v0.5 inference](docs/V05_INFERENCE.md),
 [benchmark contract](docs/BENCHMARK.md),
 [validation](docs/VALIDATION.md) and [roadmap](docs/ROADMAP.md).
+
+The [integration validation report (中文)](docs/INTEGRATION_VALIDATION.zh-CN.md)
+records actual Linux/macOS checks, five published-genome pairs, external
+GIAB/PCR state subsets and controlled copy-context/scale results. It also
+states the remaining probability-calibration and biological polyploid
+validation requirements. See the [pair workflow](studies/published-genomes-v05/README.md)
+and [validation scripts](studies/validation/README.md) to reproduce the work.
 
 ## State and phylogeny
 

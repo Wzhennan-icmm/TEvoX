@@ -1,0 +1,72 @@
+{
+  "derived_from_manifest": "/workspace/tevox-study/metadata/human_pair.json",
+  "genomes": [
+    {
+      "assembly": "GCA_009914755.4",
+      "fasta": "/workspace/tevox-study/data/human/chm13/selected_nuclear.fa.gz",
+      "genes": "/workspace/tevox-study/data/human/chm13/selected_nuclear.genes.gff3.gz",
+      "id": "chm13",
+      "material": "CHM13hTERT",
+      "normalize_args": [
+        "--bed-coordinates",
+        "zero-based-half-open",
+        "--bed-class-column",
+        "7",
+        "--bed-family-column",
+        "8",
+        "--bed-strand-column",
+        "6",
+        "--bed-id-column",
+        "10"
+      ],
+      "repeat_duplicate_audit": "/workspace/tevox-study/metadata/human/chm13_repeat_duplicates.json",
+      "repeat_format": "te-bed",
+      "repeats": "/workspace/tevox-study/data/human/chm13/selected_nuclear.repeats.tsv.gz",
+      "selection_provenance": "/workspace/tevox-study/metadata/human/chm13_selection.json"
+    },
+    {
+      "assembly": "GCA_018852615.3",
+      "fasta": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.fa.gz",
+      "genes": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.genes.gff3.gz",
+      "id": "hg002_mat",
+      "material": "HG002/NA24385/GM24385, maternal haplotype",
+      "normalize_args": [],
+      "repeat_duplicate_audit": "/workspace/tevox-study/metadata/human/hg002_mat_repeat_duplicates.json",
+      "repeat_format": "repeatmasker-out",
+      "repeat_fragment_extraction_provenance": "/workspace/tevox-study/metadata/human/hg002_mat_fragment_extraction.json",
+      "repeat_fragment_sources": "/workspace/tevox-study/metadata/human/hg002_mat_fragment_sources.tsv.gz",
+      "repeat_source_original": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeats.tsv.gz",
+      "repeats": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeatmasker.out.gz",
+      "selection_provenance": "/workspace/tevox-study/metadata/human/hg002_mat_selection.json"
+    }
+  ],
+  "limitations": [
+    "Different repeat-annotation software/library versions remain a confounder; differences are annotation-fragment candidates, not proven insertion polymorphisms.",
+    "GCA and GCF CHM13 assemblies are explicitly not identical. Use the selected GenBank/author analysis-set sequence only.",
+    "HG002 is one maternal haplotype of one donor, not a diploid/population comparison.",
+    "HG002 bigRmsk visualization spans include unaligned flanks/gaps; recover original fragment coordinates from description rows, never BED visualization extents.",
+    "Four annotation assets have no published full-object MD5 in reviewed metadata; multipart S3 ETags are not MD5. Fetch with HTTPS, record exact byte sizes and local SHA256; do not invent provider checksums.",
+    "HG002 v1.1 is deliberately pinned to the assembly version with matching Liftoff and repeat annotations; newer project assemblies are not substituted.",
+    "Joined HG002 browser records can contain mixed original fragment orientations; use the standalone extracted RepeatMasker input. The frozen direct bigRmsk parser rejects these valid complex joins and must not be used for this dataset."
+  ],
+  "pair_id": "human_chm13_hg002_mat_extracted",
+  "preset": "asm10",
+  "source_coverage_note": "All 5,422,582 original RepeatMasker fragments from all 4,480,264 selected bigRmsk records are preserved. Ordered full-field hashes and per-chromosome counts match the original source; each output maps to its source row and fragment index.",
+  "source_manifest": "/workspace/tevox-study/discovery/human_sources.json",
+  "species": "Homo sapiens",
+  "threads": 4,
+  "upstream_annotation_qc": [
+    {
+      "action": "Recover all original RepeatMasker fields and fragment orientations without changing coordinates, merging, deduplicating or filtering. One original fragment extends one base left of its browser aligned-summary interval; the exact original end+remaining length agrees with the selected FASTA.",
+      "all_query_end_plus_remaining_match_fasta_length": true,
+      "assembly": "GCA_018852615.3",
+      "display_strand_mismatch_fragments": 13870,
+      "fragments_outside_aligned_summary": 1,
+      "inconsistent_aligned_summary_records": 1,
+      "mixed_orientation_browser_records": 12454,
+      "original_fragment_records": 5422582,
+      "provenance": "/workspace/tevox-study/metadata/human/hg002_mat_fragment_extraction.json",
+      "source_browser_records": 4480264
+    }
+  ]
+}

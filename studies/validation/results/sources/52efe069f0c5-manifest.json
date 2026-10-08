@@ -1,0 +1,54 @@
+{
+  "derived_from_manifest": "/workspace/tevox-study/metadata/rat_pair.json",
+  "genomes": [
+    {
+      "assembly": "GCF_036323735.1_GRCr8",
+      "fasta": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+      "genes": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+      "id": "bn",
+      "material": "BN/NHsdMcwi",
+      "normalize_args": [],
+      "repeat_format": "repeatmasker-out",
+      "repeats": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz"
+    },
+    {
+      "assembly": "GCF_021556685.1_SHRSP_T2T",
+      "fasta": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+      "genes": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+      "id": "shrsp",
+      "material": "SHRSP/BbbUtx",
+      "normalize_args": [],
+      "repeat_deduplication_provenance": "/workspace/tevox-study/metadata/rat_shrsp_repeat_dedup.json",
+      "repeat_format": "repeatmasker-out",
+      "repeat_source_groups": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz.source_groups.tsv.gz",
+      "repeat_source_original": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+      "repeats": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz"
+    }
+  ],
+  "limitations": [
+    "Two strains, not population frequencies",
+    "Annotation fragments are not reconstructed TE insertion events",
+    "Genome-wide alignment gaps require reciprocal flank validation",
+    "Official SHRSP RepeatMasker source contained 4,559,500 exact consecutive duplicate rows; these were removed without merging distinct annotation records. Source checksum verification and derived-file integrity are recorded separately."
+  ],
+  "pair_id": "rat_bn_shrsp_corrected",
+  "preset": "asm10",
+  "source_manifest": "/workspace/tevox-study/discovery/rat_sources.json",
+  "species": "Rattus norvegicus",
+  "threads": 4,
+  "upstream_annotation_qc": [
+    {
+      "assembly": "GCF_021556685.1_SHRSP_T2T",
+      "correction_rule": "All original record columns equal after splitting/joining whitespace; only consecutive record rows removed",
+      "finding": "Every original RepeatMasker record occurred twice consecutively with identical values in all columns; published source artifact retained unchanged.",
+      "multiplicity_histogram": {
+        "2": 4559500
+      },
+      "provenance": "/workspace/tevox-study/metadata/rat_shrsp_repeat_dedup.json",
+      "removed_duplicate_rows": 4559500,
+      "retained_nonconsecutive_duplicate_rows": 0,
+      "retained_record_rows": 4559500,
+      "source_record_rows": 9119000
+    }
+  ]
+}

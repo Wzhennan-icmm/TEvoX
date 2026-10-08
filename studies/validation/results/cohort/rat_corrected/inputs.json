@@ -1,0 +1,44 @@
+[
+  {
+    "role": "fasta",
+    "genome": "bn",
+    "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+    "bytes": 875872536,
+    "sha256": "3b9ae168e5c680ce0afb3401d1a1a306a5373098a49219cda63598bc44943a69"
+  },
+  {
+    "role": "repeats",
+    "genome": "bn",
+    "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz",
+    "bytes": 141528731,
+    "sha256": "cc033b3f572821a9d97bf501278a5a4ef100d7cb2bebc1e6458de25955cdf2ff"
+  },
+  {
+    "role": "genes",
+    "genome": "bn",
+    "path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+    "bytes": 37442693,
+    "sha256": "fbb27c7cf14deae80d24959449d4b1c6f58f0ac3dd188f3e00da21081b259901"
+  },
+  {
+    "role": "fasta",
+    "genome": "shrsp",
+    "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+    "bytes": 874852829,
+    "sha256": "88bc0dd2422beff05e30e16c9c2a761427982d9904893b7961ead1ba283a83dd"
+  },
+  {
+    "role": "repeats",
+    "genome": "shrsp",
+    "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz",
+    "bytes": 186333603,
+    "sha256": "8e640708e26c41ec179c52762267e1662211b370c495b73ad263c20420afee3f"
+  },
+  {
+    "role": "genes",
+    "genome": "shrsp",
+    "path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+    "bytes": 41562811,
+    "sha256": "828d12749401c4c0844ac9721430198c3809c1667696e409a826c4e59e21db74"
+  }
+]

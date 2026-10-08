@@ -1,0 +1,83 @@
+{
+  "status": "lossless_archive",
+  "files": [
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/bn/genome.fa",
+      "plain_sha256": "980de5d0a313b78351b70084d8cef062b58fdfb59c0ebe1f194e6c8df8a7081c",
+      "restore_from": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "3b9ae168e5c680ce0afb3401d1a1a306a5373098a49219cda63598bc44943a69"
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/genome.fa",
+      "plain_sha256": "802561e3097940ba8aba54d86800dac9dc14fc20889d128aeb74d9b7d4ac9f87",
+      "restore_from": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "88bc0dd2422beff05e30e16c9c2a761427982d9904893b7961ead1ba283a83dd"
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/alignment.eqx.paf",
+      "plain_sha256": "d01def9d46bcaa916281504563d421d7759d45390ece2b7c3623e1f3e493140c",
+      "plain_bytes": 52520975,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/alignment.eqx.paf.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "401c891f390f619baca0ad2d64e40eb155ad2e71a743faa4872e0dc4600dd9b1",
+      "compressed_bytes": 21285652
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/bn/empty_site_genes.tsv",
+      "plain_sha256": "201131778f4a6f21bc9a543b1e99721f151b2ba09962e93e9aff5ecf2caddaab",
+      "plain_bytes": 2202998,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/bn/empty_site_genes.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "aa7fdaae72c2fff6276f5adbc9b3a338708054eb9bf19cfab4b26c11b6f220fd",
+      "compressed_bytes": 423957
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/bn/repeats.metadata.tsv",
+      "plain_sha256": "be6c3c8c0ace3a845756d9c983f17f133b98b4eb10dcfe63bde479644c8e67cc",
+      "plain_bytes": 340614940,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/bn/repeats.metadata.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "dd7c7ae0ab91fcf23c71823bb497685b5f7ae7d82c3339ee73c30e026690d99d",
+      "compressed_bytes": 68665780
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/bn/repeats.rejected.tsv",
+      "plain_sha256": "d89e67f9d553c742eb297d3987a2fb937d1bb348eff5bc009553880e8b9bbe9e",
+      "plain_bytes": 255148621,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/bn/repeats.rejected.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "3e459f73f94c2569dfe69b4dd81da6d8ccd2a7fcac5a17eb0e285edecc358776",
+      "compressed_bytes": 58486298
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/empty_site_genes.tsv",
+      "plain_sha256": "b730d065d27767d80e6dd25a40d7cc78d3811b7556c8c13ac99f207ff4226b9f",
+      "plain_bytes": 2194870,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/empty_site_genes.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "31408f9f63420a498e8865a3272207533c0703fe19fa38a40f3b3cb8be94e73f",
+      "compressed_bytes": 409462
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/repeats.metadata.tsv",
+      "plain_sha256": "348ce00cf60a24ef2ded66077d00edd99abc576ed02824b320597017b62d32a5",
+      "plain_bytes": 349386796,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/repeats.metadata.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "e41167503d29b87f2ce4b8c1eff244c57af9a5d8e5edbe4f7c59064486c412fa",
+      "compressed_bytes": 68806118
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/repeats.rejected.tsv",
+      "plain_sha256": "b234c43cd934c9df0408abd9b72e3d102a3cc3d33aba826bd852cf54d9ac7f92",
+      "plain_bytes": 258418392,
+      "restore_from": "/workspace/tevox-v05-study/final/rat_corrected/shrsp/repeats.rejected.tsv.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "aa2f1be4894b11a883637806ef4c14d2362ccf8e163d7842215a8c29dfec9f06",
+      "compressed_bytes": 59091620
+    }
+  ],
+  "note": "run.json retains original paths/hashes; use restore_from and restore_method to recover original bytes"
+}

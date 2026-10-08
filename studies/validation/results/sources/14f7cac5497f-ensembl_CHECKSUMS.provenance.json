@@ -1,0 +1,28 @@
+{
+  "checksum_source": null,
+  "completed_at": "2026-10-03T08:20:49.252914+00:00",
+  "curl_log": "/workspace/tevox-study/data/mouse/c57/ensembl_CHECKSUMS.provenance.json.curl.log",
+  "effective_url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/CHECKSUMS",
+  "observed": {
+    "bytes": 1814,
+    "md5": "3e3f3171bd23c903a9a46b4fefb5c675",
+    "sha256": "433c1b7241e7facc0cc9068804c5f43f301cb3ba3e12d2967b63a2ff917e098b"
+  },
+  "original_url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/CHECKSUMS",
+  "output": "/workspace/tevox-study/data/mouse/c57/ensembl_CHECKSUMS",
+  "request": {
+    "expected_bytes": 1814,
+    "expected_md5": null,
+    "expected_sha256": "433c1b7241e7facc0cc9068804c5f43f301cb3ba3e12d2967b63a2ff917e098b",
+    "original_url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/CHECKSUMS",
+    "url_sha256": "1ee2a841b5f1da166255cdabd413f5eebc86f0bc8bc5b0c50f86b84a4528ee84"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:20:48.844564+00:00",
+  "verification": "provided_checksum_verified",
+  "verified_algorithms": [
+    "sha256"
+  ]
+}

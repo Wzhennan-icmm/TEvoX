@@ -1,0 +1,177 @@
+{
+  "status": "completed",
+  "signature": {
+    "manifest": {
+      "path": "/workspace/tevox-study/results/maize/manifest.json",
+      "bytes": 65970,
+      "sha256": "06974c6fa363de2db40d462b9d8665dd388552bc84020b9e458dc21e3cab4ae2"
+    },
+    "binary": {
+      "path": "/workspace/tevox-v05-validation-20261006/tevox-final",
+      "bytes": 678000,
+      "sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7"
+    },
+    "alignment": {
+      "path": "/workspace/tevox-study/results/maize/alignment.paf.gz",
+      "bytes": 40730098,
+      "sha256": "5611d471d5505549f0456cadd43059cd646d1fd26c26f101112656adbe055a39"
+    },
+    "source_inputs": [
+      {
+        "role": "fasta",
+        "genome": "b73",
+        "path": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.fa.gz",
+        "bytes": 684902666,
+        "sha256": "bcb6b02e7d26545c999d1c7e46fdafa919434c6c87ccb40da3d11ec8b51e91f4"
+      },
+      {
+        "role": "repeats",
+        "genome": "b73",
+        "path": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.repeatMasker.out.gz",
+        "bytes": 45453820,
+        "sha256": "6ea5e5d068539c5f900fbafebbc0d8ea3bc7902455fce432c9530d50f5377819"
+      },
+      {
+        "role": "genes",
+        "genome": "b73",
+        "path": "/workspace/tevox-study/data/maize/b73/predicted.genes.gff3.gz",
+        "bytes": 2627019,
+        "sha256": "bb04b0925e56d1fa54c9c8751b44a9b48f8348b1ed363bc28ae9d2e0842b5dae"
+      },
+      {
+        "role": "fasta",
+        "genome": "oh43",
+        "path": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.fa.gz",
+        "bytes": 684860257,
+        "sha256": "f6917684fa99eb29a27fd59511f2e5108aab6e7ba718c3881d7fe7a446a1bfdc"
+      },
+      {
+        "role": "repeats",
+        "genome": "oh43",
+        "path": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.repeatMasker.out.gz",
+        "bytes": 45545022,
+        "sha256": "0d8440a3b9fce766ef6b0a91f22a45fbcaeeccb051686d9a5c6c8241f78daf68"
+      },
+      {
+        "role": "genes",
+        "genome": "oh43",
+        "path": "/workspace/tevox-study/data/maize/oh43/predicted.genes.gff3.gz",
+        "bytes": 2627687,
+        "sha256": "13b2527ca13bfb692c9af1351fa8b4cb802b22c88c5c18053ca3ab2ce7c43936"
+      }
+    ],
+    "family_policy": "repeat-name",
+    "scripts": {
+      "annotate_candidates.py": "45ded3f62ba22abc75b758de25fa88cb23d2b6bdae66e9fe791a8054df96e6a7",
+      "archive_run.py": "8275cd5c6bc9ac83286bedcd72613edcb2cd4ed22141d76f8b3610a04bdfc20d",
+      "normalize_annotations.py": "3ef9740365a26ab02d52ef17b0c5123e66f0c67826d7b49a5f8b626fb4d562e9",
+      "paf_exact.py": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+      "run_pair.py": "474f66229331396be1331538aa23d99c3bdf9b63680ba0448ec3a308d1a326b0",
+      "test_inputs.py": "6806ee0085898ed077e15c785914dfce28d803f7490b385b780b3f3bc72bf2c2",
+      "test_run_integrity.py": "c4d3704875e669d4101926ff1aa9e3407020272d6e5b9f297457da408fc24aeb"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.candidate_contexts.tsv.gz",
+      "bytes": 78640702,
+      "sha256": "628fdafd75b5b0451ce2692dc410939365ff2c7f3f557dce52a745724097c8d2"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.candidate_features.tsv.gz",
+      "bytes": 148880557,
+      "sha256": "de4a7d789e4c8c890f44035c0d9607ea5c9d4776bf3814c5cebcaeb9df12a15a"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.candidates.tsv.gz",
+      "bytes": 148715892,
+      "sha256": "724d897f184f298993c5f8486b5a8950986c1e66d36bf6acf1262428fe65c3e9"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.contexts.tsv.gz",
+      "bytes": 118,
+      "sha256": "c2f268a421aa1280ad7a8db700a473525544b903efe101acbc85d9f62bdc4cb1"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.decisions.tsv.gz",
+      "bytes": 78753245,
+      "sha256": "723d162f1073d9d111a04ef4fef205d0fa96abe566f39eb106e311ac3352fff5"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.edges.tsv.gz",
+      "bytes": 49576984,
+      "sha256": "fb2d9abcd81ca5d16a023a73ce465734d82458d1dffb25dcb37ce30365134332"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.evidence.tsv.gz",
+      "bytes": 153297423,
+      "sha256": "aacdfc8bb748c509c7c4ee0fda9c904a7c12f8b7642079b38176ddeafeba8169"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.instances.tsv.gz",
+      "bytes": 143142656,
+      "sha256": "679a641a508a64147403e8e0e18da3dbe02ff35c89b74c8add965bc86d63fc77"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.loci.tsv.gz",
+      "bytes": 57189882,
+      "sha256": "d2197c28adde41d487ae4506eb5d956c80e65c07240fc86921eec7a3efe22369"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.observation_scores.tsv.gz",
+      "bytes": 74681011,
+      "sha256": "7ca088074cbf571716fb6051f47b76028098033e75ad8a08090335112fdf386b"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.relations.tsv.gz",
+      "bytes": 64797672,
+      "sha256": "5639afb459313ab959b5852b5c4550099206d87023a592ca7739b184c7d94d48"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.run.json",
+      "bytes": 29309415,
+      "sha256": "aac43562411045235e4067b51f42b9f79c74817b8a37e1d96d7129982e442e37"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.solver.tsv.gz",
+      "bytes": 21147357,
+      "sha256": "bf2d4c0f552c306e32cb935d47a4e20d994a5626d062b9ae10fab9ed3fa6ac49"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.states.tsv.gz",
+      "bytes": 120355240,
+      "sha256": "f4f5fcf6ed594349be0b83cd20655be77a64647e31929d4aca52aa1ce978ca64"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.stdout.log",
+      "bytes": 391,
+      "sha256": "47ee333a20554a014c349d11bf49b5078c6567f4b63fb94f900819e1eff0d88f"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.summary.tsv.gz",
+      "bytes": 257,
+      "sha256": "0d28a08311cf261bedeedbd78a6412f6991b14bff49f9cd5e6c2e5c42816036e"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.synteny.anchors.tsv.gz",
+      "bytes": 96,
+      "sha256": "4ceed09e1ca7ad133addd60c8621b7f244bc94fedfd542c4380a28a147413e53"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.synteny.blocks.tsv.gz",
+      "bytes": 179,
+      "sha256": "54961cab79329070a9c2c11f53521fccda1f7d2a6a1a61997f207ef9b44dfd9c"
+    },
+    {
+      "path": "/workspace/tevox-v05-study/final/maize/tevox.te_contexts.tsv.gz",
+      "bytes": 112,
+      "sha256": "d9d4e8ae67a63ecb2386a88e51f56a96f3aea85fec27027410b5054f50443326"
+    }
+  ],
+  "completed_utc": "2026-10-06T17:32:59.876702+00:00"
+}

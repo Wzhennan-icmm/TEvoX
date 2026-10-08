@@ -1,0 +1,48 @@
+{
+  "classes": {
+    "DNA": 525169,
+    "LINE": 1557318,
+    "LTR": 743185,
+    "RC": 2249,
+    "SINE": 1770907,
+    "Unknown": 20810
+  },
+  "configuration": {
+    "bed_class_column": 7,
+    "bed_coordinates": "zero-based-half-open",
+    "bed_family_column": 8,
+    "bed_id_column": 10,
+    "bed_name_column": 4,
+    "bed_strand_column": 6,
+    "class_attribute": "Classification",
+    "class_map": null,
+    "family_attribute": null,
+    "family_policy": "repeat-name",
+    "format": "te-bed",
+    "gff_feature": [],
+    "id_prefix": "chm13",
+    "lengths": "/workspace/tevox-v05-study/final/human/chm13/lengths.tsv",
+    "name_attribute": "Name",
+    "output_prefix": "/workspace/tevox-v05-study/final/human/chm13/repeats"
+  },
+  "counts": {
+    "parsed_fragments": 5512424,
+    "rejected_excluded_non_te": 884166,
+    "rejected_unresolved_class": 8620,
+    "retained_fragments": 4619638,
+    "source_records": 5512424,
+    "unknown_class_fragments": 20810
+  },
+  "format": "te-bed",
+  "input": "/workspace/tevox-study/data/human/chm13/selected_nuclear.repeats.tsv.gz",
+  "input_coordinate_system": "zero-based-half-open",
+  "interpretation": "Annotation fragments only; not reconstructed elements or proven insertion/deletion events. Unknown class retained explicitly with uncertainty.",
+  "lengths": "/workspace/tevox-v05-study/final/human/chm13/lengths.tsv",
+  "output_coordinate_system": "zero-based-half-open",
+  "outputs": {
+    "bed": "/workspace/tevox-v05-study/final/human/chm13/repeats.bed",
+    "metadata": "/workspace/tevox-v05-study/final/human/chm13/repeats.metadata.tsv",
+    "qc": "/workspace/tevox-v05-study/final/human/chm13/repeats.qc.json",
+    "rejected": "/workspace/tevox-v05-study/final/human/chm13/repeats.rejected.tsv"
+  }
+}

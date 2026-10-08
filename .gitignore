@@ -2,6 +2,8 @@
 /tevox
 *.dSYM/
 *.log
+!studies/validation/results/*.log
+!studies/validation/results/platforms/*/validation.log
 *.tmp
 *.temp
 *.edges.tsv

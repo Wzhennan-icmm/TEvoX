@@ -1,0 +1,39 @@
+{
+  "genomes": [
+    {
+      "assembly": "GCA_921999865.2_C57BL_6NJ_v3",
+      "fasta": "/workspace/tevox-study/data/mouse/c57/primary.fna.gz",
+      "genes": "/workspace/tevox-study/data/mouse/c57/primary.genes.gff3.gz",
+      "id": "c57",
+      "material": "C57BL/6NJ",
+      "normalize_args": [],
+      "repeat_format": "repeatmasker-out",
+      "repeats": "/workspace/tevox-study/data/mouse/c57/primary.repeatMasker.out.gz",
+      "selection_provenance": "/workspace/tevox-study/data/mouse/c57/primary_selection.provenance.json"
+    },
+    {
+      "assembly": "GCA_921999005.2_CAST_EiJ_v3",
+      "fasta": "/workspace/tevox-study/data/mouse/cast/primary.fna.gz",
+      "genes": "/workspace/tevox-study/data/mouse/cast/primary.genes.gff3.gz",
+      "id": "cast",
+      "material": "CAST/EiJ",
+      "normalize_args": [],
+      "repeat_format": "repeatmasker-out",
+      "repeats": "/workspace/tevox-study/data/mouse/cast/primary.repeatMasker.out.gz",
+      "selection_provenance": "/workspace/tevox-study/data/mouse/cast/primary_selection.provenance.json"
+    }
+  ],
+  "limitations": [
+    "Paper Table 1 reports CAST contig N50 22.55 Mb and C57BL/6NJ 5.31 Mb, whereas ENA v3 records report 32.955239 and 8.304515 Mb. Paper statistics cover chromosomes 1\u201319 and X, but this alone has not been shown to explain the differences. Do not claim exact recreation of paper assemblies/statistics without supplementary-version confirmation.",
+    "The assembly workflow uses de novo Falcon CLR contigs but RagTag chromosome organization guided by GRCm39 and Hi-C/manual curation. It is not wholly reference-independent.",
+    "The old Lilue et al. 2018 paper supports the earlier short-read assemblies; use Helmy et al. DOI 10.1016/j.xgen.2025.101074 for this modern long-read project.",
+    "C57 -species 'Mus musculus'; CAST -species 'Mus musculus castaneus'. Family selection count agrees, exact selected library content not independently compared.",
+    "Two strain assemblies do not establish population frequencies; TE candidates need reciprocal unique-flank evidence."
+  ],
+  "pair_id": "mouse_c57_cast_v3_primary",
+  "preset": "asm10",
+  "scope": "Whole primary nuclear chromosomes 1-19 and X of both strains; MT and unplaced scaffolds explicitly excluded, no chromosome sampling",
+  "source_manifest": "/workspace/tevox-study/discovery/mouse_sources.json",
+  "species": "Mus musculus",
+  "threads": 4
+}

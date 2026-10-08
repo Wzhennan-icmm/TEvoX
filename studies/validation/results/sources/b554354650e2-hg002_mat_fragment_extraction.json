@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "input": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeats.tsv.gz",
+  "input_sha256": "99d5d205d734602b4e689a086fce4def59675a0457731e39c5f5022a6aadf641",
+  "length_source": "/workspace/tevox-study/metadata/human/hg002_mat_selection.json",
+  "length_source_sha256": "88e4183b1c9d0eaaf6838b8ece4de535ffcf48fd3995f495b95d0c8878db1c77",
+  "output": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeatmasker.out.gz",
+  "output_sha256": "eda9f44d936b9d0bdaf88bdd715c608823a56d6519caffca5edd13fc41447deb",
+  "source_map": "/workspace/tevox-study/metadata/human/hg002_mat_fragment_sources.tsv.gz",
+  "source_map_sha256": "10ae18fb160f3f17d73c1f1946ed26f58dbe1d8bed82e554a6f9a765b453de5e",
+  "counts": {
+    "source_browser_records": 4480264,
+    "query_length_verified_fragments": 5422582,
+    "output_fragment_records": 5422582,
+    "multi_fragment_source_records": 592731,
+    "mixed_strand_source_records": 12454,
+    "display_strand_mismatch_source_records": 12454,
+    "display_strand_mismatch_fragments": 13870,
+    "aligned_summary_mismatch_source_records": 1,
+    "fragments_outside_aligned_summary": 1,
+    "mixed_repeatmasker_id_source_records": 0
+  },
+  "fragments_per_sequence": {
+    "chr10_MATERNAL": 244733,
+    "chr11_MATERNAL": 247584,
+    "chr12_MATERNAL": 256480,
+    "chr13_MATERNAL": 172758,
+    "chr14_MATERNAL": 179443,
+    "chr15_MATERNAL": 168142,
+    "chr16_MATERNAL": 184876,
+    "chr17_MATERNAL": 172961,
+    "chr18_MATERNAL": 129836,
+    "chr19_MATERNAL": 138442,
+    "chr1_MATERNAL": 471357,
+    "chr20_MATERNAL": 130236,
+    "chr21_MATERNAL": 66743,
+    "chr22_MATERNAL": 88499,
+    "chr2_MATERNAL": 427732,
+    "chr3_MATERNAL": 357713,
+    "chr4_MATERNAL": 323399,
+    "chr5_MATERNAL": 314801,
+    "chr6_MATERNAL": 296142,
+    "chr7_MATERNAL": 288087,
+    "chr8_MATERNAL": 259394,
+    "chr9_MATERNAL": 228325,
+    "chrX_MATERNAL": 274899
+  },
+  "canonical_source_fragment_sha256": "9f2060df71887f5f42b5d23027b7e5d32faff886f6593935359569ce7e5fe08c",
+  "canonical_output_fragment_sha256": "9f2060df71887f5f42b5d23027b7e5d32faff886f6593935359569ce7e5fe08c",
+  "independent_output_reread_passed": true,
+  "independent_source_map_reread_passed": true,
+  "expected_audit": "/workspace/tevox-study/metadata/human/hg002_mat_repeat_duplicates.json",
+  "expected_audit_sha256": "62fea0d7eebdedac627f770c463f182639e826c6264c73143f56bf0e89a58be8",
+  "mixed_orientation_examples": [
+    {
+      "selected_bed_physical_line": 271,
+      "browser_record_id": "270",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 200159,
+      "aligned_end0": 201864,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 366,
+      "browser_record_id": "367",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 289378,
+      "aligned_end0": 290553,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 746,
+      "browser_record_id": "746",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 706704,
+      "aligned_end0": 706906,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 1712,
+      "browser_record_id": "1712",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 1557720,
+      "aligned_end0": 1558858,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 1923,
+      "browser_record_id": "1926",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 1760818,
+      "aligned_end0": 1764692,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 1987,
+      "browser_record_id": "1987",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 1808830,
+      "aligned_end0": 1812212,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 2021,
+      "browser_record_id": "2019",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 1830765,
+      "aligned_end0": 1831743,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 2108,
+      "browser_record_id": "2108",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 1904284,
+      "aligned_end0": 1904772,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 2563,
+      "browser_record_id": "2564",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 2272059,
+      "aligned_end0": 2272341,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    },
+    {
+      "selected_bed_physical_line": 3303,
+      "browser_record_id": "3302",
+      "chrom": "chr10_MATERNAL",
+      "aligned_start0": 2843294,
+      "aligned_end0": 2843693,
+      "display_strand": "-",
+      "original_fragment_strands": [
+        "C",
+        "+"
+      ]
+    }
+  ],
+  "aligned_summary_mismatch_examples": [
+    {
+      "selected_bed_physical_line": 1704575,
+      "browser_record_id": "1704575",
+      "chrom": "chr1_MATERNAL",
+      "browser_aligned_start0": 69263963,
+      "browser_aligned_end0": 69277886,
+      "original_fragment_envelope_start0": 69263962,
+      "original_fragment_envelope_end0": 69277886,
+      "fragments": [
+        {
+          "part": 2,
+          "original_record": "260 18.4 3.2 4.8 chr1_MATERNAL 69263963 69264025 (174758042) C MER34C_v LTR/ERV1 (512) 73 12 1704575 *",
+          "left_excess": 1,
+          "right_excess": 0
+        }
+      ]
+    }
+  ],
+  "allow_inconsistent_aligned_summary": true,
+  "script": "/workspace/tevox-study/scripts/extract_bigrmsk_fragments.py",
+  "script_sha256": "3e0dc9f0af2d82ddac11593f3f4955de15d6d8dbdd9d9e5122541122560f7cef",
+  "coordinate_policy": "Original RepeatMasker one-based inclusive coordinates preserved; validated against selected chromosome length, with query end + original remaining bases required to equal the exact FASTA length. BED aligned-summary mismatches are rejected by default; an explicit flag permits them with counts, examples, and per-fragment sidecar flags. No original coordinates changed.",
+  "strand_policy": "Every original fragment C/+/- field is preserved. Browser display strand may differ, including within a mixed-orientation joined element.",
+  "identity_policy": "All original fragment fields and their order preserved, including optional overlap marker; only whitespace separators canonicalized. No fragment merge, deduplication or filtering.",
+  "source_map_policy": "Each output data record maps to a unique selected-BED physical line and one-based description fragment index; browser record ID is recorded separately."
+}

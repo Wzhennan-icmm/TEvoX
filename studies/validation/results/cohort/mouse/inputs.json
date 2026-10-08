@@ -1,0 +1,44 @@
+[
+  {
+    "role": "fasta",
+    "genome": "c57",
+    "path": "/workspace/tevox-study/data/mouse/c57/primary.fna.gz",
+    "bytes": 929228832,
+    "sha256": "be21737995f8598f635fd35f534ddaa6667d08bc38fb23604f9acbde9933ce4a"
+  },
+  {
+    "role": "repeats",
+    "genome": "c57",
+    "path": "/workspace/tevox-study/data/mouse/c57/primary.repeatMasker.out.gz",
+    "bytes": 184369583,
+    "sha256": "0a9037abdcf43ee7677f6c9eb7b080cb819d7908cf361ac7652e1f2d3c9bf2b1"
+  },
+  {
+    "role": "genes",
+    "genome": "c57",
+    "path": "/workspace/tevox-study/data/mouse/c57/primary.genes.gff3.gz",
+    "bytes": 28481035,
+    "sha256": "bf8e44b3e03bad7c6983ac29bf9e3e2d36b8dd039908b0a8244f099539dfc314"
+  },
+  {
+    "role": "fasta",
+    "genome": "cast",
+    "path": "/workspace/tevox-study/data/mouse/cast/primary.fna.gz",
+    "bytes": 925432206,
+    "sha256": "b0693be78b4c597d0867e534ef0ba198d0392067d325fb74c0752435ba1c9656"
+  },
+  {
+    "role": "repeats",
+    "genome": "cast",
+    "path": "/workspace/tevox-study/data/mouse/cast/primary.repeatMasker.out.gz",
+    "bytes": 184590393,
+    "sha256": "ee0aa8b72ab5716c67b710ee6616e3f8bcb90e4be027312ed23a9cd70a44f2f8"
+  },
+  {
+    "role": "genes",
+    "genome": "cast",
+    "path": "/workspace/tevox-study/data/mouse/cast/primary.genes.gff3.gz",
+    "bytes": 28871831,
+    "sha256": "37337e687d613ed1da5d7658b5943b57d69136c0c2688f1d464ce597afd8e7cc"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "truth": {
+      "truth_record_id": "GIAB_TE_000001",
+      "source_genome_id": "chm13",
+      "source_te_id": "chm13_F000000243662",
+      "target_genome_id": "hg002_mat",
+      "chrom": "chr1",
+      "te_start": "82500685",
+      "te_end": "82502190",
+      "sv_start": "82500675",
+      "sv_end": "82502286",
+      "giab_variant_id": "HG3_Ill_SVrefine2DISCOVARDovetail_450",
+      "grch37_chrom": "1",
+      "grch37_ref_start": "83125957",
+      "grch37_ref_end": "83127569",
+      "mapping_strand": "+",
+      "te_overlap_fraction": "1.0",
+      "deletion_overlap_fraction": "0.9342023587833643",
+      "expected_state": "EMPTY_SITE_CONFIRMED",
+      "validation_source": "GIAB_HG002_SV_Tier1_v0.6",
+      "ref_sha256": "acd8fc1f939165c984b04abb3a96170f736b7cf2c64a5b49ff23efbac04f3484"
+    },
+    "prediction": {
+      "schema_version": "1.2.0",
+      "decision_id": "DEC2f7a834be1094b6f",
+      "source_genome_id": "chm13",
+      "source_te_id": "chm13_F000000243662",
+      "target_genome_id": "hg002_mat",
+      "technical_state": "UNCALLABLE",
+      "biological_state": "EMPTY",
+      "annotation_state": "NOT_APPLICABLE",
+      "legacy_state": "UNCALLABLE",
+      "claim_type": "NONE",
+      "claimable": "false",
+      "quality": "59.53",
+      "evidence_completeness": "0.900000",
+      "observation_count": "1",
+      "near_best_count": "1",
+      "winner_evidence_id": "EVD9772844a554403e2",
+      "linked_evidence_ids": "EVD9772844a554403e2",
+      "decision_code": "FLANK_SUPPORT_BELOW_THRESHOLD",
+      "claimability_reason": "TECHNICAL_UNCALLABLE"
+    }
+  }
+]

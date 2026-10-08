@@ -1,0 +1,142 @@
+{
+  "status": "all_sources_verified",
+  "source_manifest": "/workspace/tevox-study/discovery/mouse_sources.json",
+  "files": [
+    {
+      "id": "c57",
+      "kind": "ncbi_md5checksums.txt",
+      "path": "/workspace/tevox-study/data/mouse/c57/ncbi_md5checksums.txt",
+      "record": "/workspace/tevox-study/data/mouse/c57/ncbi_md5checksums.txt.provenance.json",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/md5checksums.txt",
+      "bytes": 7367,
+      "md5": "7b4437b09306b3372e2eb1e77229d021",
+      "sha256": "cbc237710b7fd0c258219f3ab9802d90b72cc451fe94aebc671da69cd6689381",
+      "verification": "provided_checksum_verified"
+    },
+    {
+      "id": "c57",
+      "kind": "genark_md5sum.txt",
+      "path": "/workspace/tevox-study/data/mouse/c57/genark_md5sum.txt",
+      "record": "/workspace/tevox-study/data/mouse/c57/genark_md5sum.txt.provenance.json",
+      "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/md5sum.txt",
+      "bytes": 8445,
+      "md5": "b4414baa230e8d791231908b9e7bf4c4",
+      "sha256": "c87da782f1436366887122567b7caf6bdebf52450c18914eafe82f3af4cf2640",
+      "verification": "provided_checksum_verified"
+    },
+    {
+      "id": "c57",
+      "kind": "ensembl_CHECKSUMS",
+      "path": "/workspace/tevox-study/data/mouse/c57/ensembl_CHECKSUMS",
+      "record": "/workspace/tevox-study/data/mouse/c57/ensembl_CHECKSUMS.provenance.json",
+      "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/CHECKSUMS",
+      "bytes": 1814,
+      "md5": "3e3f3171bd23c903a9a46b4fefb5c675",
+      "sha256": "433c1b7241e7facc0cc9068804c5f43f301cb3ba3e12d2967b63a2ff917e098b",
+      "verification": "provided_checksum_verified"
+    },
+    {
+      "id": "cast",
+      "kind": "ncbi_md5checksums.txt",
+      "path": "/workspace/tevox-study/data/mouse/cast/ncbi_md5checksums.txt",
+      "record": "/workspace/tevox-study/data/mouse/cast/ncbi_md5checksums.txt.provenance.json",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/md5checksums.txt",
+      "bytes": 7312,
+      "md5": "ac5fbe365bbef1b356d86fa31b0176df",
+      "sha256": "1796acf960c79f51f8f9416cc5b7cdc55578d3dae3760611cd69cd8040c354e3",
+      "verification": "provided_checksum_verified"
+    },
+    {
+      "id": "cast",
+      "kind": "genark_md5sum.txt",
+      "path": "/workspace/tevox-study/data/mouse/cast/genark_md5sum.txt",
+      "record": "/workspace/tevox-study/data/mouse/cast/genark_md5sum.txt.provenance.json",
+      "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+      "bytes": 11258,
+      "md5": "1d85c921fcd45aceef81a4028d072244",
+      "sha256": "4bae983be0663ecf9f2b2ae1f282fc5c0caca8397d47f0716a9da1a38c65df52",
+      "verification": "provided_checksum_verified"
+    },
+    {
+      "id": "cast",
+      "kind": "ensembl_CHECKSUMS",
+      "path": "/workspace/tevox-study/data/mouse/cast/ensembl_CHECKSUMS",
+      "record": "/workspace/tevox-study/data/mouse/cast/ensembl_CHECKSUMS.provenance.json",
+      "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/CHECKSUMS",
+      "bytes": 1767,
+      "md5": "aa5ab0f7946c91d792bdb73caf0214a5",
+      "sha256": "056221831e9a91ce5715758a8ba0338d99832b08bdf0fc1380a96fa536d8eeb2",
+      "verification": "provided_checksum_verified"
+    },
+    {
+      "id": "c57",
+      "kind": "fasta",
+      "path": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz",
+      "record": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz.provenance.json",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz",
+      "bytes": 789570616,
+      "md5": "630ac3123b4938c90f0f2b927267b2b5",
+      "sha256": "003c13a0a2e561cf444ffbaf862a66cbd03cb1159cf59349ee495e1b521c057a",
+      "verification": "source_checksum_verified"
+    },
+    {
+      "id": "cast",
+      "kind": "fasta",
+      "path": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+      "record": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz.provenance.json",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+      "bytes": 786637315,
+      "md5": "c90532d400f688a28d13e0b5e01cc25e",
+      "sha256": "ab89efa7707311035ed8210e18adee259a8d5cfda134c504f889d209d756d06b",
+      "verification": "source_checksum_verified"
+    },
+    {
+      "id": "c57",
+      "kind": "gene_gff3",
+      "path": "/workspace/tevox-study/data/mouse/c57/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz",
+      "record": "/workspace/tevox-study/data/mouse/c57/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz.provenance.json",
+      "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz",
+      "bytes": 20844108,
+      "md5": "8a99608f8e32389a26374ef7d8a4cdc1",
+      "sha256": "e18e926041fe0112f41a6610b278a428847905df2c46cc042d8c100d0e935ca0",
+      "bsd_sum": 24914,
+      "bsd_blocks_1024": 20356,
+      "verification": "source_bsd_sum_verified"
+    },
+    {
+      "id": "c57",
+      "kind": "repeatmasker",
+      "path": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz",
+      "record": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz.provenance.json",
+      "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.repeatMasker.out.gz",
+      "bytes": 147025938,
+      "md5": "c695318cc936b90860eb4eb4eb085c5a",
+      "sha256": "ecb7d394a82dcd225a0e153d2abc783bcf20e46a46f20cc157bcf54644cad6be",
+      "verification": "source_checksum_verified"
+    },
+    {
+      "id": "cast",
+      "kind": "gene_gff3",
+      "path": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+      "record": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz.provenance.json",
+      "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+      "bytes": 21010744,
+      "md5": "378c95d58c8ca5d9c38b4d04be9efb2c",
+      "sha256": "ba0f01cd108fad0bc64ba679c0db7c4006588f25affbd926afdbc3de4524ab04",
+      "bsd_sum": 12244,
+      "bsd_blocks_1024": 20519,
+      "verification": "source_bsd_sum_verified"
+    },
+    {
+      "id": "cast",
+      "kind": "repeatmasker",
+      "path": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz",
+      "record": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz.provenance.json",
+      "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/GCA_921999005.2.repeatMasker.out.gz",
+      "bytes": 147210864,
+      "md5": "4aef58f16805d2eb51e2037f4b6e1bf0",
+      "sha256": "ad436910e09dc56b45cd24ea912d7146b6482a1e58783c8a2b1bb6bb14da96db",
+      "verification": "source_checksum_verified"
+    }
+  ]
+}

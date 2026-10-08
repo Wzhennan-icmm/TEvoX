@@ -67,6 +67,13 @@ typedef struct {
     int64_t length;
 } TvCigarOp;
 
+#define TV_CIGAR_CHECKPOINT_STRIDE 64U
+typedef struct {
+    int64_t query;
+    int64_t target;
+    int64_t query_end;
+} TvCigarCheckpoint;
+
 typedef enum {
     TV_IDENTITY_MISSING,
     TV_IDENTITY_EQX,
@@ -133,6 +140,8 @@ typedef struct {
     size_t n_ops;
     TvCigarOp *identity_ops;
     size_t n_identity_ops;
+    TvCigarCheckpoint *op_checkpoints;
+    TvCigarCheckpoint *identity_checkpoints;
     TvIdentityMethod identity_method;
     TvEvidenceOrigin origin;
     char *source_path;
@@ -520,6 +529,7 @@ typedef struct {
     int exact_matching_max_nodes;
     int tandem_distance;
     bool verbose;
+    bool gzip_output;
 } TvConfig;
 
 typedef struct {
@@ -581,6 +591,8 @@ typedef struct {
     size_t n_te_interval_index;
     int *components;
     int n_loci;
+    struct TvOutputIndex *output_index;
+    int output_child_pid;
     TvInputDigest *input_digests;
     size_t n_input_digests;
     size_t cap_input_digests;

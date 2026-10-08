@@ -1,0 +1,44 @@
+[
+  {
+    "role": "fasta",
+    "genome": "chm13",
+    "path": "/workspace/tevox-study/data/human/chm13/selected_nuclear.fa.gz",
+    "bytes": 1011778152,
+    "sha256": "304ae091fc71f1192aacb657c1addc5246c1fe3873efc96dce71935cc036b524"
+  },
+  {
+    "role": "repeats",
+    "genome": "chm13",
+    "path": "/workspace/tevox-study/data/human/chm13/selected_nuclear.repeats.tsv.gz",
+    "bytes": 105974890,
+    "sha256": "9a65b5d6a89b63d79d4543062bba59cbcf73abd7da248c0cd0281d224322638c"
+  },
+  {
+    "role": "genes",
+    "genome": "chm13",
+    "path": "/workspace/tevox-study/data/human/chm13/selected_nuclear.genes.gff3.gz",
+    "bytes": 59505455,
+    "sha256": "efe0420ed7278d69ad76f690e11bb02f2c1db49037bbd71e22904f3bd2deb0f3"
+  },
+  {
+    "role": "fasta",
+    "genome": "hg002_mat",
+    "path": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.fa.gz",
+    "bytes": 1017438407,
+    "sha256": "1eefbc8a9c3ea612331c1daf07ae1128dc89a3d6e8ceabecabcfbc27657a48e3"
+  },
+  {
+    "role": "repeats",
+    "genome": "hg002_mat",
+    "path": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeatmasker.out.gz",
+    "bytes": 182874797,
+    "sha256": "eda9f44d936b9d0bdaf88bdd715c608823a56d6519caffca5edd13fc41447deb"
+  },
+  {
+    "role": "genes",
+    "genome": "hg002_mat",
+    "path": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.genes.gff3.gz",
+    "bytes": 34661899,
+    "sha256": "63e7adae6d207677dbcdb8fad985eb5e7df811365ae9515c1954c10db0e8fd5f"
+  }
+]

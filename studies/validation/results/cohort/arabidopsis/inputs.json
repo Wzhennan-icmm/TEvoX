@@ -1,0 +1,44 @@
+[
+  {
+    "role": "fasta",
+    "genome": "nyl7",
+    "path": "/workspace/tevox-study/data/arabidopsis/nyl7/6069.scaffolds_corrected.v2.1.fasta.gz",
+    "bytes": 36848589,
+    "sha256": "9d49c90c6832ed5316337b0db674b88122c6e3a302486749da337058489ea968"
+  },
+  {
+    "role": "repeats",
+    "genome": "nyl7",
+    "path": "/workspace/tevox-study/data/arabidopsis/nyl7/primary.repeats.gff3.gz",
+    "bytes": 661433,
+    "sha256": "fc94890bbc9589ed95f259ae73f9d9d1ffabe94c4733771277e351a25a39f869"
+  },
+  {
+    "role": "genes",
+    "genome": "nyl7",
+    "path": "/workspace/tevox-study/data/arabidopsis/nyl7/primary.genes.gff3.gz",
+    "bytes": 2475140,
+    "sha256": "33a86bac2d67ae21bf5474eaeb8389089289049d538b7fe6066d5e4f68b45b21"
+  },
+  {
+    "role": "fasta",
+    "genome": "sq1",
+    "path": "/workspace/tevox-study/data/arabidopsis/sq1/6966.scaffolds_corrected.v2.1.fasta.gz",
+    "bytes": 37121959,
+    "sha256": "5402c511b465072bec35e3810fc9f56fc3065abefb8ed6d855c12f1546b15da9"
+  },
+  {
+    "role": "repeats",
+    "genome": "sq1",
+    "path": "/workspace/tevox-study/data/arabidopsis/sq1/primary.repeats.gff3.gz",
+    "bytes": 632402,
+    "sha256": "13760b552f9253e456820b8e857cdf61a9db45e59725fb9f42dc731ea5088857"
+  },
+  {
+    "role": "genes",
+    "genome": "sq1",
+    "path": "/workspace/tevox-study/data/arabidopsis/sq1/primary.genes.gff3.gz",
+    "bytes": 2496047,
+    "sha256": "69753a3c5e7af0c3f6ca334afb6bce9c0cc4f3ae5be29d4232a65e8fb5c80c89"
+  }
+]

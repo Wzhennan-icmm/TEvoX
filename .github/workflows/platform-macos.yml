@@ -1,0 +1,67 @@
+name: Native macOS packages
+on:
+  push:
+    branches: [main, 'agent/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {runner: macos-15-intel, arch: x86_64}
+          - {runner: macos-15, arch: arm64}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    env:
+      EXPECTED_ARCH: ${{ matrix.arch }}
+      PACKAGE_REVISION: ci-${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Native compiler, core and script regression
+        run: |
+          test "$(uname -m)" = "$EXPECTED_ARCH"
+          xcrun clang --version
+          make CC=clang CFLAGS='-O2 -g -Werror' check
+          python3 tests/test_macos_scripts.py
+      - name: Native and Universal packages, installation and extracted tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          report_failure() {
+            result=$?
+            python3 -c 'import os,pathlib; p=pathlib.Path(os.environ["RUNNER_TEMP"])/"package.log"; s="\n".join(p.read_text(errors="replace").splitlines()[-20:]); print("::error::"+s.replace("%","%25").replace("\r","%0D").replace("\n","%0A"))'
+            exit "$result"
+          }
+          trap report_failure ERR
+          exec > >(tee "$RUNNER_TEMP/package.log") 2>&1
+          set -x
+          output="$RUNNER_TEMP/tevox packages"
+          sh scripts/package-macos.sh --revision "$PACKAGE_REVISION" --output-dir "$output"
+          sh scripts/package-macos.sh --universal --revision "$PACKAGE_REVISION" --output-dir "$output"
+          xcrun lipo build/macos/universal/tevox -verify_arch x86_64 arm64
+          for arch in x86_64 arm64; do
+            xcrun vtool -arch "$arch" -show-build build/macos/universal/tevox
+          done
+          sh scripts/install-macos.sh --universal --prefix "$RUNNER_TEMP/user install"
+          TEVOX_BIN="$RUNNER_TEMP/user install/bin/tevox" bash tests/run_tests.sh
+          for helper in "$RUNNER_TEMP/user install/bin/tevox-"*; do "$helper" --help >/dev/null; done
+          for arch in "$EXPECTED_ARCH" universal; do
+            package="tevox-$PACKAGE_REVISION-macos-$arch"
+            (cd "$output" && shasum -a 256 -c "$package.tar.gz.sha256")
+            mkdir -p "$RUNNER_TEMP/extracted $arch"
+            tar -xzf "$output/$package.tar.gz" -C "$RUNNER_TEMP/extracted $arch"
+            binary="$RUNNER_TEMP/extracted $arch/$package/bin/tevox"
+            codesign --verify --strict "$binary"
+            TEVOX_BIN="$binary" bash tests/run_tests.sh
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}-packages
+          path: ${{ runner.temp }}/tevox packages/*

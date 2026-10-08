@@ -1,0 +1,783 @@
+{
+  "completed_at": "2026-10-03T08:28:21.389737+00:00",
+  "dna_iupac_valid": true,
+  "excluded_bases": 5459687,
+  "excluded_sequence_count": 188,
+  "excluded_sequences": [
+    {
+      "length": 138317,
+      "sequence_id": "CAKLHV020000001.1"
+    },
+    {
+      "length": 128609,
+      "sequence_id": "CAKLHV020000002.1"
+    },
+    {
+      "length": 144106,
+      "sequence_id": "CAKLHV020000003.1"
+    },
+    {
+      "length": 126419,
+      "sequence_id": "CAKLHV020000004.1"
+    },
+    {
+      "length": 20142,
+      "sequence_id": "CAKLHV020000005.1"
+    },
+    {
+      "length": 26970,
+      "sequence_id": "CAKLHV020000006.1"
+    },
+    {
+      "length": 26748,
+      "sequence_id": "CAKLHV020000007.1"
+    },
+    {
+      "length": 76158,
+      "sequence_id": "CAKLHV020000008.1"
+    },
+    {
+      "length": 46816,
+      "sequence_id": "CAKLHV020000009.1"
+    },
+    {
+      "length": 55588,
+      "sequence_id": "CAKLHV020000010.1"
+    },
+    {
+      "length": 81073,
+      "sequence_id": "CAKLHV020000011.1"
+    },
+    {
+      "length": 23134,
+      "sequence_id": "CAKLHV020000012.1"
+    },
+    {
+      "length": 20257,
+      "sequence_id": "CAKLHV020000013.1"
+    },
+    {
+      "length": 20225,
+      "sequence_id": "CAKLHV020000014.1"
+    },
+    {
+      "length": 57224,
+      "sequence_id": "CAKLHV020000015.1"
+    },
+    {
+      "length": 65991,
+      "sequence_id": "CAKLHV020000016.1"
+    },
+    {
+      "length": 11098,
+      "sequence_id": "CAKLHV020000017.1"
+    },
+    {
+      "length": 119114,
+      "sequence_id": "CAKLHV020000018.1"
+    },
+    {
+      "length": 77686,
+      "sequence_id": "CAKLHV020000019.1"
+    },
+    {
+      "length": 17404,
+      "sequence_id": "CAKLHV020000020.1"
+    },
+    {
+      "length": 88675,
+      "sequence_id": "CAKLHV020000021.1"
+    },
+    {
+      "length": 18156,
+      "sequence_id": "CAKLHV020000022.1"
+    },
+    {
+      "length": 55351,
+      "sequence_id": "CAKLHV020000023.1"
+    },
+    {
+      "length": 20600,
+      "sequence_id": "CAKLHV020000024.1"
+    },
+    {
+      "length": 90138,
+      "sequence_id": "CAKLHV020000025.1"
+    },
+    {
+      "length": 17007,
+      "sequence_id": "CAKLHV020000026.1"
+    },
+    {
+      "length": 16004,
+      "sequence_id": "CAKLHV020000027.1"
+    },
+    {
+      "length": 12926,
+      "sequence_id": "CAKLHV020000028.1"
+    },
+    {
+      "length": 44402,
+      "sequence_id": "CAKLHV020000029.1"
+    },
+    {
+      "length": 38099,
+      "sequence_id": "CAKLHV020000030.1"
+    },
+    {
+      "length": 12678,
+      "sequence_id": "CAKLHV020000031.1"
+    },
+    {
+      "length": 72131,
+      "sequence_id": "CAKLHV020000032.1"
+    },
+    {
+      "length": 92087,
+      "sequence_id": "CAKLHV020000033.1"
+    },
+    {
+      "length": 23734,
+      "sequence_id": "CAKLHV020000034.1"
+    },
+    {
+      "length": 79518,
+      "sequence_id": "CAKLHV020000035.1"
+    },
+    {
+      "length": 40875,
+      "sequence_id": "CAKLHV020000036.1"
+    },
+    {
+      "length": 11367,
+      "sequence_id": "CAKLHV020000037.1"
+    },
+    {
+      "length": 21868,
+      "sequence_id": "CAKLHV020000038.1"
+    },
+    {
+      "length": 74652,
+      "sequence_id": "CAKLHV020000039.1"
+    },
+    {
+      "length": 73156,
+      "sequence_id": "CAKLHV020000040.1"
+    },
+    {
+      "length": 12805,
+      "sequence_id": "CAKLHV020000041.1"
+    },
+    {
+      "length": 98006,
+      "sequence_id": "CAKLHV020000042.1"
+    },
+    {
+      "length": 33793,
+      "sequence_id": "CAKLHV020000043.1"
+    },
+    {
+      "length": 64611,
+      "sequence_id": "CAKLHV020000044.1"
+    },
+    {
+      "length": 11928,
+      "sequence_id": "CAKLHV020000045.1"
+    },
+    {
+      "length": 19956,
+      "sequence_id": "CAKLHV020000046.1"
+    },
+    {
+      "length": 73190,
+      "sequence_id": "CAKLHV020000047.1"
+    },
+    {
+      "length": 15183,
+      "sequence_id": "CAKLHV020000048.1"
+    },
+    {
+      "length": 81369,
+      "sequence_id": "CAKLHV020000049.1"
+    },
+    {
+      "length": 62723,
+      "sequence_id": "CAKLHV020000050.1"
+    },
+    {
+      "length": 63768,
+      "sequence_id": "CAKLHV020000051.1"
+    },
+    {
+      "length": 11324,
+      "sequence_id": "CAKLHV020000052.1"
+    },
+    {
+      "length": 23924,
+      "sequence_id": "CAKLHV020000053.1"
+    },
+    {
+      "length": 11909,
+      "sequence_id": "CAKLHV020000054.1"
+    },
+    {
+      "length": 19910,
+      "sequence_id": "CAKLHV020000055.1"
+    },
+    {
+      "length": 13625,
+      "sequence_id": "CAKLHV020000056.1"
+    },
+    {
+      "length": 12547,
+      "sequence_id": "CAKLHV020000057.1"
+    },
+    {
+      "length": 23988,
+      "sequence_id": "CAKLHV020000058.1"
+    },
+    {
+      "length": 26130,
+      "sequence_id": "CAKLHV020000059.1"
+    },
+    {
+      "length": 18902,
+      "sequence_id": "CAKLHV020000060.1"
+    },
+    {
+      "length": 38461,
+      "sequence_id": "CAKLHV020000061.1"
+    },
+    {
+      "length": 20501,
+      "sequence_id": "CAKLHV020000062.1"
+    },
+    {
+      "length": 24376,
+      "sequence_id": "CAKLHV020000063.1"
+    },
+    {
+      "length": 126924,
+      "sequence_id": "CAKLHV020000064.1"
+    },
+    {
+      "length": 13264,
+      "sequence_id": "CAKLHV020000065.1"
+    },
+    {
+      "length": 16300,
+      "sequence_id": "CAKLHV020000066.1"
+    },
+    {
+      "length": 10182,
+      "sequence_id": "CAKLHV020000067.1"
+    },
+    {
+      "length": 13280,
+      "sequence_id": "CAKLHV020000068.1"
+    },
+    {
+      "length": 10459,
+      "sequence_id": "CAKLHV020000069.1"
+    },
+    {
+      "length": 27074,
+      "sequence_id": "CAKLHV020000070.1"
+    },
+    {
+      "length": 12245,
+      "sequence_id": "CAKLHV020000071.1"
+    },
+    {
+      "length": 23244,
+      "sequence_id": "CAKLHV020000072.1"
+    },
+    {
+      "length": 10158,
+      "sequence_id": "CAKLHV020000073.1"
+    },
+    {
+      "length": 36015,
+      "sequence_id": "CAKLHV020000074.1"
+    },
+    {
+      "length": 11277,
+      "sequence_id": "CAKLHV020000075.1"
+    },
+    {
+      "length": 18301,
+      "sequence_id": "CAKLHV020000076.1"
+    },
+    {
+      "length": 10444,
+      "sequence_id": "CAKLHV020000077.1"
+    },
+    {
+      "length": 22208,
+      "sequence_id": "CAKLHV020000078.1"
+    },
+    {
+      "length": 37085,
+      "sequence_id": "CAKLHV020000079.1"
+    },
+    {
+      "length": 12628,
+      "sequence_id": "CAKLHV020000080.1"
+    },
+    {
+      "length": 12412,
+      "sequence_id": "CAKLHV020000081.1"
+    },
+    {
+      "length": 20074,
+      "sequence_id": "CAKLHV020000082.1"
+    },
+    {
+      "length": 19354,
+      "sequence_id": "CAKLHV020000083.1"
+    },
+    {
+      "length": 26272,
+      "sequence_id": "CAKLHV020000084.1"
+    },
+    {
+      "length": 12230,
+      "sequence_id": "CAKLHV020000085.1"
+    },
+    {
+      "length": 20811,
+      "sequence_id": "CAKLHV020000086.1"
+    },
+    {
+      "length": 14256,
+      "sequence_id": "CAKLHV020000087.1"
+    },
+    {
+      "length": 17379,
+      "sequence_id": "CAKLHV020000088.1"
+    },
+    {
+      "length": 25937,
+      "sequence_id": "CAKLHV020000089.1"
+    },
+    {
+      "length": 17605,
+      "sequence_id": "CAKLHV020000090.1"
+    },
+    {
+      "length": 17054,
+      "sequence_id": "CAKLHV020000091.1"
+    },
+    {
+      "length": 11057,
+      "sequence_id": "CAKLHV020000092.1"
+    },
+    {
+      "length": 15781,
+      "sequence_id": "CAKLHV020000093.1"
+    },
+    {
+      "length": 25159,
+      "sequence_id": "CAKLHV020000094.1"
+    },
+    {
+      "length": 12427,
+      "sequence_id": "CAKLHV020000095.1"
+    },
+    {
+      "length": 11431,
+      "sequence_id": "CAKLHV020000096.1"
+    },
+    {
+      "length": 10088,
+      "sequence_id": "CAKLHV020000097.1"
+    },
+    {
+      "length": 16877,
+      "sequence_id": "CAKLHV020000098.1"
+    },
+    {
+      "length": 12348,
+      "sequence_id": "CAKLHV020000099.1"
+    },
+    {
+      "length": 12049,
+      "sequence_id": "CAKLHV020000100.1"
+    },
+    {
+      "length": 13249,
+      "sequence_id": "CAKLHV020000101.1"
+    },
+    {
+      "length": 18207,
+      "sequence_id": "CAKLHV020000102.1"
+    },
+    {
+      "length": 12269,
+      "sequence_id": "CAKLHV020000103.1"
+    },
+    {
+      "length": 22625,
+      "sequence_id": "CAKLHV020000104.1"
+    },
+    {
+      "length": 31327,
+      "sequence_id": "CAKLHV020000105.1"
+    },
+    {
+      "length": 21376,
+      "sequence_id": "CAKLHV020000106.1"
+    },
+    {
+      "length": 30658,
+      "sequence_id": "CAKLHV020000107.1"
+    },
+    {
+      "length": 30345,
+      "sequence_id": "CAKLHV020000108.1"
+    },
+    {
+      "length": 17816,
+      "sequence_id": "CAKLHV020000109.1"
+    },
+    {
+      "length": 13720,
+      "sequence_id": "CAKLHV020000110.1"
+    },
+    {
+      "length": 14895,
+      "sequence_id": "CAKLHV020000111.1"
+    },
+    {
+      "length": 18023,
+      "sequence_id": "CAKLHV020000112.1"
+    },
+    {
+      "length": 24015,
+      "sequence_id": "CAKLHV020000113.1"
+    },
+    {
+      "length": 10261,
+      "sequence_id": "CAKLHV020000114.1"
+    },
+    {
+      "length": 11596,
+      "sequence_id": "CAKLHV020000115.1"
+    },
+    {
+      "length": 23407,
+      "sequence_id": "CAKLHV020000116.1"
+    },
+    {
+      "length": 21898,
+      "sequence_id": "CAKLHV020000117.1"
+    },
+    {
+      "length": 19782,
+      "sequence_id": "CAKLHV020000118.1"
+    },
+    {
+      "length": 16502,
+      "sequence_id": "CAKLHV020000119.1"
+    },
+    {
+      "length": 17927,
+      "sequence_id": "CAKLHV020000120.1"
+    },
+    {
+      "length": 10588,
+      "sequence_id": "CAKLHV020000121.1"
+    },
+    {
+      "length": 10113,
+      "sequence_id": "CAKLHV020000122.1"
+    },
+    {
+      "length": 11327,
+      "sequence_id": "CAKLHV020000123.1"
+    },
+    {
+      "length": 30951,
+      "sequence_id": "CAKLHV020000124.1"
+    },
+    {
+      "length": 13740,
+      "sequence_id": "CAKLHV020000125.1"
+    },
+    {
+      "length": 24134,
+      "sequence_id": "CAKLHV020000126.1"
+    },
+    {
+      "length": 16164,
+      "sequence_id": "CAKLHV020000127.1"
+    },
+    {
+      "length": 12552,
+      "sequence_id": "CAKLHV020000128.1"
+    },
+    {
+      "length": 17910,
+      "sequence_id": "CAKLHV020000129.1"
+    },
+    {
+      "length": 14130,
+      "sequence_id": "CAKLHV020000130.1"
+    },
+    {
+      "length": 26280,
+      "sequence_id": "CAKLHV020000131.1"
+    },
+    {
+      "length": 22168,
+      "sequence_id": "CAKLHV020000132.1"
+    },
+    {
+      "length": 15916,
+      "sequence_id": "CAKLHV020000133.1"
+    },
+    {
+      "length": 10204,
+      "sequence_id": "CAKLHV020000134.1"
+    },
+    {
+      "length": 14127,
+      "sequence_id": "CAKLHV020000135.1"
+    },
+    {
+      "length": 19223,
+      "sequence_id": "CAKLHV020000136.1"
+    },
+    {
+      "length": 14048,
+      "sequence_id": "CAKLHV020000137.1"
+    },
+    {
+      "length": 14878,
+      "sequence_id": "CAKLHV020000138.1"
+    },
+    {
+      "length": 21277,
+      "sequence_id": "CAKLHV020000139.1"
+    },
+    {
+      "length": 12284,
+      "sequence_id": "CAKLHV020000140.1"
+    },
+    {
+      "length": 13814,
+      "sequence_id": "CAKLHV020000141.1"
+    },
+    {
+      "length": 30806,
+      "sequence_id": "CAKLHV020000142.1"
+    },
+    {
+      "length": 20253,
+      "sequence_id": "CAKLHV020000143.1"
+    },
+    {
+      "length": 12378,
+      "sequence_id": "CAKLHV020000144.1"
+    },
+    {
+      "length": 13775,
+      "sequence_id": "CAKLHV020000145.1"
+    },
+    {
+      "length": 19559,
+      "sequence_id": "CAKLHV020000146.1"
+    },
+    {
+      "length": 16014,
+      "sequence_id": "CAKLHV020000147.1"
+    },
+    {
+      "length": 21743,
+      "sequence_id": "CAKLHV020000148.1"
+    },
+    {
+      "length": 21706,
+      "sequence_id": "CAKLHV020000149.1"
+    },
+    {
+      "length": 13025,
+      "sequence_id": "CAKLHV020000150.1"
+    },
+    {
+      "length": 40904,
+      "sequence_id": "CAKLHV020000151.1"
+    },
+    {
+      "length": 16695,
+      "sequence_id": "CAKLHV020000152.1"
+    },
+    {
+      "length": 45344,
+      "sequence_id": "CAKLHV020000153.1"
+    },
+    {
+      "length": 24590,
+      "sequence_id": "CAKLHV020000154.1"
+    },
+    {
+      "length": 14874,
+      "sequence_id": "CAKLHV020000155.1"
+    },
+    {
+      "length": 11177,
+      "sequence_id": "CAKLHV020000156.1"
+    },
+    {
+      "length": 29836,
+      "sequence_id": "CAKLHV020000157.1"
+    },
+    {
+      "length": 18273,
+      "sequence_id": "CAKLHV020000158.1"
+    },
+    {
+      "length": 51192,
+      "sequence_id": "CAKLHV020000159.1"
+    },
+    {
+      "length": 11257,
+      "sequence_id": "CAKLHV020000160.1"
+    },
+    {
+      "length": 13811,
+      "sequence_id": "CAKLHV020000161.1"
+    },
+    {
+      "length": 56495,
+      "sequence_id": "CAKLHV020000162.1"
+    },
+    {
+      "length": 59613,
+      "sequence_id": "CAKLHV020000163.1"
+    },
+    {
+      "length": 25909,
+      "sequence_id": "CAKLHV020000164.1"
+    },
+    {
+      "length": 10497,
+      "sequence_id": "CAKLHV020000165.1"
+    },
+    {
+      "length": 16209,
+      "sequence_id": "CAKLHV020000166.1"
+    },
+    {
+      "length": 10535,
+      "sequence_id": "CAKLHV020000167.1"
+    },
+    {
+      "length": 24307,
+      "sequence_id": "CAKLHV020000168.1"
+    },
+    {
+      "length": 18471,
+      "sequence_id": "CAKLHV020000169.1"
+    },
+    {
+      "length": 18678,
+      "sequence_id": "CAKLHV020000170.1"
+    },
+    {
+      "length": 26033,
+      "sequence_id": "CAKLHV020000171.1"
+    },
+    {
+      "length": 19443,
+      "sequence_id": "CAKLHV020000172.1"
+    },
+    {
+      "length": 15714,
+      "sequence_id": "CAKLHV020000173.1"
+    },
+    {
+      "length": 13669,
+      "sequence_id": "CAKLHV020000174.1"
+    },
+    {
+      "length": 22175,
+      "sequence_id": "CAKLHV020000175.1"
+    },
+    {
+      "length": 13059,
+      "sequence_id": "CAKLHV020000176.1"
+    },
+    {
+      "length": 21730,
+      "sequence_id": "CAKLHV020000177.1"
+    },
+    {
+      "length": 13571,
+      "sequence_id": "CAKLHV020000178.1"
+    },
+    {
+      "length": 20754,
+      "sequence_id": "CAKLHV020000179.1"
+    },
+    {
+      "length": 16829,
+      "sequence_id": "CAKLHV020000180.1"
+    },
+    {
+      "length": 14133,
+      "sequence_id": "CAKLHV020000181.1"
+    },
+    {
+      "length": 15282,
+      "sequence_id": "CAKLHV020000182.1"
+    },
+    {
+      "length": 25043,
+      "sequence_id": "CAKLHV020000183.1"
+    },
+    {
+      "length": 14958,
+      "sequence_id": "CAKLHV020000184.1"
+    },
+    {
+      "length": 18215,
+      "sequence_id": "CAKLHV020000185.1"
+    },
+    {
+      "length": 27206,
+      "sequence_id": "CAKLHV020000186.1"
+    },
+    {
+      "length": 10800,
+      "sequence_id": "CAKLHV020000187.1"
+    },
+    {
+      "length": 16300,
+      "sequence_id": "OW971572.1"
+    }
+  ],
+  "gzip_input": true,
+  "gzip_integrity_checked": true,
+  "input": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz",
+  "lengths_scope": "all input sequences",
+  "lowercase_bases": 850952700,
+  "n_bases": 6079266,
+  "n_run_count": 1127,
+  "n_runs_coordinates": "0-based half-open; all input sequences",
+  "outputs": {
+    "lengths": "/workspace/tevox-study/data/mouse/c57/source.fasta.lengths.tsv",
+    "n_runs": "/workspace/tevox-study/data/mouse/c57/source.N_runs.bed",
+    "selected_fasta": "/workspace/tevox-study/data/mouse/c57/primary.fna.gz",
+    "summary": "/workspace/tevox-study/data/mouse/c57/primary.fasta_selection.json"
+  },
+  "schema_version": 1,
+  "selected_bases": 2509150141,
+  "selected_sequence_count": 20,
+  "selection_file": "/workspace/tevox-study/data/mouse/c57/primary_sequence_ids.txt",
+  "selection_policy": "exact names, retain input order",
+  "sequence_count": 208,
+  "sequence_ids_unique": true,
+  "sequence_name_policy": "exact_first_header_token; no normalization",
+  "total_bases": 2514609828
+}

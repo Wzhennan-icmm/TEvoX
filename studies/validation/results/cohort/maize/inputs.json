@@ -1,0 +1,44 @@
+[
+  {
+    "role": "fasta",
+    "genome": "b73",
+    "path": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.fa.gz",
+    "bytes": 684902666,
+    "sha256": "bcb6b02e7d26545c999d1c7e46fdafa919434c6c87ccb40da3d11ec8b51e91f4"
+  },
+  {
+    "role": "repeats",
+    "genome": "b73",
+    "path": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.repeatMasker.out.gz",
+    "bytes": 45453820,
+    "sha256": "6ea5e5d068539c5f900fbafebbc0d8ea3bc7902455fce432c9530d50f5377819"
+  },
+  {
+    "role": "genes",
+    "genome": "b73",
+    "path": "/workspace/tevox-study/data/maize/b73/predicted.genes.gff3.gz",
+    "bytes": 2627019,
+    "sha256": "bb04b0925e56d1fa54c9c8751b44a9b48f8348b1ed363bc28ae9d2e0842b5dae"
+  },
+  {
+    "role": "fasta",
+    "genome": "oh43",
+    "path": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.fa.gz",
+    "bytes": 684860257,
+    "sha256": "f6917684fa99eb29a27fd59511f2e5108aab6e7ba718c3881d7fe7a446a1bfdc"
+  },
+  {
+    "role": "repeats",
+    "genome": "oh43",
+    "path": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.repeatMasker.out.gz",
+    "bytes": 45545022,
+    "sha256": "0d8440a3b9fce766ef6b0a91f22a45fbcaeeccb051686d9a5c6c8241f78daf68"
+  },
+  {
+    "role": "genes",
+    "genome": "oh43",
+    "path": "/workspace/tevox-study/data/maize/oh43/predicted.genes.gff3.gz",
+    "bytes": 2627687,
+    "sha256": "13b2527ca13bfb692c9af1351fa8b4cb802b22c88c5c18053ca3ab2ce7c43936"
+  }
+]

@@ -1,0 +1,60 @@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Python 3.12.3
+python3 -c 'import sys; sys.exit("Python 3.8+ is required for tests and helper commands" if sys.version_info < (3, 8) else 0)'
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/aln_mummer_delta.c" -o "/evidence/build/aln_mummer_delta.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/engine.c" -o "/evidence/build/engine.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/index.c" -o "/evidence/build/index.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/inference.c" -o "/evidence/build/inference.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/io.c" -o "/evidence/build/io.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/main.c" -o "/evidence/build/main.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/output.c" -o "/evidence/build/output.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/sha256.c" -o "/evidence/build/sha256.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/synteny.c" -o "/evidence/build/synteny.o"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -MMD -MP -c "src/util.c" -o "/evidence/build/util.o"
+mkdir -p "/evidence/"
+gcc -O2 -g -Werror  /evidence/build/aln_mummer_delta.o /evidence/build/engine.o /evidence/build/index.o /evidence/build/inference.o /evidence/build/io.o /evidence/build/main.o /evidence/build/output.o /evidence/build/sha256.o /evidence/build/synteny.o /evidence/build/util.o -lm -o "/evidence/tevox"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow  tests/index_test.c src/index.c -o "/evidence/build/index_test"
+mkdir -p "/evidence/build/"
+gcc -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Iinclude  -O2 -g -Werror -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wshadow  tests/delta_test.c src/aln_mummer_delta.c src/io.c src/sha256.c src/util.c -lm -o "/evidence/build/delta_test"
+"/evidence/build/index_test"
+"/evidence/build/delta_test" tests/data/conflict/A.fa tests/data/conflict/A.gff3 tests/data/conflict/B.fa tests/data/reverse/B.gff3 tests/data/v04/delta/plus.delta tests/data/v04/delta/reverse.delta
+TEVOX_BIN="/evidence/tevox" PYTHON="python3" bash ./tests/run_tests.sh
+All TEvoX tests passed.
+install -d "/evidence/stage/usr/bin"
+install -m 0755 "/evidence/tevox" "/evidence/stage/usr/bin/tevox"
+install -m 0755 scripts/tevox_phylo.py "/evidence/stage/usr/bin/tevox-phylo"
+install -m 0755 scripts/tevox_score_audit.py "/evidence/stage/usr/bin/tevox-score-audit"
+install -m 0755 scripts/tevox_benchmark.py "/evidence/stage/usr/bin/tevox-benchmark"
+install -m 0755 scripts/tevox_export_training.py "/evidence/stage/usr/bin/tevox-export-training"
+install -m 0755 scripts/tevox_split_audit.py "/evidence/stage/usr/bin/tevox-split-audit"
+tevox 0.5.0-alpha.2 (schema 1.2.0)
+All TEvoX tests passed.
+TEVOX_V05_MATRIX_PASS

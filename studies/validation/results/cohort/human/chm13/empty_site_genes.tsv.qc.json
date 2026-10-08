@@ -1,0 +1,19 @@
+{
+  "candidate_coordinate_system": "one-based-inclusive",
+  "candidates": "/workspace/tevox-v05-study/final/human/chm13/empty_site_source_fragments.tsv",
+  "counts": {
+    "candidates": 929,
+    "nearest": 445,
+    "overlap": 484
+  },
+  "distance_definition": "Minimum gene-body base-coordinate difference; overlapping intervals=0; adjacent intervals=1; all nearest ties reported.",
+  "gene_counts": {
+    "other_feature_rows_skipped": 3932234,
+    "retained_gene_feature_rows": 60619,
+    "source_feature_rows": 3992853
+  },
+  "genes": "/workspace/tevox-study/data/human/chm13/selected_nuclear.genes.gff3.gz",
+  "interpretation": "Gene proximity is descriptive; annotation fragments are not confirmed TE insertions or expression/causal effects.",
+  "metadata": "/workspace/tevox-v05-study/final/human/chm13/repeats.metadata.tsv",
+  "warnings": []
+}

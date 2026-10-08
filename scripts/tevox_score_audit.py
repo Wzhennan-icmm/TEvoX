@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import gzip
+
 import argparse
 import bisect
 import csv
@@ -16,7 +18,24 @@ from pathlib import Path
 from typing import Iterable, Sequence
 
 
-Record = tuple[float, int, str]
+from typing import Tuple
+
+Record = Tuple[float, int, str]
+
+
+def table_path(path):
+    path = Path(path)
+    compressed = Path(str(path) + ".gz")
+    if path.suffix == ".tsv" and compressed.is_file():
+        if path.is_file():
+            raise ValueError("ambiguous plain/compressed table: " + str(path))
+        return compressed
+    return path
+
+
+def open_table(path):
+    path = table_path(path)
+    return gzip.open(path, "rt", newline="", encoding="utf-8") if path.suffix == ".gz" else path.open(newline="", encoding="utf-8")
 
 
 def resolved_path(path: Path, label: str) -> Path:
@@ -64,7 +83,7 @@ def fsync_directory(path: Path) -> None:
 
 def read_rows(path: Path, table_name: str) -> tuple[list[str], list[dict[str, str]]]:
     try:
-        handle = path.open(newline="", encoding="utf-8")
+        handle = open_table(path)
     except OSError as exc:
         raise SystemExit(f"cannot open {table_name} TSV {path}: {exc}") from exc
     with handle:

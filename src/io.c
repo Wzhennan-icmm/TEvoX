@@ -423,6 +423,11 @@ static int annotation(TvGenome *genome, int genome_index)
             if (!tv_parse_i64(fields[3], &start) || !tv_parse_i64(fields[4], &end)) {
                 goto record_bad;
             }
+            /* Validate the 1-based interval before subtracting: INT64_MIN
+             * is parseable but start - 1 would invoke signed overflow. */
+            if (start < 1 || end < start) {
+                goto record_bad;
+            }
             te.start = start - 1;
             te.end = end;
             te.strand = *fields[6] == '\0' ? '.' : *fields[6];
@@ -550,6 +555,8 @@ void tv_run_free(TvRun *run)
         free(run->pafs[index].tname);
         free(run->pafs[index].ops);
         free(run->pafs[index].identity_ops);
+        free(run->pafs[index].op_checkpoints);
+        free(run->pafs[index].identity_checkpoints);
         free(run->pafs[index].source_path);
     }
     for (index = 0; index < run->n_projections; index++) {
@@ -1165,6 +1172,20 @@ int tv_add_paf_file(TvRun *run, int query_genome, int target_genome,
             memcpy(paf.identity_ops, paf.ops, paf.n_ops * sizeof(*paf.ops));
             paf.n_identity_ops = paf.n_ops;
             paf.identity_method = TV_IDENTITY_EQX;
+        }
+        /* PAF cg/cs are in target-forward traversal order. The projection
+         * engine traverses query coordinates forward on either strand. */
+        if (paf.strand == '-') {
+            for (size_t index = 0; index < paf.n_ops / 2; index++) {
+                TvCigarOp swap = paf.ops[index];
+                paf.ops[index] = paf.ops[paf.n_ops - 1 - index];
+                paf.ops[paf.n_ops - 1 - index] = swap;
+            }
+            for (size_t index = 0; index < paf.n_identity_ops / 2; index++) {
+                TvCigarOp swap = paf.identity_ops[index];
+                paf.identity_ops[index] = paf.identity_ops[paf.n_identity_ops - 1 - index];
+                paf.identity_ops[paf.n_identity_ops - 1 - index] = swap;
+            }
         }
         paf.mapq_observed = parsed_mapq != 255;
         paf.mapq = paf.mapq_observed ? parsed_mapq : -1;

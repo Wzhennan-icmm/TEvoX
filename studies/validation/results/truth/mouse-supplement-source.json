@@ -1,0 +1,7 @@
+{
+  "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10203049/supplementaryFiles",
+  "bytes": 120924049,
+  "sha256": "c196efbe67a2259cb20b220c29c0e2e982001bd84332fb58ccb17b7389c013bd",
+  "pcr_table": "mouse-mmc4.xlsx",
+  "pcr_sha256": "c8ef30b315b2ba38c810b668f18c3ebb5105557e58eb58387d03389e522cca1b"
+}

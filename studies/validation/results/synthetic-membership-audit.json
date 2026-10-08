@@ -1,0 +1,247 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "case": "loci128_copies2_missing0_seed17",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 384
+    },
+    {
+      "case": "loci128_copies2_missing0_seed17",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 384
+    },
+    {
+      "case": "loci128_copies2_missing0_seed31",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 384
+    },
+    {
+      "case": "loci128_copies2_missing0_seed31",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 384
+    },
+    {
+      "case": "loci128_copies2_missing0_seed53",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 384
+    },
+    {
+      "case": "loci128_copies2_missing0_seed53",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 384
+    },
+    {
+      "case": "loci128_copies2_missing1_seed17",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 365
+    },
+    {
+      "case": "loci128_copies2_missing1_seed17",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 365
+    },
+    {
+      "case": "loci128_copies2_missing1_seed31",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 365
+    },
+    {
+      "case": "loci128_copies2_missing1_seed31",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 365
+    },
+    {
+      "case": "loci128_copies2_missing1_seed53",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 365
+    },
+    {
+      "case": "loci128_copies2_missing1_seed53",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 365
+    },
+    {
+      "case": "loci128_copies4_missing0_seed17",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 640
+    },
+    {
+      "case": "loci128_copies4_missing0_seed17",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 640
+    },
+    {
+      "case": "loci128_copies4_missing0_seed31",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 640
+    },
+    {
+      "case": "loci128_copies4_missing0_seed31",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 640
+    },
+    {
+      "case": "loci128_copies4_missing0_seed53",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 640
+    },
+    {
+      "case": "loci128_copies4_missing0_seed53",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 640
+    },
+    {
+      "case": "loci128_copies4_missing1_seed17",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 621
+    },
+    {
+      "case": "loci128_copies4_missing1_seed17",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 621
+    },
+    {
+      "case": "loci128_copies4_missing1_seed31",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 621
+    },
+    {
+      "case": "loci128_copies4_missing1_seed31",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 621
+    },
+    {
+      "case": "loci128_copies4_missing1_seed53",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 621
+    },
+    {
+      "case": "loci128_copies4_missing1_seed53",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 621
+    },
+    {
+      "case": "loci128_copies6_missing0_seed17",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 896
+    },
+    {
+      "case": "loci128_copies6_missing0_seed17",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 896
+    },
+    {
+      "case": "loci128_copies6_missing0_seed31",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 896
+    },
+    {
+      "case": "loci128_copies6_missing0_seed31",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 896
+    },
+    {
+      "case": "loci128_copies6_missing0_seed53",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 896
+    },
+    {
+      "case": "loci128_copies6_missing0_seed53",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 896
+    },
+    {
+      "case": "loci128_copies6_missing1_seed17",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 877
+    },
+    {
+      "case": "loci128_copies6_missing1_seed17",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 877
+    },
+    {
+      "case": "loci128_copies6_missing1_seed31",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 877
+    },
+    {
+      "case": "loci128_copies6_missing1_seed31",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 877
+    },
+    {
+      "case": "loci128_copies6_missing1_seed53",
+      "condition": "with_synteny",
+      "status": "PASS",
+      "members": 877
+    },
+    {
+      "case": "loci128_copies6_missing1_seed53",
+      "condition": "without_synteny",
+      "status": "PASS",
+      "members": 877
+    },
+    {
+      "case": "loci100_copies1_missing0_seed17",
+      "condition": "sparse_pair",
+      "status": "PASS",
+      "members": 200
+    },
+    {
+      "case": "loci1000_copies1_missing0_seed17",
+      "condition": "sparse_pair",
+      "status": "PASS",
+      "members": 2000
+    },
+    {
+      "case": "loci10000_copies1_missing0_seed17",
+      "condition": "sparse_pair",
+      "status": "PASS",
+      "members": 20000
+    },
+    {
+      "case": "loci100000_copies1_missing0_seed17",
+      "condition": "sparse_pair",
+      "status": "PASS",
+      "members": 200000
+    }
+  ],
+  "checked_runs": 40,
+  "contract": "Exactly one predicted locus per observed truth member; complete membership universe; recomputed metrics match stored results."
+}

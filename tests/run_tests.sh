@@ -2,13 +2,15 @@
 set -euo pipefail
 
 repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-bin="$repo/tevox"
+bin=${TEVOX_BIN:-"$repo/tevox"}
+python=${PYTHON:-python3}
 data="$repo/tests/data"
 work=$(mktemp -d "${TMPDIR:-/tmp}/tevox.XXXXXX")
+export PYTHONPYCACHEPREFIX="$work/pycache"
 trap 'rm -rf "$work"' EXIT
 
 any_row() {
-    python3 - "$@" <<'PY'
+    "$python" - "$@" <<'PY'
 import csv
 import sys
 
@@ -54,18 +56,107 @@ for value in nan inf -inf; do
 done
 
 # Baseline pair: annotated match plus a cs-supported empty site.
+# Invalid 1-based coordinates must be rejected before conversion arithmetic.
+# The diagnostic check also distinguishes a sanitizer abort from validation.
+for coordinates in '-9223372036854775808 60' '0 60' '60 40' '9223372036854775807 9223372036854775807'; do
+    read -r invalid_start invalid_end <<EOF
+$coordinates
+EOF
+    printf 'chr1\tfixture\ttransposable_element\t%s\t%s\t.\t+\t.\tID=bad;family=Fam1\n' \
+        "$invalid_start" "$invalid_end" > "$work/invalid_coordinate.gff3"
+    if run_pair "$work/invalid_coordinate" \
+        "$data/pair/A.fa" "$work/invalid_coordinate.gff3" \
+        "$data/pair/B.fa" "$data/pair/B.gff3" "$data/pair/A_B.paf" \
+        >"$work/invalid_coordinate.stdout" 2>"$work/invalid_coordinate.stderr"; then
+        echo 'accepted an invalid GFF interval' >&2
+        exit 1
+    fi
+    if grep -E 'runtime error:|AddressSanitizer|UndefinedBehaviorSanitizer' \
+        "$work/invalid_coordinate.stderr" >/dev/null; then
+        cat "$work/invalid_coordinate.stderr" >&2
+        exit 1
+    fi
+    test ! -e "$work/invalid_coordinate.run.json"
+done
+
 run_pair "$work/pair" \
     "$data/pair/A.fa" "$data/pair/A.gff3" \
     "$data/pair/B.fa" "$data/pair/B.gff3" "$data/pair/A_B.paf"
 any_row "$work/pair.states.tsv" genome_id B state EMPTY_SITE_CONFIRMED claimable true
 any_row "$work/pair.edges.tsv" te_a A_shared te_b B_shared \
     independent_reciprocal false support_count 1 selected true
-python3 "$repo/tests/validate_schema.py" "$work/pair"
+"$python" "$repo/tests/validate_schema.py" "$work/pair"
 diff -u "$repo/tests/golden/pair.states.tsv" "$work/pair.states.tsv"
+
+# Native negative-strand PAF operations are target-forward, not query-forward.
+# The 10-base insertion lies at query [80,90), target boundary 10.
+"$python" - "$work" <<'PYTEST'
+import pathlib, sys
+p=pathlib.Path(sys.argv[1])
+(p/'asym_A.fa').write_text('>chr1\n'+'A'*100+'\n')
+(p/'asym_B.fa').write_text('>chr1\n'+'T'*90+'\n')
+(p/'asym_A.bed').write_text('chr1\t80\t90\tA_insert\t0\t+\tFam1\tLINE\n')
+(p/'asym_B.bed').write_text('chr1\t40\t50\tB_other\t0\t+\tOther\tLINE\n')
+(p/'asym.paf').write_text('chr1\t100\t0\t100\t-\tchr1\t90\t0\t90\t90\t100\t60\tcg:Z:10=10I80=\n')
+(p/'asym_cs.paf').write_text('chr1\t100\t0\t100\t-\tchr1\t90\t0\t90\t90\t100\t60\tcg:Z:10M10I80M\tcs:Z::10+tttttttttt:80\n')
+PYTEST
+for alignment in asym asym_cs; do
+    "$bin" pair --genome-a A --fasta-a "$work/asym_A.fa" --te-a "$work/asym_A.bed" \
+        --genome-b B --fasta-b "$work/asym_B.fa" --te-b "$work/asym_B.bed" \
+        --paf "$work/$alignment.paf" --flank 5 --candidate-window 0 --output "$work/$alignment" >/dev/null
+    any_row "$work/$alignment.evidence.tsv" source_te_id A_insert \
+        insertion_fraction 1.000000 legacy_state EMPTY_SITE_CONFIRMED claimable true
+    "$python" "$repo/tests/validate_schema.py" "$work/$alignment"
+done
+
+# An exact CIGAR may have no aligned bases within a particular TE/flank
+# window. Local identity and its method must both be missing in that case.
+"$python" - "$work" <<'PYGAP'
+import pathlib,sys
+p=pathlib.Path(sys.argv[1])
+(p/'gap_A.fa').write_text('>chr1\n'+'A'*1000+'\n')
+(p/'gap_B.fa').write_text('>chr1\n'+'A'*600+'\n')
+(p/'gap_A.bed').write_text('chr1\t200\t240\tinside_gap\t0\t+\tFAM\tDNA\n')
+(p/'gap_B.bed').write_text('chr1\t300\t340\tother\t0\t+\tOTHER\tDNA\n')
+(p/'gap.paf').write_text('chr1\t1000\t0\t1000\t+\tchr1\t600\t0\t600\t600\t1000\t60\tcg:Z:100=400I500=\n')
+PYGAP
+run_pair "$work/local_gap" "$work/gap_A.fa" "$work/gap_A.bed" \
+    "$work/gap_B.fa" "$work/gap_B.bed" "$work/gap.paf"
+any_row "$work/local_gap.evidence.tsv" source_te_id inside_gap \
+    local_identity . identity_method MISSING legacy_state UNCALLABLE claimable false
+"$python" "$repo/tests/validate_schema.py" "$work/local_gap"
+
+# Streaming gzip must retain every byte of the 17 table contracts.
+"$bin" pair --genome-a A --fasta-a "$data/pair/A.fa" --te-a "$data/pair/A.gff3" \
+    --genome-b B --fasta-b "$data/pair/B.fa" --te-b "$data/pair/B.gff3" \
+    --paf "$data/pair/A_B.paf" --flank 20 --candidate-window 10 \
+    --gzip-output --output "$work/compressed ; literal" >/dev/null
+"$python" "$repo/tests/validate_schema.py" "$work/compressed ; literal"
+"$python" - "$work" <<'PYGZIP'
+import gzip,json,pathlib,sys
+p=pathlib.Path(sys.argv[1]);run=json.loads((p/'compressed ; literal.run.json').read_text())
+assert run['output_compression']=='gzip'
+assert len(run['outputs'])==17
+for name in run['outputs']:
+    assert name.endswith('.tsv.gz')
+    with gzip.open(p/('compressed ; literal.'+name),'rb') as handle:
+        assert handle.read()==(p/('pair.'+name[:-3])).read_bytes(), name
+PYGZIP
+TEVOX_BIN="$bin" "$python" "$repo/tests/check_output_modes.py"
+mkdir "$work/failed-compressor"
+printf '#!/bin/sh\nexit 7\n' > "$work/failed-compressor/gzip"
+chmod +x "$work/failed-compressor/gzip"
+if PATH="$work/failed-compressor:$PATH" "$bin" pair \
+    --genome-a A --fasta-a "$data/pair/A.fa" --te-a "$data/pair/A.gff3" \
+    --genome-b B --fasta-b "$data/pair/B.fa" --te-b "$data/pair/B.gff3" \
+    --paf "$data/pair/A_B.paf" --gzip-output --output "$work/failed_compressed" >/dev/null 2>&1; then
+    echo 'accepted a failed compressor' >&2; exit 1
+fi
+test ! -e "$work/failed_compressed.run.json"
 
 # A single native PAF and its synthetic reverse share one dependency group and
 # must not earn independent reciprocal support.
-python3 - "$work/pair.evidence.tsv" <<'PY'
+"$python" - "$work/pair.evidence.tsv" <<'PY'
 import csv, sys
 rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 assert {row["origin"] for row in rows} == {"NATIVE", "DERIVED_REVERSE"}
@@ -153,7 +244,7 @@ fi
     --candidate-window 10 --output "$work/reciprocal" >/dev/null
 any_row "$work/reciprocal.edges.tsv" te_a A_shared te_b B_shared \
     independent_reciprocal true support_count 2 selected true
-python3 "$repo/tests/validate_schema.py" "$work/reciprocal"
+"$python" "$repo/tests/validate_schema.py" "$work/reciprocal"
 
 # Annotation dropout, known family conflict, target gap and reverse strand.
 run_pair "$work/unannotated" \
@@ -195,7 +286,7 @@ any_row "$work/missing_identity.evidence.tsv" source_te_id A_conflict \
 any_row "$work/missing_identity.candidate_features.tsv" local_identity . \
     aggregate_identity 0.995000 model_id BUILTIN_UNCALIBRATED_V1 \
     calibration_status UNCALIBRATED
-python3 "$repo/tests/validate_schema.py" "$work/missing_identity"
+"$python" "$repo/tests/validate_schema.py" "$work/missing_identity"
 
 # PAF MAPQ 255 is missing, and neither it nor a low native MAPQ can be rescued
 # by the generated reverse view.
@@ -236,7 +327,7 @@ run_pair "$work/ambiguous" \
 any_row "$work/ambiguous.decisions.tsv" source_te_id A_multi \
     technical_state AMBIGUOUS observation_count 2 near_best_count 2 \
     decision_code MULTIPLE_NEAR_BEST_PROJECTIONS claimable false
-python3 - "$work/ambiguous.decisions.tsv" "$work/ambiguous.evidence.tsv" <<'PY'
+"$python" - "$work/ambiguous.decisions.tsv" "$work/ambiguous.evidence.tsv" <<'PY'
 import csv, sys
 decisions = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 decision = next(row for row in decisions if row["source_te_id"] == "A_multi")
@@ -246,7 +337,7 @@ observed = {row["evidence_id"] for row in evidence if row["decision_id"] == deci
 assert linked == observed and len(linked) == 2
 assert all(row["decision_ambiguous"] == "true" for row in evidence if row["evidence_id"] in linked)
 PY
-python3 "$repo/tests/validate_schema.py" "$work/ambiguous"
+"$python" "$repo/tests/validate_schema.py" "$work/ambiguous"
 
 # A zero-overlap adjacent TE is not a co-ortholog merely because copy quota=2.
 "$bin" graph --manifest "$data/multi/manifest.tsv" \
@@ -261,7 +352,7 @@ any_row "$work/multi.candidates.tsv" target_te_id G2_A2 \
     reciprocal_overlap 0.000000 eligible false \
     decision_code RECIPROCAL_OVERLAP_LT_0.50
 test "$(($(wc -l < "$work/multi.loci.tsv") - 1))" -eq 3
-python3 "$repo/tests/validate_schema.py" "$work/multi"
+"$python" "$repo/tests/validate_schema.py" "$work/multi"
 
 # Two adjacent target TEs can each cover exactly half of one projected source
 # locus and therefore both pass reciprocal=0.5. A permissive copy quota must not
@@ -269,7 +360,7 @@ python3 "$repo/tests/validate_schema.py" "$work/multi"
 "$bin" graph --manifest "$data/v05/nonoverlap/manifest.tsv" \
     --alignments "$data/v05/nonoverlap/alignments.tsv" --flank 20 \
     --candidate-window 40 --output "$work/nonoverlap_bridge" >/dev/null
-python3 - "$work/nonoverlap_bridge.evidence.tsv" \
+"$python" - "$work/nonoverlap_bridge.evidence.tsv" \
     "$work/nonoverlap_bridge.candidates.tsv" \
     "$work/nonoverlap_bridge.edges.tsv" \
     "$work/nonoverlap_bridge.instances.tsv" <<'PY'
@@ -301,7 +392,7 @@ assert not any(
 )
 PY
 test "$(($(wc -l < "$work/nonoverlap_bridge.loci.tsv") - 1))" -eq 2
-python3 "$repo/tests/validate_schema.py" "$work/nonoverlap_bridge"
+"$python" "$repo/tests/validate_schema.py" "$work/nonoverlap_bridge"
 
 # An unknown-family node cannot bridge two incompatible known families.
 "$bin" graph --manifest "$data/v03/bridge/manifest.tsv" \
@@ -316,7 +407,7 @@ if grep -E 'FamA.*FamC|FamC.*FamA' "$work/bridge.loci.tsv" >/dev/null; then
 fi
 any_row "$work/bridge.instances.tsv" decision_code TARGET_ASSIGNED_TO_DIFFERENT_LOCUS \
     claimable false
-python3 "$repo/tests/validate_schema.py" "$work/bridge"
+"$python" "$repo/tests/validate_schema.py" "$work/bridge"
 "$bin" graph --manifest "$data/v03/bridge/manifest.sorted.tsv" \
     --alignments "$data/v03/bridge/alignments.sorted.tsv" --flank 20 \
     --candidate-window 10 --output "$work/bridge_sorted" >/dev/null
@@ -352,7 +443,7 @@ any_row "$work/delta.evidence.tsv" provider MUMMER_DELTA origin NATIVE \
 any_row "$work/delta.evidence.tsv" provider MUMMER_DELTA \
     origin DERIVED_REVERSE dependency DERIVED_SAME_GROUP
 no_row "$work/delta.states.tsv" state EMPTY_SITE_CONFIRMED
-python3 "$repo/tests/validate_schema.py" "$work/delta"
+"$python" "$repo/tests/validate_schema.py" "$work/delta"
 
 "$bin" pair \
     --genome-a A --fasta-a "$data/conflict/A.fa" --te-a "$data/conflict/A.gff3" \
@@ -362,12 +453,12 @@ python3 "$repo/tests/validate_schema.py" "$work/delta"
     --output "$work/delta_reverse" >/dev/null
 any_row "$work/delta_reverse.edges.tsv" te_a A_conflict te_b B_reverse \
     independent_reciprocal false selected true
-python3 "$repo/tests/validate_schema.py" "$work/delta_reverse"
+"$python" "$repo/tests/validate_schema.py" "$work/delta_reverse"
 
 # Canonical file-header paths take precedence over basename fallback. The
 # swapped canonical direction must be rejected even when contig IDs and lengths
 # are identical in the two genomes.
-python3 - "$data/v04/delta/full.delta" "$data/conflict/B.fa" \
+"$python" - "$data/v04/delta/full.delta" "$data/conflict/B.fa" \
     "$data/conflict/A.fa" "$work/delta_canonical.delta" \
     "$work/delta_canonical_swapped.delta" <<'PY'
 from pathlib import Path
@@ -400,7 +491,7 @@ same_name="tevox_delta_same_${BASHPID}.fa"
 mkdir -p "$work/same_query" "$work/same_target"
 ln -s "$data/conflict/A.fa" "$work/same_query/$same_name"
 ln -s "$data/conflict/B.fa" "$work/same_target/$same_name"
-python3 - "$data/v04/delta/full.delta" "$same_name" \
+"$python" - "$data/v04/delta/full.delta" "$same_name" \
     "$work/delta_ambiguous_header.delta" <<'PY'
 from pathlib import Path
 import sys
@@ -440,8 +531,8 @@ done
     --output "$work/synteny" >/dev/null
 no_row "$work/synteny.states.tsv" state EMPTY_SITE_CONFIRMED
 test "$(wc -l < "$work/synteny.evidence.tsv")" -eq 1
-python3 "$repo/tests/validate_schema.py" "$work/synteny"
-python3 - "$work/synteny.contexts.tsv" "$work/synteny.te_contexts.tsv" <<'PY'
+"$python" "$repo/tests/validate_schema.py" "$work/synteny"
+"$python" - "$work/synteny.contexts.tsv" "$work/synteny.te_contexts.tsv" <<'PY'
 import csv, sys
 contexts = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 assignments = list(csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"))
@@ -456,7 +547,7 @@ PY
 # In particular, a gene table must never be replaced by contexts.tsv.
 cp "$data/v04/synteny/genes.tsv" \
     "$work/synteny_gene_collision.contexts.tsv"
-python3 - "$data/v04/synteny/blocks.collinearity" \
+"$python" - "$data/v04/synteny/blocks.collinearity" \
     "$work/synteny_gene_collision.contexts.tsv" \
     "$work/synteny_gene_collision.sources.tsv" <<'PY'
 import sys
@@ -508,7 +599,7 @@ done
 any_row "$work/combined.instances.tsv" genome_id B copy_count 2
 any_row "$work/combined.candidates.tsv" context_relation SUPPORTED \
     shared_homology_group_id HMGfd5f79567dd2c40d context_compatible true
-python3 - "$work/combined.edges.tsv" <<'PY'
+"$python" - "$work/combined.edges.tsv" <<'PY'
 import csv, sys
 rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 assert sum(row["selected"] == "true" for row in rows) == 2
@@ -519,8 +610,8 @@ assert {row["matching_group_id"] for row in rows} == {
 PY
 any_row "$work/combined.relations.tsv" predicted_relation WGD_HOMEOLOG \
     calibration_status UNCALIBRATED out_of_domain false
-python3 "$repo/tests/validate_schema.py" "$work/combined"
-python3 - "$work/combined.run.json" <<'PY'
+"$python" "$repo/tests/validate_schema.py" "$work/combined"
+"$python" - "$work/combined.run.json" <<'PY'
 import hashlib, json, sys
 run = json.load(open(sys.argv[1], encoding="utf-8"))
 assert run["counts"]["synteny_provider_inputs"] == 1
@@ -546,7 +637,7 @@ PY
 any_row "$work/same_contig_wgd.instances.tsv" genome_id B copy_count 2
 any_row "$work/same_contig_wgd.relations.tsv" te_a B1_TE te_b B2_TE \
     predicted_relation WGD_HOMEOLOG
-python3 - "$work/same_contig_wgd.contexts.tsv" <<'PY'
+"$python" - "$work/same_contig_wgd.contexts.tsv" <<'PY'
 import csv, sys
 rows = [
     row for row in csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t")
@@ -559,7 +650,7 @@ assert len({row["homology_group_id"] for row in rows}) == 1
 assert {row["wgd_node"] for row in rows} == {"WGD1"}
 assert all(row["status"] == "PASS" for row in rows)
 PY
-python3 "$repo/tests/validate_schema.py" "$work/same_contig_wgd"
+"$python" "$repo/tests/validate_schema.py" "$work/same_contig_wgd"
 
 # If a deliberately strict membership gate leaves two explicit WGD copies in
 # separate loci, their physical proximity still cannot relabel them TANDEM.
@@ -573,7 +664,7 @@ any_row "$work/same_contig_wgd_gated.relations.tsv" \
     te_a B1_TE te_b B2_TE predicted_relation UNKNOWN
 no_row "$work/same_contig_wgd_gated.relations.tsv" \
     te_a B1_TE te_b B2_TE predicted_relation TANDEM_PARALOG
-python3 "$repo/tests/validate_schema.py" "$work/same_contig_wgd_gated"
+"$python" "$repo/tests/validate_schema.py" "$work/same_contig_wgd_gated"
 
 # Different haplotypes of the same subgenome are allelic metadata, not WGD
 # copy evidence. They cannot invoke the same-contig WGD merge exception.
@@ -582,7 +673,7 @@ python3 "$repo/tests/validate_schema.py" "$work/same_contig_wgd_gated"
     --alignments "$data/v04/synteny/alignments.same_contig_wgd.tsv" \
     --synteny "$data/v04/synteny/sources.same_contig_allelic.tsv" --flank 20 \
     --candidate-window 20 --output "$work/same_contig_allelic" >/dev/null
-python3 - "$work/same_contig_allelic.edges.tsv" \
+"$python" - "$work/same_contig_allelic.edges.tsv" \
     "$work/same_contig_allelic.instances.tsv" \
     "$work/same_contig_allelic.contexts.tsv" <<'PY'
 import csv, sys
@@ -598,7 +689,7 @@ assert max(int(row["copy_count"]) for row in instances if row["genome_id"] == "B
 assert {row["subgenome_id"] for row in contexts} == {"B1"}
 assert {row["haplotype_id"] for row in contexts} == {"hap1", "hap2"}
 PY
-python3 "$repo/tests/validate_schema.py" "$work/same_contig_allelic"
+"$python" "$repo/tests/validate_schema.py" "$work/same_contig_allelic"
 
 # Two otherwise supported edges that would place two A annotations from the
 # same strong copy context into one locus are rejected during graph merging.
@@ -616,7 +707,7 @@ any_row "$work/copy_context_conflict.edges.tsv" te_a A_TE te_b B1_TE \
 any_row "$work/copy_context_conflict.edges.tsv" te_a A_TE_same_context \
     te_b B1_TE selected true matching_selected true \
     selection_reason SELECTED_EXACT
-python3 "$repo/tests/validate_schema.py" "$work/copy_context_conflict"
+"$python" "$repo/tests/validate_schema.py" "$work/copy_context_conflict"
 
 # Both A annotations locally prefer B_MATCH_1, but the exact block objective is
 # larger when A_MATCH_2 uses its second-ranked candidate B_MATCH_2. This proves
@@ -625,7 +716,7 @@ python3 "$repo/tests/validate_schema.py" "$work/copy_context_conflict"
     --alignments "$data/v05/matching/alignments.tsv" \
     --synteny "$data/v05/matching/sources.tsv" --flank 20 \
     --candidate-window 30 --output "$work/matching_alternative" >/dev/null
-python3 - "$work/matching_alternative.evidence.tsv" \
+"$python" - "$work/matching_alternative.evidence.tsv" \
     "$work/matching_alternative.candidates.tsv" \
     "$work/matching_alternative.edges.tsv" <<'PY'
 import csv, sys
@@ -661,7 +752,7 @@ assert next(
     and row["target_te_id"] == "B_MATCH_2"
 )["candidate_rank"] == "2"
 PY
-python3 "$repo/tests/validate_schema.py" "$work/matching_alternative"
+"$python" "$repo/tests/validate_schema.py" "$work/matching_alternative"
 
 # The block matcher reports its deterministic fallback instead of claiming an
 # exact result when a context side exceeds the configured Hungarian limit.
@@ -674,7 +765,7 @@ python3 "$repo/tests/validate_schema.py" "$work/matching_alternative"
 any_row "$work/copy_context_heuristic.edges.tsv" \
     matching_method DETERMINISTIC_GREEDY matching_selected true \
     selected true selection_reason SELECTED_EXACT
-python3 "$repo/tests/validate_schema.py" "$work/copy_context_heuristic"
+"$python" "$repo/tests/validate_schema.py" "$work/copy_context_heuristic"
 
 # A context-free bridge may provide individually valid DNA edges, but it must
 # not transitively merge TEs assigned to two disconnected HMGs.
@@ -693,7 +784,7 @@ any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG1_TE \
     selection_reason GLOBAL_CONSTRAINT_SEPARATED
 any_row "$work/hmg_conflict.edges.tsv" te_a A_HMG2_TE \
     te_b B_CONTEXT_FREE_TE selected true selection_reason SELECTED_EXACT
-python3 "$repo/tests/validate_schema.py" "$work/hmg_conflict"
+"$python" "$repo/tests/validate_schema.py" "$work/hmg_conflict"
 
 # A truth-controlled four-node component makes the greedy failure explicit:
 # its strongest first edge blocks two compatible medium edges. Exact search
@@ -717,7 +808,7 @@ any_row "$work/global_heuristic.edges.tsv" te_a A_greedy te_b B_bridge \
     selected true selection_reason SELECTED_HEURISTIC
 any_row "$work/global_heuristic.solver.tsv" \
     method DETERMINISTIC_GREEDY status HEURISTIC
-python3 - "$work/global_exact.solver.tsv" \
+"$python" - "$work/global_exact.solver.tsv" \
     "$work/global_heuristic.solver.tsv" <<'PY'
 import csv, sys
 def objective(path):
@@ -725,8 +816,8 @@ def objective(path):
     return sum(float(row["objective"]) for row in rows)
 assert objective(sys.argv[1]) > objective(sys.argv[2])
 PY
-python3 "$repo/tests/validate_schema.py" "$work/global_exact"
-python3 "$repo/tests/validate_schema.py" "$work/global_heuristic"
+"$python" "$repo/tests/validate_schema.py" "$work/global_exact"
+"$python" "$repo/tests/validate_schema.py" "$work/global_heuristic"
 
 # A direct edge can fail its own gate while both endpoints are assigned to the
 # same final locus through other selected edges. Relation locus membership must
@@ -737,7 +828,7 @@ python3 "$repo/tests/validate_schema.py" "$work/global_heuristic"
     --output "$work/relation_weak_triangle" >/dev/null
 any_row "$work/relation_weak_triangle.edges.tsv" te_a A_global te_b C_global \
     selected false selection_reason BELOW_EDGE_THRESHOLD
-python3 - "$work/relation_weak_triangle.relations.tsv" <<'PY'
+"$python" - "$work/relation_weak_triangle.relations.tsv" <<'PY'
 import csv, sys
 rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 row = next(
@@ -748,7 +839,7 @@ assert row["direct_edge"] == "true"
 assert row["locus_id"] != "."
 assert row["predicted_relation"] == "ORTHOLOG"
 PY
-python3 "$repo/tests/validate_schema.py" "$work/relation_weak_triangle"
+"$python" "$repo/tests/validate_schema.py" "$work/relation_weak_triangle"
 
 # Overlapping or nested annotations are not tandem copies. A nearby,
 # non-overlapping pair remains eligible for the tandem relation label.
@@ -756,7 +847,7 @@ python3 "$repo/tests/validate_schema.py" "$work/relation_weak_triangle"
     --alignments "$data/v04/synteny/alignments.tsv" --flank 20 \
     --candidate-window 20 --tandem-distance 100 \
     --output "$work/relation_nested" >/dev/null
-python3 - "$work/relation_nested.relations.tsv" <<'PY'
+"$python" - "$work/relation_nested.relations.tsv" <<'PY'
 import csv, sys
 rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 by_pair = {frozenset((row["te_a"], row["te_b"])): row for row in rows}
@@ -764,7 +855,7 @@ assert frozenset(("A_TE", "A_TE_nested")) not in by_pair
 nearby = by_pair[frozenset(("A_TE", "A_TE_same_context"))]
 assert nearby["predicted_relation"] == "TANDEM_PARALOG"
 PY
-python3 "$repo/tests/validate_schema.py" "$work/relation_nested"
+"$python" "$repo/tests/validate_schema.py" "$work/relation_nested"
 
 # The nested hard-negative applies to locus reconstruction, not only relation
 # naming. A permissive legacy quota and a shared B bridge cannot merge two
@@ -776,7 +867,7 @@ python3 "$repo/tests/validate_schema.py" "$work/relation_nested"
     --te-b "$data/v04/synteny/B.gff3" --max-copies-b 1 \
     --paf "$data/v04/synteny/A_B.paf" --flank 20 --candidate-window 20 \
     --output "$work/nested_bridge" >/dev/null
-python3 - "$work/nested_bridge.loci.tsv" \
+"$python" - "$work/nested_bridge.loci.tsv" \
     "$work/nested_bridge.instances.tsv" \
     "$work/nested_bridge.edges.tsv" <<'PY'
 import csv, sys
@@ -795,12 +886,12 @@ assert any(
     for row in edges
 )
 PY
-python3 "$repo/tests/validate_schema.py" "$work/nested_bridge"
+"$python" "$repo/tests/validate_schema.py" "$work/nested_bridge"
 
 # The legacy run-local score audit remains an explicitly uncalibrated
 # diagnostic. It now reports coverage, AUPRC, equal-mass ECE and deterministic
 # group bootstrap intervals without fitting or blessing a model.
-python3 - "$work/global_exact.evidence.tsv" \
+"$python" - "$work/global_exact.evidence.tsv" \
     "$work/global_exact.candidates.tsv" "$work/global_truth.tsv" <<'PY'
 import csv, sys
 evidence = {
@@ -820,12 +911,12 @@ with open(sys.argv[3], "w", newline="", encoding="utf-8") as handle:
             "group_id": f'{observation["query_genome_id"]}-{observation["target_genome_id"]}',
         })
 PY
-python3 "$repo/scripts/tevox_score_audit.py" \
+"$python" "$repo/scripts/tevox_score_audit.py" \
     --features "$work/global_exact.candidate_features.tsv" \
     --truth "$work/global_truth.tsv" --bins 4 --bootstrap-replicates 20 \
     --seed 17 \
     --output "$work/global_audit" >/dev/null
-python3 - "$work/global_audit.metrics.json" \
+"$python" - "$work/global_audit.metrics.json" \
     "$work/global_audit.calibration.tsv" <<'PY'
 import csv, json, sys
 report = json.load(open(sys.argv[1], encoding="utf-8"))
@@ -840,7 +931,7 @@ assert report["group_bootstrap_95_ci"]["replicates_requested"] == 20
 rows = list(csv.DictReader(open(sys.argv[2], newline="", encoding="utf-8"), delimiter="\t"))
 assert {row["scope"] for row in rows} >= {"overall"}
 PY
-python3 - "$work/global_exact.candidate_features.tsv" \
+"$python" - "$work/global_exact.candidate_features.tsv" \
     "$work/global_mixed_model.candidate_features.tsv" <<'PY'
 import csv, sys
 with open(sys.argv[1], newline="", encoding="utf-8") as source:
@@ -852,7 +943,7 @@ with open(sys.argv[2], "w", newline="", encoding="utf-8") as destination:
     writer.writeheader()
     writer.writerows(rows)
 PY
-if python3 "$repo/scripts/tevox_score_audit.py" \
+if "$python" "$repo/scripts/tevox_score_audit.py" \
     --features "$work/global_mixed_model.candidate_features.tsv" \
     --truth "$work/global_truth.tsv" --output "$work/mixed_model_audit" \
     >/dev/null 2>&1; then
@@ -862,7 +953,7 @@ fi
 
 # Publication metrics must be invariant to truth-row order inside tied scores,
 # and a truth-supported class that is completely missed contributes F1=0.
-python3 - "$repo/scripts" <<'PY'
+"$python" - "$repo/scripts" <<'PY'
 import sys
 sys.path.insert(0, sys.argv[1])
 import tevox_benchmark as benchmark
@@ -940,7 +1031,7 @@ PY
 # The publication-facing benchmark uses dataset semantic keys, never CAN/EVD/
 # TEL identifiers. Exact and heuristic runs share one immutable truth bundle;
 # the evaluator must expose the known greedy clustering failure.
-python3 - "$work/benchmark_runs.tsv" "$work/global_exact" \
+"$python" - "$work/benchmark_runs.tsv" "$work/global_exact" \
     "$work/global_heuristic" <<'PY'
 import csv, sys
 fields = [
@@ -962,10 +1053,10 @@ with open(sys.argv[1], "w", newline="", encoding="utf-8") as handle:
             "prefix": prefix,
         })
 PY
-python3 "$repo/scripts/tevox_benchmark.py" \
+"$python" "$repo/scripts/tevox_benchmark.py" \
     --datasets "$data/v05/benchmark/datasets.tsv" \
     --runs "$work/benchmark_runs.tsv" --output "$work/benchmark" >/dev/null
-python3 - "$work/benchmark.metrics.json" \
+"$python" - "$work/benchmark.metrics.json" \
     "$work/benchmark.callability_accuracy.tsv" <<'PY'
 import csv, json, sys
 report = json.load(open(sys.argv[1], encoding="utf-8"))
@@ -990,7 +1081,7 @@ PY
 # A header-only prediction is a valid catastrophic method, not a malformed
 # benchmark input. Missing claimable=false must remain NO_PREDICTION, and an
 # EMPTY call against biological UNKNOWN is unassessed rather than a false hit.
-python3 - "$work/global_exact" "$work/benchmark_zero" \
+"$python" - "$work/global_exact" "$work/benchmark_zero" \
     "$work/benchmark_unknown_empty" "$work/benchmark_instance_unknown.tsv" \
     "$work/benchmark_strict.datasets.tsv" "$work/benchmark_strict.runs.tsv" \
     "$data/v05/benchmark/truth.candidates.tsv" \
@@ -1086,11 +1177,11 @@ with runs.open("w", newline="", encoding="utf-8") as handle:
             "prediction_format": "tevox-1.2", "prefix": prefix.resolve(),
         })
 PY
-python3 "$repo/scripts/tevox_benchmark.py" \
+"$python" "$repo/scripts/tevox_benchmark.py" \
     --datasets "$work/benchmark_strict.datasets.tsv" \
     --runs "$work/benchmark_strict.runs.tsv" \
     --output "$work/benchmark_strict" >/dev/null
-python3 - "$work/benchmark_strict.metrics.json" <<'PY'
+"$python" - "$work/benchmark_strict.metrics.json" <<'PY'
 import json, sys
 report = json.load(open(sys.argv[1], encoding="utf-8"))
 runs = {row["run_id"]: row for row in report["runs"]}
@@ -1110,12 +1201,12 @@ PY
 # A leakage-safe split keeps every shared TE/event/locus/batch/clade binding in
 # one partition and fold. Moving one connected record must fail while still
 # emitting a machine-readable violation report.
-python3 "$repo/scripts/tevox_split_audit.py" \
+"$python" "$repo/scripts/tevox_split_audit.py" \
     --truth "$data/v05/benchmark/truth.candidates.tsv" \
     --locus-truth "$data/v05/benchmark/truth.members.tsv" \
     --splits "$data/v05/benchmark/splits.valid.tsv" --strict \
     --output "$work/split_valid.json" >/dev/null
-if python3 "$repo/scripts/tevox_split_audit.py" \
+if "$python" "$repo/scripts/tevox_split_audit.py" \
     --truth "$data/v05/benchmark/truth.candidates.tsv" \
     --locus-truth "$data/v05/benchmark/truth.members.tsv" \
     --splits "$data/v05/benchmark/splits.leaky.tsv" \
@@ -1123,7 +1214,7 @@ if python3 "$repo/scripts/tevox_split_audit.py" \
     echo "accepted a candidate split with cross-partition leakage" >&2
     exit 1
 fi
-python3 - "$work/split_valid.json" "$work/split_leaky.json" <<'PY'
+"$python" - "$work/split_valid.json" "$work/split_leaky.json" <<'PY'
 import json, sys
 valid, leaky = (json.load(open(path, encoding="utf-8")) for path in sys.argv[1:])
 assert valid["passed"] is True and not valid["violations"]
@@ -1139,14 +1230,14 @@ PY
 
 # Strict auditing must fail closed when locus-member truth is omitted, because
 # endpoint WGD/HMG bindings cannot then be checked independently.
-if python3 "$repo/scripts/tevox_split_audit.py" \
+if "$python" "$repo/scripts/tevox_split_audit.py" \
     --truth "$data/v05/benchmark/truth.candidates.tsv" \
     --splits "$data/v05/benchmark/splits.valid.tsv" --strict \
     --output "$work/split_missing_locus_truth.json" >/dev/null 2>&1; then
     echo "strict split audit passed without locus-member truth" >&2
     exit 1
 fi
-python3 - "$work/split_missing_locus_truth.json" <<'PY'
+"$python" - "$work/split_missing_locus_truth.json" <<'PY'
 import json, sys
 report = json.load(open(sys.argv[1], encoding="utf-8"))
 assert report["passed"] is False
@@ -1156,7 +1247,7 @@ assert {row["code"] for row in report["unverifiable"]} == {
 }
 PY
 cp "$data/v05/benchmark/truth.candidates.tsv" "$work/split_collision.tsv"
-if python3 "$repo/scripts/tevox_split_audit.py" \
+if "$python" "$repo/scripts/tevox_split_audit.py" \
     --truth "$work/split_collision.tsv" \
     --locus-truth "$data/v05/benchmark/truth.members.tsv" \
     --splits "$data/v05/benchmark/splits.valid.tsv" \
@@ -1176,13 +1267,13 @@ cmp "$work/split_collision.tsv" "$data/v05/benchmark/truth.candidates.tsv"
         --flank 20 --candidate-window 10 --max-candidates 0 \
         --max-graph-candidates 0 --output "$work/relative_cwd" >/dev/null
 )
-python3 "$repo/tests/validate_schema.py" "$work/relative_cwd"
-python3 "$repo/scripts/tevox_export_training.py" \
+"$python" "$repo/tests/validate_schema.py" "$work/relative_cwd"
+"$python" "$repo/scripts/tevox_export_training.py" \
     --prefix "$work/relative_cwd" \
     --truth "$data/v05/benchmark/truth.candidates.tsv" \
     --dataset-id D_GLOBAL --run-id relative-cwd-export \
     --output "$work/relative_cwd_export" >/dev/null
-python3 - "$work/relative_cwd.run.json" \
+"$python" - "$work/relative_cwd.run.json" \
     "$work/relative_cwd_export.dataset.json" <<'PY'
 import json, sys
 from pathlib import Path
@@ -1195,12 +1286,12 @@ assert dataset["commit_marker"]["status"] == \
     "COMMITTED_IF_DATASET_JSON_PRESENT"
 PY
 
-python3 "$repo/scripts/tevox_export_training.py" \
+"$python" "$repo/scripts/tevox_export_training.py" \
     --prefix "$work/global_exact" \
     --truth "$data/v05/benchmark/truth.candidates.tsv" \
     --dataset-id D_GLOBAL --run-id export_fixture \
     --output "$work/training_export" >/dev/null
-python3 - "$work/training_export.training.tsv" \
+"$python" - "$work/training_export.training.tsv" \
     "$work/training_export.unmatched_truth.tsv" \
     "$work/training_export.dataset.json" <<'PY'
 import csv, hashlib, json, sys
@@ -1244,7 +1335,7 @@ assert directed == {
 PY
 
 # Stale/tampered feature sidecars and run-time input hashes must fail closed.
-python3 - "$work/global_exact" "$work/export_tampered_feature" \
+"$python" - "$work/global_exact" "$work/export_tampered_feature" \
     "$work/export_stale_hash" <<'PY'
 import csv, json, shutil, sys
 from pathlib import Path
@@ -1271,7 +1362,7 @@ with run_path.open("w", encoding="utf-8") as handle:
     handle.write("\n")
 PY
 for rejected_prefix in export_tampered_feature export_stale_hash; do
-    if python3 "$repo/scripts/tevox_export_training.py" \
+    if "$python" "$repo/scripts/tevox_export_training.py" \
         --prefix "$work/$rejected_prefix" \
         --truth "$data/v05/benchmark/truth.candidates.tsv" \
         --dataset-id D_GLOBAL --run-id "$rejected_prefix" \
@@ -1283,7 +1374,7 @@ done
 
 # Removing truth for one generated semantic pair must not remove its feature
 # rows or silently turn label ascertainment into negative sampling.
-python3 - "$data/v05/benchmark/truth.candidates.tsv" \
+"$python" - "$data/v05/benchmark/truth.candidates.tsv" \
     "$work/truth_partial.tsv" <<'PY'
 import csv, sys
 with open(sys.argv[1], newline="", encoding="utf-8") as source:
@@ -1295,11 +1386,11 @@ with open(sys.argv[2], "w", newline="", encoding="utf-8") as destination:
     writer.writeheader()
     writer.writerows(rows)
 PY
-python3 "$repo/scripts/tevox_export_training.py" \
+"$python" "$repo/scripts/tevox_export_training.py" \
     --prefix "$work/global_exact" --truth "$work/truth_partial.tsv" \
     --dataset-id D_GLOBAL --run-id export_partial_fixture \
     --output "$work/training_export_partial" >/dev/null
-python3 - "$work/training_export_partial.training.tsv" \
+"$python" - "$work/training_export_partial.training.tsv" \
     "$work/training_export_partial.dataset.json" <<'PY'
 import csv, json, sys
 training = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
@@ -1315,7 +1406,7 @@ PY
 
 # PARTIAL candidate truth reports prediction-only semantic pairs as unassessed.
 # Declaring the same incomplete table EXHAUSTIVE must fail closed.
-python3 - "$work/truth_partial.tsv" "$work/global_exact" \
+"$python" - "$work/truth_partial.tsv" "$work/global_exact" \
     "$work/candidate_partial.datasets.tsv" \
     "$work/candidate_exhaustive_bad.datasets.tsv" \
     "$work/candidate_scope.runs.tsv" \
@@ -1359,18 +1450,18 @@ with runs.open("w", newline="", encoding="utf-8") as handle:
         "prediction_format": "tevox-1.2", "prefix": prefix.resolve(),
     })
 PY
-python3 "$repo/scripts/tevox_benchmark.py" \
+"$python" "$repo/scripts/tevox_benchmark.py" \
     --datasets "$work/candidate_partial.datasets.tsv" \
     --runs "$work/candidate_scope.runs.tsv" \
     --output "$work/candidate_partial" >/dev/null
-python3 - "$work/candidate_partial.metrics.json" <<'PY'
+"$python" - "$work/candidate_partial.metrics.json" <<'PY'
 import json, sys
 metrics = json.load(open(sys.argv[1], encoding="utf-8"))["runs"][0]["candidate_membership"]
 assert metrics["truth_scope"] == "PARTIAL"
 assert metrics["unassessed_predicted_semantic_pairs"] > 0
 assert metrics["population_prevalence_or_calibration_claimable"] is False
 PY
-if python3 "$repo/scripts/tevox_benchmark.py" \
+if "$python" "$repo/scripts/tevox_benchmark.py" \
     --datasets "$work/candidate_exhaustive_bad.datasets.tsv" \
     --runs "$work/candidate_scope.runs.tsv" \
     --output "$work/candidate_exhaustive_bad" >/dev/null 2>&1; then
@@ -1381,7 +1472,7 @@ fi
     --alignments "$data/v05/global/alignments.tsv" --flank 20 \
     --candidate-window 10 --max-candidates 0 --max-graph-candidates 1 \
     --output "$work/global_export_truncated" >/dev/null
-if python3 "$repo/scripts/tevox_export_training.py" \
+if "$python" "$repo/scripts/tevox_export_training.py" \
     --prefix "$work/global_export_truncated" \
     --truth "$data/v05/benchmark/truth.candidates.tsv" \
     --dataset-id D_GLOBAL --run-id rejected_export \
@@ -1400,13 +1491,13 @@ any_row "$work/context_ambiguous.contexts.tsv" genome_id A \
 any_row "$work/context_ambiguous.candidates.tsv" context_relation AMBIGUOUS \
     context_compatible false decision_code SYNTENY_CONTEXT_AMBIGUOUS
 no_row "$work/context_ambiguous.candidates.tsv" context_relation SUPPORTED
-python3 "$repo/tests/validate_schema.py" "$work/context_ambiguous"
+"$python" "$repo/tests/validate_schema.py" "$work/context_ambiguous"
 
 # Overlapping evidence assigned to different WGD layers must remain separate.
 "$bin" graph --manifest "$data/v04/synteny/manifest.tsv" \
     --synteny "$data/v04/synteny/sources.two_wgd.tsv" \
     --output "$work/two_wgd" >/dev/null
-python3 - "$work/two_wgd.contexts.tsv" <<'PY'
+"$python" - "$work/two_wgd.contexts.tsv" <<'PY'
 import csv, sys
 rows = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
 assert len(rows) == 6
@@ -1414,7 +1505,7 @@ assert len({row["context_id"] for row in rows}) == 6
 assert {row["wgd_node"] for row in rows} == {"WGD1", "WGD2"}
 assert len({row["homology_group_id"] for row in rows}) == 2
 PY
-python3 "$repo/tests/validate_schema.py" "$work/two_wgd"
+"$python" "$repo/tests/validate_schema.py" "$work/two_wgd"
 
 # Bounded top-K and unlimited candidates use the same complete winner order.
 for limit in 1 0; do
@@ -1423,12 +1514,12 @@ for limit in 1 0; do
         --genome-b B --fasta-b "$data/conflict/B.fa" --te-b "$data/v04/topk/B.gff3" \
         --paf "$data/conflict/A_B.paf" --flank 20 --candidate-window 10 \
         --max-candidates "$limit" --output "$work/topk_$limit" >/dev/null
-    python3 "$repo/tests/validate_schema.py" "$work/topk_$limit"
+    "$python" "$repo/tests/validate_schema.py" "$work/topk_$limit"
 done
 for suffix in decisions edges loci instances states; do
     diff -u "$work/topk_1.$suffix.tsv" "$work/topk_0.$suffix.tsv"
 done
-python3 - "$work/topk_1.evidence.tsv" "$work/topk_1.candidates.tsv" \
+"$python" - "$work/topk_1.evidence.tsv" "$work/topk_1.candidates.tsv" \
     "$work/topk_0.evidence.tsv" "$work/topk_0.candidates.tsv" <<'PY'
 import csv, sys
 def read(path):
@@ -1453,8 +1544,8 @@ PY
     --paf "$data/conflict/A_B.paf" --flank 20 --candidate-window 10 \
     --max-candidates 0 --max-graph-candidates 1 \
     --output "$work/topk_graph_1" >/dev/null
-python3 "$repo/tests/validate_schema.py" "$work/topk_graph_1"
-python3 - "$work/topk_graph_1.evidence.tsv" \
+"$python" "$repo/tests/validate_schema.py" "$work/topk_graph_1"
+"$python" - "$work/topk_graph_1.evidence.tsv" \
     "$work/topk_graph_1.candidates.tsv" "$work/topk_graph_1.run.json" <<'PY'
 import csv, json, sys
 evidence = list(csv.DictReader(open(sys.argv[1], newline="", encoding="utf-8"), delimiter="\t"))
@@ -1505,12 +1596,41 @@ if "$bin" pair \
     exit 1
 fi
 
-python3 "$repo/scripts/tevox_phylo.py" \
+"$python" "$repo/scripts/tevox_phylo.py" \
     --states "$data/multi/phylo_states.tsv" --tree "$data/multi/tree.nwk" \
     --output "$work/phylo" >/dev/null
 grep -Eq $'^TEL000001\t(gain|loss)\t' "$work/phylo.events.tsv"
 
-python3 -m py_compile "$repo/tests/validate_schema.py" \
+# All public readers accept the same compressed tables, including implicit
+# .gz fallback when a caller supplies the original TSV path or run prefix.
+"$python" - "$work" "$data/multi/phylo_states.tsv" <<'PYCOMP'
+import gzip,pathlib,sys
+root=pathlib.Path(sys.argv[1])
+for source in root.glob('relative_cwd.*.tsv'):
+    with gzip.open(str(source)+'.gz','wb') as dest: dest.write(source.read_bytes())
+    source.unlink()
+for source in [root/'global_exact.candidate_features.tsv',pathlib.Path(sys.argv[2])]:
+    with gzip.open(root/(source.name+'.gz'),'wb') as dest:dest.write(source.read_bytes())
+PYCOMP
+"$python" "$repo/scripts/tevox_export_training.py" --prefix "$work/relative_cwd" \
+    --truth "$data/v05/benchmark/truth.candidates.tsv" --dataset-id D_GLOBAL \
+    --run-id relative-cwd-export --output "$work/compressed_export" >/dev/null
+cmp "$work/relative_cwd_export.training.tsv" "$work/compressed_export.training.tsv"
+# Keep the uncompressed feature fixture under a different name to exercise
+# implicit resolution without leaving an ambiguous plain/gzip pair.
+mv "$work/global_exact.candidate_features.tsv" "$work/global_exact.features.original"
+"$python" "$repo/scripts/tevox_score_audit.py" --features "$work/global_exact.candidate_features.tsv" \
+    --truth "$work/global_truth.tsv" --bins 4 --bootstrap-replicates 20 --seed 17 \
+    --output "$work/compressed_audit" >/dev/null
+cmp "$work/global_audit.calibration.tsv" "$work/compressed_audit.calibration.tsv"
+"$python" "$repo/scripts/tevox_benchmark.py" --datasets "$data/v05/benchmark/datasets.tsv" \
+    --runs "$work/benchmark_runs.tsv" --output "$work/compressed_benchmark" >/dev/null
+cmp "$work/benchmark.callability_accuracy.tsv" "$work/compressed_benchmark.callability_accuracy.tsv"
+"$python" "$repo/scripts/tevox_phylo.py" --states "$work/phylo_states.tsv.gz" \
+    --tree "$data/multi/tree.nwk" --output "$work/compressed_phylo" >/dev/null
+cmp "$work/phylo.events.tsv" "$work/compressed_phylo.events.tsv"
+
+"$python" -m py_compile "$repo/tests/validate_schema.py" \
     "$repo/scripts/tevox_phylo.py" "$repo/scripts/tevox_score_audit.py" \
     "$repo/scripts/tevox_benchmark.py" \
     "$repo/scripts/tevox_export_training.py" \

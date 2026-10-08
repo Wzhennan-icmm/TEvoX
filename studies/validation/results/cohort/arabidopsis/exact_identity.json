@@ -1,0 +1,8 @@
+{
+  "records": 2162,
+  "source_sha256": "153f44848e1e23e947be6c8427f2c5502dc25287b9667c548a9540b785abf4da",
+  "output_sha256": "6bbb3ca6b12eb0db5a2535f77071dfa07f62a2f1f8bb1f30e819558b36ac8938",
+  "method": "Exact =/X reconstructed from the unchanged PAF indel path and both FASTAs; no independent reciprocal support added",
+  "ambiguous_bases": "non-ACGT treated as mismatches",
+  "numpy_version": "2.3.5"
+}

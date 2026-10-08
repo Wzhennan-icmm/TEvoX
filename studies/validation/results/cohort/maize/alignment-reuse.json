@@ -1,0 +1,84 @@
+{
+  "status": "VERIFIED_EXACT_ALIGNMENT_CACHE_REUSE",
+  "source_run": "/workspace/tevox-v05-study/results/maize",
+  "utc": "2026-10-06T16:49:05.672172+00:00",
+  "converter_sha256": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+  "exact_alignment": {
+    "records": 95842,
+    "source_sha256": "5611d471d5505549f0456cadd43059cd646d1fd26c26f101112656adbe055a39",
+    "output_sha256": "6473495bf008e04a3a8b2507a9f9657986704af301a7023956d8fd7145a3ecae",
+    "method": "Exact =/X reconstructed from the unchanged PAF indel path and both FASTAs; no independent reciprocal support added",
+    "ambiguous_bases": "non-ACGT treated as mismatches",
+    "numpy_version": "2.3.5"
+  },
+  "archive_record": {
+    "plain": "/workspace/tevox-v05-study/results/maize/alignment.eqx.paf",
+    "plain_sha256": "6473495bf008e04a3a8b2507a9f9657986704af301a7023956d8fd7145a3ecae",
+    "plain_bytes": 101243813,
+    "restore_from": "/workspace/tevox-v05-study/results/maize/alignment.eqx.paf.gz",
+    "restore_method": "gzip_decompress",
+    "source_sha256": "8d295fa03db630a901c0ebb181c451d918a672ccdab5ee9708a62e12c09e14e9",
+    "compressed_bytes": 37562733
+  },
+  "fasta_archive_bindings": [
+    {
+      "plain": "/workspace/tevox-v05-study/results/maize/b73/genome.fa",
+      "plain_sha256": "7dae7cb832ade10716a43b7b9861e08e6031d67f6998c99599444c41f22c22de",
+      "restore_from": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.fa.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "bcb6b02e7d26545c999d1c7e46fdafa919434c6c87ccb40da3d11ec8b51e91f4"
+    },
+    {
+      "plain": "/workspace/tevox-v05-study/results/maize/oh43/genome.fa",
+      "plain_sha256": "05b9b021be7b3f5c31a49848f8db3275572bc2c7549464208c200103cc76bfc4",
+      "restore_from": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.fa.gz",
+      "restore_method": "gzip_decompress",
+      "source_sha256": "f6917684fa99eb29a27fd59511f2e5108aab6e7ba718c3881d7fe7a446a1bfdc"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "role": "fasta",
+      "genome": "b73",
+      "path": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.fa.gz",
+      "bytes": 684902666,
+      "sha256": "bcb6b02e7d26545c999d1c7e46fdafa919434c6c87ccb40da3d11ec8b51e91f4"
+    },
+    {
+      "role": "repeats",
+      "genome": "b73",
+      "path": "/workspace/tevox-study/data/maize/b73/GCF_902167145.1.repeatMasker.out.gz",
+      "bytes": 45453820,
+      "sha256": "6ea5e5d068539c5f900fbafebbc0d8ea3bc7902455fce432c9530d50f5377819"
+    },
+    {
+      "role": "genes",
+      "genome": "b73",
+      "path": "/workspace/tevox-study/data/maize/b73/predicted.genes.gff3.gz",
+      "bytes": 2627019,
+      "sha256": "bb04b0925e56d1fa54c9c8751b44a9b48f8348b1ed363bc28ae9d2e0842b5dae"
+    },
+    {
+      "role": "fasta",
+      "genome": "oh43",
+      "path": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.fa.gz",
+      "bytes": 684860257,
+      "sha256": "f6917684fa99eb29a27fd59511f2e5108aab6e7ba718c3881d7fe7a446a1bfdc"
+    },
+    {
+      "role": "repeats",
+      "genome": "oh43",
+      "path": "/workspace/tevox-study/data/maize/oh43/GCA_902167015.1.repeatMasker.out.gz",
+      "bytes": 45545022,
+      "sha256": "0d8440a3b9fce766ef6b0a91f22a45fbcaeeccb051686d9a5c6c8241f78daf68"
+    },
+    {
+      "role": "genes",
+      "genome": "oh43",
+      "path": "/workspace/tevox-study/data/maize/oh43/predicted.genes.gff3.gz",
+      "bytes": 2627687,
+      "sha256": "13b2527ca13bfb692c9af1351fa8b4cb802b22c88c5c18053ca3ab2ce7c43936"
+    }
+  ],
+  "note": "Only unchanged source-derived EQX alignment reused; final TEvoX inference and all postprocessing rerun."
+}

@@ -1,0 +1,40 @@
+{
+  "input": "/workspace/tevox-study/data/human/chm13/selected_nuclear.repeats.tsv.gz",
+  "format": "bed10",
+  "comparison": "All original source fields, including identifier and coordinates; only whitespace separators canonicalized. bigRmsk descriptions audited fragment by fragment.",
+  "counts": {
+    "browser_or_bed_rows": 5512424,
+    "source_fragment_records": 5512424,
+    "unique_exact_fragment_records": 5512424,
+    "exact_duplicate_fragment_records": 0,
+    "repeated_identity_with_different_record_fields": 0
+  },
+  "source_fragments_per_sequence": {
+    "chr1": 486322,
+    "chr10": 245427,
+    "chr11": 250025,
+    "chr12": 258800,
+    "chr13": 181368,
+    "chr14": 184213,
+    "chr15": 174545,
+    "chr16": 191459,
+    "chr17": 174500,
+    "chr18": 131393,
+    "chr19": 139416,
+    "chr2": 431800,
+    "chr20": 131827,
+    "chr21": 75184,
+    "chr22": 92816,
+    "chr3": 360654,
+    "chr4": 325121,
+    "chr5": 316501,
+    "chr6": 299346,
+    "chr7": 291192,
+    "chr8": 261984,
+    "chr9": 230576,
+    "chrX": 277955
+  },
+  "exact_duplicates_per_sequence": {},
+  "duplicate_examples": [],
+  "action": "audit only; input preserved; no overlaps or distinct identifiers merged"
+}

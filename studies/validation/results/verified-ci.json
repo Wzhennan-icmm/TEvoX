@@ -1,0 +1,85 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "id": 37499319980,
+      "name": "CI",
+      "head_sha": "06ed75f1ac301772083d96cc641834c03768cae3",
+      "head_branch": "agent/v05-integration-20261005",
+      "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980",
+      "conclusion": "success",
+      "created_at": "2026-10-06T16:54:02Z",
+      "updated_at": "2026-10-06T16:54:31Z",
+      "jobs": [
+        {
+          "name": "sanitizers",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:05Z",
+          "completed_at": "2026-10-06T16:54:29Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980/job/112391938435"
+        },
+        {
+          "name": "study_workflows (3.12, 2.2.6)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:05Z",
+          "completed_at": "2026-10-06T16:54:16Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980/job/112391938678"
+        },
+        {
+          "name": "test (ubuntu-latest, gcc)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:05Z",
+          "completed_at": "2026-10-06T16:54:20Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980/job/112391938795"
+        },
+        {
+          "name": "study_workflows (3.8, 1.24.4)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:05Z",
+          "completed_at": "2026-10-06T16:54:30Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980/job/112391938798"
+        },
+        {
+          "name": "test (ubuntu-latest, clang)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:06Z",
+          "completed_at": "2026-10-06T16:54:31Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980/job/112391938882"
+        },
+        {
+          "name": "test (macos-latest, clang)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:11Z",
+          "completed_at": "2026-10-06T16:54:30Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319980/job/112391939030"
+        }
+      ]
+    },
+    {
+      "id": 37499319996,
+      "name": "Native macOS packages",
+      "head_sha": "06ed75f1ac301772083d96cc641834c03768cae3",
+      "head_branch": "agent/v05-integration-20261005",
+      "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319996",
+      "conclusion": "success",
+      "created_at": "2026-10-06T16:54:02Z",
+      "updated_at": "2026-10-06T16:56:12Z",
+      "jobs": [
+        {
+          "name": "macos (macos-15-intel, x86_64)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:07Z",
+          "completed_at": "2026-10-06T16:56:12Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319996/job/112391938400"
+        },
+        {
+          "name": "macos (macos-15, arm64)",
+          "conclusion": "success",
+          "started_at": "2026-10-06T16:54:09Z",
+          "completed_at": "2026-10-06T16:55:13Z",
+          "html_url": "https://github.com/Wzhennan-icmm/TEvoX/actions/runs/37499319996/job/112391938742"
+        }
+      ]
+    }
+  ]
+}

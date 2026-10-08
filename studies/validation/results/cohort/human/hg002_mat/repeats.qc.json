@@ -1,0 +1,49 @@
+{
+  "classes": {
+    "DNA": 516490,
+    "LINE": 1532557,
+    "LTR": 734684,
+    "RC": 2177,
+    "SINE": 1758863,
+    "Unknown": 25028
+  },
+  "configuration": {
+    "bed_class_column": null,
+    "bed_coordinates": null,
+    "bed_family_column": null,
+    "bed_id_column": null,
+    "bed_name_column": 4,
+    "bed_strand_column": null,
+    "class_attribute": "Classification",
+    "class_map": null,
+    "family_attribute": null,
+    "family_policy": "repeat-name",
+    "format": "repeatmasker-out",
+    "gff_feature": [],
+    "id_prefix": "hg002_mat",
+    "lengths": "/workspace/tevox-v05-study/final/human/hg002_mat/lengths.tsv",
+    "name_attribute": "Name",
+    "output_prefix": "/workspace/tevox-v05-study/final/human/hg002_mat/repeats"
+  },
+  "counts": {
+    "header_records": 2,
+    "parsed_fragments": 5422582,
+    "rejected_excluded_non_te": 845680,
+    "rejected_unresolved_class": 7103,
+    "retained_fragments": 4569799,
+    "source_records": 5422584,
+    "unknown_class_fragments": 25028
+  },
+  "format": "repeatmasker-out",
+  "input": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeatmasker.out.gz",
+  "input_coordinate_system": "one-based-inclusive",
+  "interpretation": "Annotation fragments only; not reconstructed elements or proven insertion/deletion events. Unknown class retained explicitly with uncertainty.",
+  "lengths": "/workspace/tevox-v05-study/final/human/hg002_mat/lengths.tsv",
+  "output_coordinate_system": "zero-based-half-open",
+  "outputs": {
+    "bed": "/workspace/tevox-v05-study/final/human/hg002_mat/repeats.bed",
+    "metadata": "/workspace/tevox-v05-study/final/human/hg002_mat/repeats.metadata.tsv",
+    "qc": "/workspace/tevox-v05-study/final/human/hg002_mat/repeats.qc.json",
+    "rejected": "/workspace/tevox-v05-study/final/human/hg002_mat/repeats.rejected.tsv"
+  }
+}

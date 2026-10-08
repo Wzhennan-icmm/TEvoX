@@ -1,0 +1,26 @@
+{
+  "checksum_source": null,
+  "completed_at": "2026-10-03T08:21:07.639914+00:00",
+  "curl_log": "/workspace/tevox-study/data/human/hg002_mat/hg002v1.1.maternal.bb.provenance.json.curl.log",
+  "effective_url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/HG002/assemblies/annotation/repeatmasker/hg002v1.1.maternal.bb",
+  "observed": {
+    "bytes": 355102813,
+    "md5": "4c6e706adae8ac1036632aacc010bcb8",
+    "sha256": "266769e74844ad380a9f4d57014d838efd646096d0f4f3dd2d8ee305804b6824"
+  },
+  "original_url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/HG002/assemblies/annotation/repeatmasker/hg002v1.1.maternal.bb",
+  "output": "/workspace/tevox-study/data/human/hg002_mat/hg002v1.1.maternal.bb",
+  "request": {
+    "expected_bytes": 355102813,
+    "expected_md5": null,
+    "expected_sha256": null,
+    "original_url": "https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/HG002/assemblies/annotation/repeatmasker/hg002v1.1.maternal.bb",
+    "url_sha256": "5c6f8e7a486b6334d0810268cba1f81a7746cfeb02c9193a757d0405bbf65d17"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:20:57.656572+00:00",
+  "verification": "local_sha256_only",
+  "verified_algorithms": []
+}

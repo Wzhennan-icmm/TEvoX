@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Fitch-parsimony event candidates from a TEvoX locus-state matrix."""
 from __future__ import annotations
+
+import gzip
+from pathlib import Path
 import argparse,csv,dataclasses,pathlib,re,sys
 @dataclasses.dataclass(eq=False)
 class Node:
@@ -35,6 +38,21 @@ class Parser:
             for c in n.children:names(c)
             if not n.name:self.k+=1;n.name=f'internal_{self.k}'
         names(root);return root
+def table_path(path):
+    path = Path(path)
+    compressed = Path(str(path) + ".gz")
+    if path.suffix == ".tsv" and compressed.is_file():
+        if path.is_file():
+            raise ValueError("ambiguous plain/compressed table: " + str(path))
+        return compressed
+    return path
+
+
+def open_table(path):
+    path = table_path(path)
+    return gzip.open(path, "rt", newline="", encoding="utf-8") if path.suffix == ".gz" else path.open(newline="", encoding="utf-8")
+
+
 def post(n):
     for c in n.children:yield from post(c)
     yield n
@@ -43,7 +61,7 @@ def pre(n):
     for c in n.children:yield from pre(c)
 def load(path):
     loci=[];m={}
-    with path.open(encoding='utf8',newline='') as h:
+    with open_table(path) as h:
         r=csv.DictReader(h,delimiter='\t')
         if not r.fieldnames or not {'locus_id','genome_id','state'}<=set(r.fieldnames):raise ValueError('states TSV requires locus_id, genome_id and state')
         for row in r:

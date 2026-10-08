@@ -8,6 +8,8 @@ membership score as a probability.
 
 from __future__ import annotations
 
+import gzip
+
 import argparse
 import csv
 import hashlib
@@ -140,6 +142,21 @@ class ContractError(ValueError):
     """An input cannot safely be exported under this contract."""
 
 
+def table_path(path):
+    path = Path(path)
+    compressed = Path(str(path) + ".gz")
+    if path.suffix == ".tsv" and compressed.is_file():
+        if path.is_file():
+            raise ValueError("ambiguous plain/compressed table: " + str(path))
+        return compressed
+    return path
+
+
+def open_table(path):
+    path = table_path(path)
+    return gzip.open(path, "rt", newline="", encoding="utf-8") if path.suffix == ".gz" else path.open(newline="", encoding="utf-8")
+
+
 def fail_constant(value: str) -> None:
     raise ContractError(f"JSON contains non-finite constant {value!r}")
 
@@ -211,7 +228,7 @@ def validate_sha256(value: Any, label: str) -> str:
 
 def read_tsv(path: Path, expected: Sequence[str], label: str) -> list[dict[str, str]]:
     try:
-        with path.open(newline="", encoding="utf-8") as handle:
+        with open_table(path) as handle:
             reader = csv.DictReader(handle, delimiter="\t")
             fields = reader.fieldnames
             if fields is None:
@@ -1112,9 +1129,9 @@ def export(args: argparse.Namespace) -> tuple[Path, Path, Path]:
     prefix = Path(args.prefix)
     truth_path = Path(args.truth).resolve()
     run_path = Path(f"{prefix}.run.json").resolve()
-    evidence_path = Path(f"{prefix}.evidence.tsv").resolve()
-    candidate_path = Path(f"{prefix}.candidates.tsv").resolve()
-    feature_path = Path(f"{prefix}.candidate_features.tsv").resolve()
+    evidence_path = table_path(Path(f"{prefix}.evidence.tsv")).resolve()
+    candidate_path = table_path(Path(f"{prefix}.candidates.tsv")).resolve()
+    feature_path = table_path(Path(f"{prefix}.candidate_features.tsv")).resolve()
     output_prefix = Path(args.output)
     training_path = Path(f"{output_prefix}.training.tsv").resolve()
     unmatched_path = Path(f"{output_prefix}.unmatched_truth.tsv").resolve()
