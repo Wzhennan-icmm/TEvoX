@@ -1,0 +1,26 @@
+{
+  "checksum_source": null,
+  "completed_at": "2026-10-03T08:21:40.100198+00:00",
+  "curl_log": "/workspace/tevox-study/metadata/human/bigBedToBed.provenance.json.curl.log",
+  "effective_url": "https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedToBed",
+  "observed": {
+    "bytes": 12908288,
+    "md5": "a2117c557ca7ea718cf912dd236a0e22",
+    "sha256": "45cf45c3bd0b77c7f940ff467f30b3563aedb243079617b16f6125d222ff480f"
+  },
+  "original_url": "https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedToBed",
+  "output": "/workspace/tevox-study/tools/bigBedToBed",
+  "request": {
+    "expected_bytes": 12908288,
+    "expected_md5": null,
+    "expected_sha256": null,
+    "original_url": "https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedToBed",
+    "url_sha256": "8a2535d637177d4ef02a3c26539aa95c6d71d6c126539617984894c4a583c7c1"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:21:39.271526+00:00",
+  "verification": "local_sha256_only",
+  "verified_algorithms": []
+}

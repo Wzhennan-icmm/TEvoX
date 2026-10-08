@@ -1,0 +1,2 @@
+source_id	format	collinearity	genes	wgd_node
+hmg_conflict	mcscanx	blocks.hmg_conflict.collinearity	genes.hmg_conflict.tsv	WGD1

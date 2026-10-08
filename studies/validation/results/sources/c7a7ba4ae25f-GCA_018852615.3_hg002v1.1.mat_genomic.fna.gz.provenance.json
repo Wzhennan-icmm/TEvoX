@@ -1,0 +1,28 @@
+{
+  "checksum_source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/md5checksums.txt",
+  "completed_at": "2026-10-03T08:20:49.405362+00:00",
+  "curl_log": "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz.provenance.json.curl.log",
+  "effective_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+  "observed": {
+    "bytes": 919002270,
+    "md5": "84228143387a50fff1fc9110be2000ec",
+    "sha256": "9b8b2f9b9344ca025687b2b007665653e0a8e8ee723800001a20cf9d419265d1"
+  },
+  "original_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+  "output": "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+  "request": {
+    "expected_bytes": 919002270,
+    "expected_md5": "84228143387a50fff1fc9110be2000ec",
+    "expected_sha256": null,
+    "original_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/018/852/615/GCA_018852615.3_hg002v1.1.mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+    "url_sha256": "596b0301d2df3514c3b54d952b44e5da6fd54633712ea427d6dd9801bbf8e4b0"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:20:26.833308+00:00",
+  "verification": "source_checksum_verified",
+  "verified_algorithms": [
+    "md5"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "status": "PASS",
+      "path": "/workspace/tevox-v05-study/final/arabidopsis/tevox.evidence.tsv.gz",
+      "rows": 40017,
+      "local_identity_methods": {
+        "EQX": 37312,
+        "MISSING": 2705
+      },
+      "scope": "streamed per-row evidence invariants; not full relational schema"
+    }
+  ]
+}

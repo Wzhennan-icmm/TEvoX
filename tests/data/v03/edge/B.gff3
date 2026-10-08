@@ -1,0 +1,2 @@
+##gff-version 3
+chr1	fixture	transposable_element	1	20	.	+	.	ID=B_edge;family=FamA

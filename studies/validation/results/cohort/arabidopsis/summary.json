@@ -1,0 +1,142 @@
+{
+  "source_pair": "/workspace/tevox-study/results/arabidopsis",
+  "counts": {
+    "input_files": 5,
+    "genomes": 2,
+    "tes": 48010,
+    "alignment_views": 4324,
+    "native_evidence_groups": 2162,
+    "synteny_evidence_groups": 0,
+    "synteny_provider_inputs": 0,
+    "evidence_observations": 40017,
+    "observation_score_rows": 40017,
+    "candidate_observations": 51905,
+    "internal_candidates": 51813,
+    "graph_candidates": 51813,
+    "candidates": 51813,
+    "candidate_feature_rows": 51813,
+    "decisions": 48010,
+    "genes": 0,
+    "synteny_blocks": 0,
+    "synteny_anchors": 0,
+    "copy_contexts": 0,
+    "te_context_assignments": 0,
+    "edges": 9821,
+    "relations": 134533,
+    "solver_components": 40201,
+    "loci": 40617
+  },
+  "state_counts": [
+    {
+      "genome_id": "nyl7",
+      "state": "EMPTY_SITE_CONFIRMED",
+      "claimable": "true",
+      "count": 309
+    },
+    {
+      "genome_id": "nyl7",
+      "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+      "claimable": "true",
+      "count": 1630
+    },
+    {
+      "genome_id": "nyl7",
+      "state": "PRESENT_ANNOTATED",
+      "claimable": "true",
+      "count": 24779
+    },
+    {
+      "genome_id": "nyl7",
+      "state": "PRESENT_UNANNOTATED",
+      "claimable": "true",
+      "count": 6205
+    },
+    {
+      "genome_id": "nyl7",
+      "state": "PROJECTION_AMBIGUOUS",
+      "claimable": "false",
+      "count": 305
+    },
+    {
+      "genome_id": "nyl7",
+      "state": "STRUCTURAL_ALTERNATIVE",
+      "claimable": "true",
+      "count": 9
+    },
+    {
+      "genome_id": "nyl7",
+      "state": "UNCALLABLE",
+      "claimable": "false",
+      "count": 7380
+    },
+    {
+      "genome_id": "sq1",
+      "state": "EMPTY_SITE_CONFIRMED",
+      "claimable": "true",
+      "count": 303
+    },
+    {
+      "genome_id": "sq1",
+      "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+      "claimable": "true",
+      "count": 1600
+    },
+    {
+      "genome_id": "sq1",
+      "state": "PRESENT_ANNOTATED",
+      "claimable": "true",
+      "count": 23231
+    },
+    {
+      "genome_id": "sq1",
+      "state": "PRESENT_UNANNOTATED",
+      "claimable": "true",
+      "count": 7872
+    },
+    {
+      "genome_id": "sq1",
+      "state": "PROJECTION_AMBIGUOUS",
+      "claimable": "false",
+      "count": 305
+    },
+    {
+      "genome_id": "sq1",
+      "state": "STRUCTURAL_ALTERNATIVE",
+      "claimable": "true",
+      "count": 18
+    },
+    {
+      "genome_id": "sq1",
+      "state": "UNCALLABLE",
+      "claimable": "false",
+      "count": 7288
+    }
+  ],
+  "empty_site_source_fragments": {
+    "nyl7": 317,
+    "sq1": 317
+  },
+  "row_counts": {
+    "evidence.tsv.gz": 40017,
+    "observation_scores.tsv.gz": 40017,
+    "candidates.tsv.gz": 51813,
+    "candidate_features.tsv.gz": 51813,
+    "candidate_contexts.tsv.gz": 51813,
+    "decisions.tsv.gz": 48010,
+    "edges.tsv.gz": 9821,
+    "relations.tsv.gz": 134533,
+    "solver.tsv.gz": 40201,
+    "loci.tsv.gz": 40617,
+    "instances.tsv.gz": 81234,
+    "states.tsv.gz": 81234,
+    "summary.tsv.gz": 16,
+    "synteny.blocks.tsv.gz": 0,
+    "synteny.anchors.tsv.gz": 0,
+    "contexts.tsv.gz": 0,
+    "te_contexts.tsv.gz": 0
+  },
+  "validation": "streaming counts/state gates; full schema validator separately required on bounded fixtures",
+  "family_policy": "classification",
+  "calibration_status": "UNCALIBRATED",
+  "interpretation": "TE annotation fragments and reconstructed loci; no insertion/deletion evolutionary direction or independent accuracy claim"
+}

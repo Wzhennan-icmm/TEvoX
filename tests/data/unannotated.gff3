@@ -1,0 +1,2 @@
+##gff-version 3
+chr1	fixture	transposable_element	151	170	.	+	.	ID=B_distant;family=Fam9

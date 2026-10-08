@@ -1,0 +1,71 @@
+{
+  "manifest": {
+    "path": "/workspace/tevox-study/results/mouse/manifest.json",
+    "bytes": 2411,
+    "sha256": "dc089165ba20c771b2f6eed894a950fa2d225e229588f659ae2793d0c6b5d8c3"
+  },
+  "binary": {
+    "path": "/workspace/tevox-v05-validation-20261006/tevox-final",
+    "bytes": 678000,
+    "sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7"
+  },
+  "alignment": {
+    "path": "/workspace/tevox-study/results/mouse/alignment.paf.gz",
+    "bytes": 54861794,
+    "sha256": "51af36e47e152f10afaee9b77baba1516f062c4430a5e43fe9f196169192cdd8"
+  },
+  "source_inputs": [
+    {
+      "role": "fasta",
+      "genome": "c57",
+      "path": "/workspace/tevox-study/data/mouse/c57/primary.fna.gz",
+      "bytes": 929228832,
+      "sha256": "be21737995f8598f635fd35f534ddaa6667d08bc38fb23604f9acbde9933ce4a"
+    },
+    {
+      "role": "repeats",
+      "genome": "c57",
+      "path": "/workspace/tevox-study/data/mouse/c57/primary.repeatMasker.out.gz",
+      "bytes": 184369583,
+      "sha256": "0a9037abdcf43ee7677f6c9eb7b080cb819d7908cf361ac7652e1f2d3c9bf2b1"
+    },
+    {
+      "role": "genes",
+      "genome": "c57",
+      "path": "/workspace/tevox-study/data/mouse/c57/primary.genes.gff3.gz",
+      "bytes": 28481035,
+      "sha256": "bf8e44b3e03bad7c6983ac29bf9e3e2d36b8dd039908b0a8244f099539dfc314"
+    },
+    {
+      "role": "fasta",
+      "genome": "cast",
+      "path": "/workspace/tevox-study/data/mouse/cast/primary.fna.gz",
+      "bytes": 925432206,
+      "sha256": "b0693be78b4c597d0867e534ef0ba198d0392067d325fb74c0752435ba1c9656"
+    },
+    {
+      "role": "repeats",
+      "genome": "cast",
+      "path": "/workspace/tevox-study/data/mouse/cast/primary.repeatMasker.out.gz",
+      "bytes": 184590393,
+      "sha256": "ee0aa8b72ab5716c67b710ee6616e3f8bcb90e4be027312ed23a9cd70a44f2f8"
+    },
+    {
+      "role": "genes",
+      "genome": "cast",
+      "path": "/workspace/tevox-study/data/mouse/cast/primary.genes.gff3.gz",
+      "bytes": 28871831,
+      "sha256": "37337e687d613ed1da5d7658b5943b57d69136c0c2688f1d464ce597afd8e7cc"
+    }
+  ],
+  "family_policy": "repeat-name",
+  "scripts": {
+    "annotate_candidates.py": "45ded3f62ba22abc75b758de25fa88cb23d2b6bdae66e9fe791a8054df96e6a7",
+    "archive_run.py": "8275cd5c6bc9ac83286bedcd72613edcb2cd4ed22141d76f8b3610a04bdfc20d",
+    "normalize_annotations.py": "3ef9740365a26ab02d52ef17b0c5123e66f0c67826d7b49a5f8b626fb4d562e9",
+    "paf_exact.py": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+    "run_pair.py": "474f66229331396be1331538aa23d99c3bdf9b63680ba0448ec3a308d1a326b0",
+    "test_inputs.py": "6806ee0085898ed077e15c785914dfce28d803f7490b385b780b3f3bc72bf2c2",
+    "test_run_integrity.py": "c4d3704875e669d4101926ff1aa9e3407020272d6e5b9f297457da408fc24aeb"
+  }
+}

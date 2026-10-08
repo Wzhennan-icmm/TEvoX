@@ -1,0 +1,2 @@
+##gff-version 3
+chr1	fixture	transposable_element	141	160	.	-	.	ID=B_reverse;family=FamA

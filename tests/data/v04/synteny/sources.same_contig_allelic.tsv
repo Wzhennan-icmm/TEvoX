@@ -1,0 +1,2 @@
+source_id	format	collinearity	genes	wgd_node
+allelic_same_contig	mcscanx	blocks.same_contig_wgd.collinearity	genes.same_contig_allelic.tsv	WGD1

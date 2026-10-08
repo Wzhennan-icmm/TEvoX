@@ -1,0 +1,263 @@
+{
+  "pair_id": "mouse_c57_cast_v3",
+  "species": "Mus musculus",
+  "status": "downloaded_verified_primary_nuclear_tuples_and_repeat_audits_ready",
+  "publication": {
+    "title": "High-quality mouse reference genomes reveal the structural complexity of the murine protein-coding landscape",
+    "first_author": "Mohab Helmy",
+    "doi": "10.1016/j.xgen.2025.101074",
+    "pmid": "41330379",
+    "pmcid": "PMC12903361",
+    "journal": "Cell Genomics",
+    "first_online": "2025-12-01",
+    "journal_collection_date": "2026-02-11",
+    "fulltext_xml_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12903361/fullTextXML",
+    "evidence_path": "/workspace/tevox-study/discovery/mouse_publication/modern_mouse_fulltext.xml"
+  },
+  "publication_binding": "The paper explicitly deposits the 17 long-read assemblies to PRJEB47108 and identifies CAST/EiJ and C57BL/6NJ; authoritative ENA accession records explicitly bind exact v3 versions to PRJEB47108. The main article does not print these accession.version or v3 strings.",
+  "publication_limitations": [
+    "Paper Table 1 reports CAST contig N50 22.55 Mb and C57BL/6NJ 5.31 Mb, whereas ENA v3 records report 32.955239 and 8.304515 Mb. Paper statistics cover chromosomes 1\u201319 and X, but this alone has not been shown to explain the differences. Do not claim exact recreation of paper assemblies/statistics without supplementary-version confirmation.",
+    "The assembly workflow uses de novo Falcon CLR contigs but RagTag chromosome organization guided by GRCm39 and Hi-C/manual curation. It is not wholly reference-independent.",
+    "The old Lilue et al. 2018 paper supports the earlier short-read assemblies; use Helmy et al. DOI 10.1016/j.xgen.2025.101074 for this modern long-read project."
+  ],
+  "assemblies": [
+    {
+      "id": "c57",
+      "strain": "C57BL/6NJ",
+      "assembly_accession": "GCA_921999865.2",
+      "assembly_name": "C57BL_6NJ_v3",
+      "biosample": "SAMEA9544183",
+      "bioproject": "PRJEB47108",
+      "annotation_release": "Ensembl 115",
+      "gene_build": "2023-06",
+      "assembly_release": "2022-07-01",
+      "files": {
+        "fasta": {
+          "filename": "GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz",
+          "compressed_bytes": 789570616,
+          "head_status": 200,
+          "local_path": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz",
+          "checksum_algorithm": "MD5",
+          "md5": "630ac3123b4938c90f0f2b927267b2b5",
+          "checksum_source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/md5checksums.txt",
+          "local_sha256": "003c13a0a2e561cf444ffbaf862a66cbd03cb1159cf59349ee495e1b521c057a",
+          "verification": "source_checksum_verified",
+          "provenance_record": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2_C57BL_6NJ_v3_genomic.fna.gz.provenance.json"
+        },
+        "gene_gff3": {
+          "filename": "Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz",
+          "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz",
+          "compressed_bytes": 20844108,
+          "head_status": 200,
+          "local_path": "/workspace/tevox-study/data/mouse/c57/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz",
+          "checksum_algorithm": "BSD sum (sum -r)",
+          "bsd_sum": 24914,
+          "bsd_blocks_1024": 20356,
+          "checksum_source": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/CHECKSUMS",
+          "local_sha256": "e18e926041fe0112f41a6610b278a428847905df2c46cc042d8c100d0e935ca0",
+          "verification": "source_bsd_sum_verified",
+          "provenance_record": "/workspace/tevox-study/data/mouse/c57/Mus_musculus_c57bl6nj.C57BL_6NJ_v3.115.gff3.gz.provenance.json"
+        },
+        "repeatmasker": {
+          "filename": "GCA_921999865.2.repeatMasker.out.gz",
+          "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/GCA_921999865.2.repeatMasker.out.gz",
+          "compressed_bytes": 147025938,
+          "head_status": 200,
+          "local_path": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz",
+          "checksum_algorithm": "MD5",
+          "md5": "c695318cc936b90860eb4eb4eb085c5a",
+          "checksum_source": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/md5sum.txt",
+          "local_sha256": "ecb7d394a82dcd225a0e153d2abc783bcf20e46a46f20cc157bcf54644cad6be",
+          "verification": "source_checksum_verified",
+          "provenance_record": "/workspace/tevox-study/data/mouse/c57/GCA_921999865.2.repeatMasker.out.gz.provenance.json"
+        }
+      },
+      "metadata_sources": {
+        "ncbi_md5checksums.txt": {
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/865/GCA_921999865.2_C57BL_6NJ_v3/md5checksums.txt",
+          "snapshot": "/workspace/tevox-study/discovery/c57_v3_ncbi_md5.txt"
+        },
+        "genark_md5sum.txt": {
+          "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/865/GCA_921999865.2/md5sum.txt",
+          "snapshot": "/workspace/tevox-study/discovery/c57_v3_genark_md5.txt"
+        },
+        "ensembl_CHECKSUMS": {
+          "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_c57bl6nj/CHECKSUMS",
+          "snapshot": "/workspace/tevox-study/discovery/c57_v3_ensembl_CHECKSUMS"
+        }
+      },
+      "analysis_selection": {
+        "scope": "complete nuclear chromosomes 1-19 and X",
+        "provenance": "/workspace/tevox-study/data/mouse/c57/primary_selection.provenance.json",
+        "outputs": {
+          "fasta": {
+            "path": "/workspace/tevox-study/data/mouse/c57/primary.fna.gz",
+            "bytes": 929228832,
+            "sha256": "be21737995f8598f635fd35f534ddaa6667d08bc38fb23604f9acbde9933ce4a"
+          },
+          "genes": {
+            "path": "/workspace/tevox-study/data/mouse/c57/primary.genes.gff3.gz",
+            "bytes": 28481035,
+            "sha256": "bf8e44b3e03bad7c6983ac29bf9e3e2d36b8dd039908b0a8244f099539dfc314"
+          },
+          "repeats": {
+            "path": "/workspace/tevox-study/data/mouse/c57/primary.repeatMasker.out.gz",
+            "bytes": 184369583,
+            "sha256": "0a9037abdcf43ee7677f6c9eb7b080cb819d7908cf361ac7652e1f2d3c9bf2b1"
+          }
+        },
+        "counts": {
+          "selected_sequences": 20,
+          "selected_bases": 2509150141,
+          "excluded_sequences": 188,
+          "excluded_bases": 5459687,
+          "selected_gene_feature_rows": 26719,
+          "selected_gff_feature_rows": 1620717,
+          "excluded_gff_feature_rows": 2627,
+          "selected_repeat_rows": 4653345,
+          "excluded_repeat_rows": 7756,
+          "raw_repeat_rows": 4661101,
+          "exact_duplicate_repeat_groups": 0,
+          "repeated_id_coordinate_groups": 0
+        },
+        "provenance_sha256": "a5cd56845e6809cc073f1482480042dcaba698c02e088d17b7dd750be96a479c",
+        "repeat_audits": {
+          "full_record": {
+            "path": "/workspace/tevox-study/data/mouse/c57/repeat_duplicate_audit.json",
+            "sha256": "c0648e4186657d07534426201bf4d4738b65a9500a64d166053b0bd320f13a47"
+          },
+          "id_coordinates": {
+            "path": "/workspace/tevox-study/data/mouse/c57/repeat_identity_audit.json",
+            "sha256": "e086be4e963057838fe5276165d2b4b2a83d60e92cae2c3bddb1f05c98e087ef"
+          }
+        }
+      }
+    },
+    {
+      "id": "cast",
+      "strain": "CAST/EiJ",
+      "assembly_accession": "GCA_921999005.2",
+      "assembly_name": "CAST_EiJ_v3",
+      "biosample": "SAMEA9544174",
+      "bioproject": "PRJEB47108",
+      "annotation_release": "Ensembl 115",
+      "gene_build": "2023-06",
+      "assembly_release": "2022-07-01",
+      "files": {
+        "fasta": {
+          "filename": "GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+          "compressed_bytes": 786637315,
+          "head_status": 200,
+          "local_path": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+          "checksum_algorithm": "MD5",
+          "md5": "c90532d400f688a28d13e0b5e01cc25e",
+          "checksum_source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/md5checksums.txt",
+          "local_sha256": "ab89efa7707311035ed8210e18adee259a8d5cfda134c504f889d209d756d06b",
+          "verification": "source_checksum_verified",
+          "provenance_record": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz.provenance.json"
+        },
+        "gene_gff3": {
+          "filename": "Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+          "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+          "compressed_bytes": 21010744,
+          "head_status": 200,
+          "local_path": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+          "checksum_algorithm": "BSD sum (sum -r)",
+          "bsd_sum": 12244,
+          "bsd_blocks_1024": 20519,
+          "checksum_source": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/CHECKSUMS",
+          "local_sha256": "ba0f01cd108fad0bc64ba679c0db7c4006588f25affbd926afdbc3de4524ab04",
+          "verification": "source_bsd_sum_verified",
+          "provenance_record": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz.provenance.json"
+        },
+        "repeatmasker": {
+          "filename": "GCA_921999005.2.repeatMasker.out.gz",
+          "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/GCA_921999005.2.repeatMasker.out.gz",
+          "compressed_bytes": 147210864,
+          "head_status": 200,
+          "local_path": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz",
+          "checksum_algorithm": "MD5",
+          "md5": "4aef58f16805d2eb51e2037f4b6e1bf0",
+          "checksum_source": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+          "local_sha256": "ad436910e09dc56b45cd24ea912d7146b6482a1e58783c8a2b1bb6bb14da96db",
+          "verification": "source_checksum_verified",
+          "provenance_record": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz.provenance.json"
+        }
+      },
+      "metadata_sources": {
+        "ncbi_md5checksums.txt": {
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/md5checksums.txt",
+          "snapshot": "/workspace/tevox-study/discovery/cast_v3_ncbi_md5.txt"
+        },
+        "genark_md5sum.txt": {
+          "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+          "snapshot": "/workspace/tevox-study/discovery/cast_v3_genark_md5.txt"
+        },
+        "ensembl_CHECKSUMS": {
+          "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/CHECKSUMS",
+          "snapshot": "/workspace/tevox-study/discovery/cast_v3_ensembl_CHECKSUMS"
+        }
+      },
+      "analysis_selection": {
+        "scope": "complete nuclear chromosomes 1-19 and X",
+        "provenance": "/workspace/tevox-study/data/mouse/cast/primary_selection.provenance.json",
+        "outputs": {
+          "fasta": {
+            "path": "/workspace/tevox-study/data/mouse/cast/primary.fna.gz",
+            "bytes": 925432206,
+            "sha256": "b0693be78b4c597d0867e534ef0ba198d0392067d325fb74c0752435ba1c9656"
+          },
+          "genes": {
+            "path": "/workspace/tevox-study/data/mouse/cast/primary.genes.gff3.gz",
+            "bytes": 28871831,
+            "sha256": "37337e687d613ed1da5d7658b5943b57d69136c0c2688f1d464ce597afd8e7cc"
+          },
+          "repeats": {
+            "path": "/workspace/tevox-study/data/mouse/cast/primary.repeatMasker.out.gz",
+            "bytes": 184590393,
+            "sha256": "ee0aa8b72ab5716c67b710ee6616e3f8bcb90e4be027312ed23a9cd70a44f2f8"
+          }
+        },
+        "counts": {
+          "selected_sequences": 20,
+          "selected_bases": 2514319647,
+          "excluded_sequences": 127,
+          "excluded_bases": 5544117,
+          "selected_gene_feature_rows": 26198,
+          "selected_gff_feature_rows": 1647103,
+          "excluded_gff_feature_rows": 2055,
+          "selected_repeat_rows": 4656338,
+          "excluded_repeat_rows": 6887,
+          "raw_repeat_rows": 4663225,
+          "exact_duplicate_repeat_groups": 0,
+          "repeated_id_coordinate_groups": 0
+        },
+        "provenance_sha256": "5589501004442dceebfd723a6bce3a14fa24ceee396b65043288a2f9251499b1",
+        "repeat_audits": {
+          "full_record": {
+            "path": "/workspace/tevox-study/data/mouse/cast/repeat_duplicate_audit.json",
+            "sha256": "636416cbd62499e8b955a6937140ccec27554795293dd9b7c4c47cb32fed7f8d"
+          },
+          "id_coordinates": {
+            "path": "/workspace/tevox-study/data/mouse/cast/repeat_identity_audit.json",
+            "sha256": "a3577d66ed1bbbb217310c33bc3ab4b9e4726ed75c1198d506ee60978ef6dea7"
+          }
+        }
+      }
+    }
+  ],
+  "repeat_comparability": {
+    "provider": "UCSC GenArk",
+    "repeatmasker": "4.1.4",
+    "rmblastn": "2.13.0+",
+    "dfam": "3.6",
+    "families_selected": 1395,
+    "same_exact_options": false,
+    "difference": "C57 -species 'Mus musculus'; CAST -species 'Mus musculus castaneus'. Family selection count agrees, exact selected library content not independently compared."
+  },
+  "total_compressed_bytes": 1912299585,
+  "download_manifest": "/workspace/tevox-study/data/mouse/download_manifest.json",
+  "pair_manifest": "/workspace/tevox-study/metadata/mouse_pair.json"
+}

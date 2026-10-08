@@ -1,0 +1,2350 @@
+{
+  "id": "cast",
+  "assembly_accession": "GCA_921999005.2",
+  "scope": "complete nuclear chromosomes 1-19 and X",
+  "selection_reason": "Root-authorized matched primary chromosome scope; mitochondrial and unplaced scaffolds excluded explicitly. C57 mitochondrial Ensembl/NCBI length mismatch is outside scope.",
+  "selected_molecules": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "X"
+  ],
+  "selected_accessions": {
+    "1": "OW971825.1",
+    "2": "OW971836.1",
+    "3": "OW971837.1",
+    "4": "OW971838.1",
+    "5": "OW971839.1",
+    "6": "OW971840.1",
+    "7": "OW971841.1",
+    "8": "OW971842.1",
+    "9": "OW971843.1",
+    "10": "OW971826.1",
+    "11": "OW971827.1",
+    "12": "OW971828.1",
+    "13": "OW971829.1",
+    "14": "OW971830.1",
+    "15": "OW971831.1",
+    "16": "OW971832.1",
+    "17": "OW971833.1",
+    "18": "OW971834.1",
+    "19": "OW971835.1",
+    "X": "OW971844.1"
+  },
+  "selected_sequence_count": 20,
+  "excluded_assembly_sequences": [
+    {
+      "name": "CAST_EiJ#1#chrX_unloc_1",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000001.1",
+      "unit": "Primary Assembly",
+      "length": 445002
+    },
+    {
+      "name": "CAST_EiJ#1#21",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000002.1",
+      "unit": "Primary Assembly",
+      "length": 103138
+    },
+    {
+      "name": "CAST_EiJ#1#22",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000003.1",
+      "unit": "Primary Assembly",
+      "length": 56484
+    },
+    {
+      "name": "CAST_EiJ#1#24",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000004.1",
+      "unit": "Primary Assembly",
+      "length": 76463
+    },
+    {
+      "name": "CAST_EiJ#1#25",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000005.1",
+      "unit": "Primary Assembly",
+      "length": 12190
+    },
+    {
+      "name": "CAST_EiJ#1#28",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000006.1",
+      "unit": "Primary Assembly",
+      "length": 76463
+    },
+    {
+      "name": "CAST_EiJ#1#30",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000007.1",
+      "unit": "Primary Assembly",
+      "length": 58029
+    },
+    {
+      "name": "CAST_EiJ#1#31",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000008.1",
+      "unit": "Primary Assembly",
+      "length": 68100
+    },
+    {
+      "name": "CAST_EiJ#1#36",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000009.1",
+      "unit": "Primary Assembly",
+      "length": 22948
+    },
+    {
+      "name": "CAST_EiJ#1#40",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000010.1",
+      "unit": "Primary Assembly",
+      "length": 127094
+    },
+    {
+      "name": "CAST_EiJ#1#42",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000011.1",
+      "unit": "Primary Assembly",
+      "length": 44601
+    },
+    {
+      "name": "CAST_EiJ#1#44",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000012.1",
+      "unit": "Primary Assembly",
+      "length": 63087
+    },
+    {
+      "name": "CAST_EiJ#1#46",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000013.1",
+      "unit": "Primary Assembly",
+      "length": 28603
+    },
+    {
+      "name": "CAST_EiJ#1#47",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000014.1",
+      "unit": "Primary Assembly",
+      "length": 119659
+    },
+    {
+      "name": "CAST_EiJ#1#48",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000015.1",
+      "unit": "Primary Assembly",
+      "length": 105201
+    },
+    {
+      "name": "CAST_EiJ#1#51",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000016.1",
+      "unit": "Primary Assembly",
+      "length": 117067
+    },
+    {
+      "name": "CAST_EiJ#1#52",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000017.1",
+      "unit": "Primary Assembly",
+      "length": 20261
+    },
+    {
+      "name": "CAST_EiJ#1#56",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000018.1",
+      "unit": "Primary Assembly",
+      "length": 37141
+    },
+    {
+      "name": "CAST_EiJ#1#59",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000019.1",
+      "unit": "Primary Assembly",
+      "length": 60308
+    },
+    {
+      "name": "CAST_EiJ#1#61",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000020.1",
+      "unit": "Primary Assembly",
+      "length": 29266
+    },
+    {
+      "name": "CAST_EiJ#1#62",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000021.1",
+      "unit": "Primary Assembly",
+      "length": 63905
+    },
+    {
+      "name": "CAST_EiJ#1#63",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000022.1",
+      "unit": "Primary Assembly",
+      "length": 87739
+    },
+    {
+      "name": "CAST_EiJ#1#64",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000023.1",
+      "unit": "Primary Assembly",
+      "length": 55404
+    },
+    {
+      "name": "CAST_EiJ#1#70",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000024.1",
+      "unit": "Primary Assembly",
+      "length": 39246
+    },
+    {
+      "name": "CAST_EiJ#1#71",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000025.1",
+      "unit": "Primary Assembly",
+      "length": 63585
+    },
+    {
+      "name": "CAST_EiJ#1#73",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000026.1",
+      "unit": "Primary Assembly",
+      "length": 48215
+    },
+    {
+      "name": "CAST_EiJ#1#74",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000027.1",
+      "unit": "Primary Assembly",
+      "length": 85024
+    },
+    {
+      "name": "CAST_EiJ#1#76",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000028.1",
+      "unit": "Primary Assembly",
+      "length": 21773
+    },
+    {
+      "name": "CAST_EiJ#1#79",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000029.1",
+      "unit": "Primary Assembly",
+      "length": 230640
+    },
+    {
+      "name": "CAST_EiJ#1#81",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000030.1",
+      "unit": "Primary Assembly",
+      "length": 28885
+    },
+    {
+      "name": "CAST_EiJ#1#83",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000031.1",
+      "unit": "Primary Assembly",
+      "length": 27014
+    },
+    {
+      "name": "CAST_EiJ#1#86",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000032.1",
+      "unit": "Primary Assembly",
+      "length": 16823
+    },
+    {
+      "name": "CAST_EiJ#1#88",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000033.1",
+      "unit": "Primary Assembly",
+      "length": 27438
+    },
+    {
+      "name": "CAST_EiJ#1#90",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000034.1",
+      "unit": "Primary Assembly",
+      "length": 74941
+    },
+    {
+      "name": "CAST_EiJ#1#92",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000035.1",
+      "unit": "Primary Assembly",
+      "length": 15013
+    },
+    {
+      "name": "CAST_EiJ#1#95",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000036.1",
+      "unit": "Primary Assembly",
+      "length": 16356
+    },
+    {
+      "name": "CAST_EiJ#1#98",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000037.1",
+      "unit": "Primary Assembly",
+      "length": 61032
+    },
+    {
+      "name": "CAST_EiJ#1#100",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000038.1",
+      "unit": "Primary Assembly",
+      "length": 24064
+    },
+    {
+      "name": "CAST_EiJ#1#101",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000039.1",
+      "unit": "Primary Assembly",
+      "length": 64706
+    },
+    {
+      "name": "CAST_EiJ#1#106",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000040.1",
+      "unit": "Primary Assembly",
+      "length": 66670
+    },
+    {
+      "name": "CAST_EiJ#1#108",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000041.1",
+      "unit": "Primary Assembly",
+      "length": 168503
+    },
+    {
+      "name": "CAST_EiJ#1#109",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000042.1",
+      "unit": "Primary Assembly",
+      "length": 10871
+    },
+    {
+      "name": "CAST_EiJ#1#113",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000043.1",
+      "unit": "Primary Assembly",
+      "length": 19249
+    },
+    {
+      "name": "CAST_EiJ#1#116",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000044.1",
+      "unit": "Primary Assembly",
+      "length": 76986
+    },
+    {
+      "name": "CAST_EiJ#1#117",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000045.1",
+      "unit": "Primary Assembly",
+      "length": 26671
+    },
+    {
+      "name": "CAST_EiJ#1#121",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000046.1",
+      "unit": "Primary Assembly",
+      "length": 15554
+    },
+    {
+      "name": "CAST_EiJ#1#123",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000047.1",
+      "unit": "Primary Assembly",
+      "length": 23768
+    },
+    {
+      "name": "CAST_EiJ#1#126",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000048.1",
+      "unit": "Primary Assembly",
+      "length": 48929
+    },
+    {
+      "name": "CAST_EiJ#1#129",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000049.1",
+      "unit": "Primary Assembly",
+      "length": 75517
+    },
+    {
+      "name": "CAST_EiJ#1#130",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000050.1",
+      "unit": "Primary Assembly",
+      "length": 44823
+    },
+    {
+      "name": "CAST_EiJ#1#134",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000051.1",
+      "unit": "Primary Assembly",
+      "length": 16134
+    },
+    {
+      "name": "CAST_EiJ#1#135",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000052.1",
+      "unit": "Primary Assembly",
+      "length": 66156
+    },
+    {
+      "name": "CAST_EiJ#1#137",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000053.1",
+      "unit": "Primary Assembly",
+      "length": 39716
+    },
+    {
+      "name": "CAST_EiJ#1#139",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000054.1",
+      "unit": "Primary Assembly",
+      "length": 87268
+    },
+    {
+      "name": "CAST_EiJ#1#141",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000055.1",
+      "unit": "Primary Assembly",
+      "length": 32705
+    },
+    {
+      "name": "CAST_EiJ#1#143",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000056.1",
+      "unit": "Primary Assembly",
+      "length": 39894
+    },
+    {
+      "name": "CAST_EiJ#1#147",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000057.1",
+      "unit": "Primary Assembly",
+      "length": 184903
+    },
+    {
+      "name": "CAST_EiJ#1#149",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000058.1",
+      "unit": "Primary Assembly",
+      "length": 73588
+    },
+    {
+      "name": "CAST_EiJ#1#150",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000059.1",
+      "unit": "Primary Assembly",
+      "length": 32906
+    },
+    {
+      "name": "CAST_EiJ#1#23",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000060.1",
+      "unit": "Primary Assembly",
+      "length": 47768
+    },
+    {
+      "name": "CAST_EiJ#1#26",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000061.1",
+      "unit": "Primary Assembly",
+      "length": 17427
+    },
+    {
+      "name": "CAST_EiJ#1#27",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000062.1",
+      "unit": "Primary Assembly",
+      "length": 24015
+    },
+    {
+      "name": "CAST_EiJ#1#29",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000063.1",
+      "unit": "Primary Assembly",
+      "length": 16124
+    },
+    {
+      "name": "CAST_EiJ#1#32",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000064.1",
+      "unit": "Primary Assembly",
+      "length": 27966
+    },
+    {
+      "name": "CAST_EiJ#1#34",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000065.1",
+      "unit": "Primary Assembly",
+      "length": 21687
+    },
+    {
+      "name": "CAST_EiJ#1#35",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000066.1",
+      "unit": "Primary Assembly",
+      "length": 31618
+    },
+    {
+      "name": "CAST_EiJ#1#37",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000067.1",
+      "unit": "Primary Assembly",
+      "length": 19685
+    },
+    {
+      "name": "CAST_EiJ#1#38",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000068.1",
+      "unit": "Primary Assembly",
+      "length": 21059
+    },
+    {
+      "name": "CAST_EiJ#1#39",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000069.1",
+      "unit": "Primary Assembly",
+      "length": 19742
+    },
+    {
+      "name": "CAST_EiJ#1#43",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000070.1",
+      "unit": "Primary Assembly",
+      "length": 38008
+    },
+    {
+      "name": "CAST_EiJ#1#45",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000071.1",
+      "unit": "Primary Assembly",
+      "length": 16205
+    },
+    {
+      "name": "CAST_EiJ#1#49",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000072.1",
+      "unit": "Primary Assembly",
+      "length": 18561
+    },
+    {
+      "name": "CAST_EiJ#1#50",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000073.1",
+      "unit": "Primary Assembly",
+      "length": 10751
+    },
+    {
+      "name": "CAST_EiJ#1#53",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000074.1",
+      "unit": "Primary Assembly",
+      "length": 27730
+    },
+    {
+      "name": "CAST_EiJ#1#54",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000075.1",
+      "unit": "Primary Assembly",
+      "length": 10758
+    },
+    {
+      "name": "CAST_EiJ#1#55",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000076.1",
+      "unit": "Primary Assembly",
+      "length": 20427
+    },
+    {
+      "name": "CAST_EiJ#1#57",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000077.1",
+      "unit": "Primary Assembly",
+      "length": 32719
+    },
+    {
+      "name": "CAST_EiJ#1#58",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000078.1",
+      "unit": "Primary Assembly",
+      "length": 10977
+    },
+    {
+      "name": "CAST_EiJ#1#60",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000079.1",
+      "unit": "Primary Assembly",
+      "length": 16104
+    },
+    {
+      "name": "CAST_EiJ#1#65",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000080.1",
+      "unit": "Primary Assembly",
+      "length": 26366
+    },
+    {
+      "name": "CAST_EiJ#1#66",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000081.1",
+      "unit": "Primary Assembly",
+      "length": 11663
+    },
+    {
+      "name": "CAST_EiJ#1#68",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000082.1",
+      "unit": "Primary Assembly",
+      "length": 13090
+    },
+    {
+      "name": "CAST_EiJ#1#69",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000083.1",
+      "unit": "Primary Assembly",
+      "length": 21058
+    },
+    {
+      "name": "CAST_EiJ#1#72",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000084.1",
+      "unit": "Primary Assembly",
+      "length": 42553
+    },
+    {
+      "name": "CAST_EiJ#1#75",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000085.1",
+      "unit": "Primary Assembly",
+      "length": 40426
+    },
+    {
+      "name": "CAST_EiJ#1#77",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000086.1",
+      "unit": "Primary Assembly",
+      "length": 20947
+    },
+    {
+      "name": "CAST_EiJ#1#78",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000087.1",
+      "unit": "Primary Assembly",
+      "length": 16426
+    },
+    {
+      "name": "CAST_EiJ#1#80",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000088.1",
+      "unit": "Primary Assembly",
+      "length": 15671
+    },
+    {
+      "name": "CAST_EiJ#1#82",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000089.1",
+      "unit": "Primary Assembly",
+      "length": 38662
+    },
+    {
+      "name": "CAST_EiJ#1#84",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000090.1",
+      "unit": "Primary Assembly",
+      "length": 44064
+    },
+    {
+      "name": "CAST_EiJ#1#85",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000091.1",
+      "unit": "Primary Assembly",
+      "length": 26484
+    },
+    {
+      "name": "CAST_EiJ#1#87",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000092.1",
+      "unit": "Primary Assembly",
+      "length": 38827
+    },
+    {
+      "name": "CAST_EiJ#1#89",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000093.1",
+      "unit": "Primary Assembly",
+      "length": 32844
+    },
+    {
+      "name": "CAST_EiJ#1#91",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000094.1",
+      "unit": "Primary Assembly",
+      "length": 31121
+    },
+    {
+      "name": "CAST_EiJ#1#93",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000095.1",
+      "unit": "Primary Assembly",
+      "length": 49927
+    },
+    {
+      "name": "CAST_EiJ#1#94",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000096.1",
+      "unit": "Primary Assembly",
+      "length": 12148
+    },
+    {
+      "name": "CAST_EiJ#1#96",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000097.1",
+      "unit": "Primary Assembly",
+      "length": 19838
+    },
+    {
+      "name": "CAST_EiJ#1#97",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000098.1",
+      "unit": "Primary Assembly",
+      "length": 47599
+    },
+    {
+      "name": "CAST_EiJ#1#99",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000099.1",
+      "unit": "Primary Assembly",
+      "length": 11141
+    },
+    {
+      "name": "CAST_EiJ#1#102",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000100.1",
+      "unit": "Primary Assembly",
+      "length": 10155
+    },
+    {
+      "name": "CAST_EiJ#1#103",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000101.1",
+      "unit": "Primary Assembly",
+      "length": 10463
+    },
+    {
+      "name": "CAST_EiJ#1#104",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000102.1",
+      "unit": "Primary Assembly",
+      "length": 14085
+    },
+    {
+      "name": "CAST_EiJ#1#105",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000103.1",
+      "unit": "Primary Assembly",
+      "length": 10276
+    },
+    {
+      "name": "CAST_EiJ#1#107",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000104.1",
+      "unit": "Primary Assembly",
+      "length": 24074
+    },
+    {
+      "name": "CAST_EiJ#1#110",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000105.1",
+      "unit": "Primary Assembly",
+      "length": 17627
+    },
+    {
+      "name": "CAST_EiJ#1#111",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000106.1",
+      "unit": "Primary Assembly",
+      "length": 23864
+    },
+    {
+      "name": "CAST_EiJ#1#112",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000107.1",
+      "unit": "Primary Assembly",
+      "length": 16254
+    },
+    {
+      "name": "CAST_EiJ#1#114",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000108.1",
+      "unit": "Primary Assembly",
+      "length": 20784
+    },
+    {
+      "name": "CAST_EiJ#1#115",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000109.1",
+      "unit": "Primary Assembly",
+      "length": 26786
+    },
+    {
+      "name": "CAST_EiJ#1#118",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000110.1",
+      "unit": "Primary Assembly",
+      "length": 26268
+    },
+    {
+      "name": "CAST_EiJ#1#120",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000111.1",
+      "unit": "Primary Assembly",
+      "length": 37182
+    },
+    {
+      "name": "CAST_EiJ#1#122",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000112.1",
+      "unit": "Primary Assembly",
+      "length": 58607
+    },
+    {
+      "name": "CAST_EiJ#1#124",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000113.1",
+      "unit": "Primary Assembly",
+      "length": 36080
+    },
+    {
+      "name": "CAST_EiJ#1#125",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000114.1",
+      "unit": "Primary Assembly",
+      "length": 21704
+    },
+    {
+      "name": "CAST_EiJ#1#127",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000115.1",
+      "unit": "Primary Assembly",
+      "length": 16234
+    },
+    {
+      "name": "CAST_EiJ#1#128",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000116.1",
+      "unit": "Primary Assembly",
+      "length": 11825
+    },
+    {
+      "name": "CAST_EiJ#1#132",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000117.1",
+      "unit": "Primary Assembly",
+      "length": 41002
+    },
+    {
+      "name": "CAST_EiJ#1#133",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000118.1",
+      "unit": "Primary Assembly",
+      "length": 18995
+    },
+    {
+      "name": "CAST_EiJ#1#136",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000119.1",
+      "unit": "Primary Assembly",
+      "length": 43246
+    },
+    {
+      "name": "CAST_EiJ#1#138",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000120.1",
+      "unit": "Primary Assembly",
+      "length": 22032
+    },
+    {
+      "name": "CAST_EiJ#1#140",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000121.1",
+      "unit": "Primary Assembly",
+      "length": 13153
+    },
+    {
+      "name": "CAST_EiJ#1#142",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000122.1",
+      "unit": "Primary Assembly",
+      "length": 30132
+    },
+    {
+      "name": "CAST_EiJ#1#144",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000123.1",
+      "unit": "Primary Assembly",
+      "length": 17305
+    },
+    {
+      "name": "CAST_EiJ#1#145",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000124.1",
+      "unit": "Primary Assembly",
+      "length": 14904
+    },
+    {
+      "name": "CAST_EiJ#1#146",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000125.1",
+      "unit": "Primary Assembly",
+      "length": 31707
+    },
+    {
+      "name": "CAST_EiJ#1#148",
+      "role": "unplaced-scaffold",
+      "molecule": "na",
+      "location": "na",
+      "accession": "CAKLHS020000126.1",
+      "unit": "Primary Assembly",
+      "length": 29169
+    },
+    {
+      "name": "CAST_EiJ#1#MT",
+      "role": "assembled-molecule",
+      "molecule": "MIT",
+      "location": "Mitochondrion",
+      "accession": "OW971845.1",
+      "unit": "non-nuclear",
+      "length": 16299
+    }
+  ],
+  "source_artifacts": {
+    "fasta": {
+      "filename": "GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+      "compressed_bytes": 786637315,
+      "head_status": 200,
+      "local_path": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+      "checksum_algorithm": "MD5",
+      "md5": "c90532d400f688a28d13e0b5e01cc25e",
+      "checksum_source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/921/999/005/GCA_921999005.2_CAST_EiJ_v3/md5checksums.txt",
+      "local_sha256": "ab89efa7707311035ed8210e18adee259a8d5cfda134c504f889d209d756d06b",
+      "verification": "source_checksum_verified",
+      "provenance_record": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz.provenance.json"
+    },
+    "gene_gff3": {
+      "filename": "Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+      "url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+      "compressed_bytes": 21010744,
+      "head_status": 200,
+      "local_path": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+      "checksum_algorithm": "BSD sum (sum -r)",
+      "bsd_sum": 12244,
+      "bsd_blocks_1024": 20519,
+      "checksum_source": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/CHECKSUMS",
+      "local_sha256": "ba0f01cd108fad0bc64ba679c0db7c4006588f25affbd926afdbc3de4524ab04",
+      "verification": "source_bsd_sum_verified",
+      "provenance_record": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz.provenance.json"
+    },
+    "repeatmasker": {
+      "filename": "GCA_921999005.2.repeatMasker.out.gz",
+      "url": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/GCA_921999005.2.repeatMasker.out.gz",
+      "compressed_bytes": 147210864,
+      "head_status": 200,
+      "local_path": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz",
+      "checksum_algorithm": "MD5",
+      "md5": "4aef58f16805d2eb51e2037f4b6e1bf0",
+      "checksum_source": "https://hgdownload.soe.ucsc.edu/hubs/GCA/921/999/005/GCA_921999005.2/md5sum.txt",
+      "local_sha256": "ad436910e09dc56b45cd24ea912d7146b6482a1e58783c8a2b1bb6bb14da96db",
+      "verification": "source_checksum_verified",
+      "provenance_record": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz.provenance.json"
+    }
+  },
+  "mapping_evidence": {
+    "assembly_report": "/workspace/tevox-study/discovery/cast_v3_report.txt",
+    "assembly_report_sha256": "24e526a824b2b34ecbcafaffb05b23d4678670bd77cc67fc8be9e0c932ea83db",
+    "chrom_alias": "/workspace/tevox-study/discovery/cast_v3_chromAlias.txt",
+    "chrom_alias_sha256": "4c4d38110024a5205946131d717f4f871651281f1dbfc100d13847e6fd622d48",
+    "mapping_tsv": "/workspace/tevox-study/data/mouse/cast/ensembl_to_genbank.tsv"
+  },
+  "fasta_qc": {
+    "completed_at": "2026-10-03T08:28:26.029735+00:00",
+    "dna_iupac_valid": true,
+    "excluded_bases": 5544117,
+    "excluded_sequence_count": 127,
+    "excluded_sequences": [
+      {
+        "length": 445002,
+        "sequence_id": "CAKLHS020000001.1"
+      },
+      {
+        "length": 103138,
+        "sequence_id": "CAKLHS020000002.1"
+      },
+      {
+        "length": 56484,
+        "sequence_id": "CAKLHS020000003.1"
+      },
+      {
+        "length": 76463,
+        "sequence_id": "CAKLHS020000004.1"
+      },
+      {
+        "length": 12190,
+        "sequence_id": "CAKLHS020000005.1"
+      },
+      {
+        "length": 76463,
+        "sequence_id": "CAKLHS020000006.1"
+      },
+      {
+        "length": 58029,
+        "sequence_id": "CAKLHS020000007.1"
+      },
+      {
+        "length": 68100,
+        "sequence_id": "CAKLHS020000008.1"
+      },
+      {
+        "length": 22948,
+        "sequence_id": "CAKLHS020000009.1"
+      },
+      {
+        "length": 127094,
+        "sequence_id": "CAKLHS020000010.1"
+      },
+      {
+        "length": 44601,
+        "sequence_id": "CAKLHS020000011.1"
+      },
+      {
+        "length": 63087,
+        "sequence_id": "CAKLHS020000012.1"
+      },
+      {
+        "length": 28603,
+        "sequence_id": "CAKLHS020000013.1"
+      },
+      {
+        "length": 119659,
+        "sequence_id": "CAKLHS020000014.1"
+      },
+      {
+        "length": 105201,
+        "sequence_id": "CAKLHS020000015.1"
+      },
+      {
+        "length": 117067,
+        "sequence_id": "CAKLHS020000016.1"
+      },
+      {
+        "length": 20261,
+        "sequence_id": "CAKLHS020000017.1"
+      },
+      {
+        "length": 37141,
+        "sequence_id": "CAKLHS020000018.1"
+      },
+      {
+        "length": 60308,
+        "sequence_id": "CAKLHS020000019.1"
+      },
+      {
+        "length": 29266,
+        "sequence_id": "CAKLHS020000020.1"
+      },
+      {
+        "length": 63905,
+        "sequence_id": "CAKLHS020000021.1"
+      },
+      {
+        "length": 87739,
+        "sequence_id": "CAKLHS020000022.1"
+      },
+      {
+        "length": 55404,
+        "sequence_id": "CAKLHS020000023.1"
+      },
+      {
+        "length": 39246,
+        "sequence_id": "CAKLHS020000024.1"
+      },
+      {
+        "length": 63585,
+        "sequence_id": "CAKLHS020000025.1"
+      },
+      {
+        "length": 48215,
+        "sequence_id": "CAKLHS020000026.1"
+      },
+      {
+        "length": 85024,
+        "sequence_id": "CAKLHS020000027.1"
+      },
+      {
+        "length": 21773,
+        "sequence_id": "CAKLHS020000028.1"
+      },
+      {
+        "length": 230640,
+        "sequence_id": "CAKLHS020000029.1"
+      },
+      {
+        "length": 28885,
+        "sequence_id": "CAKLHS020000030.1"
+      },
+      {
+        "length": 27014,
+        "sequence_id": "CAKLHS020000031.1"
+      },
+      {
+        "length": 16823,
+        "sequence_id": "CAKLHS020000032.1"
+      },
+      {
+        "length": 27438,
+        "sequence_id": "CAKLHS020000033.1"
+      },
+      {
+        "length": 74941,
+        "sequence_id": "CAKLHS020000034.1"
+      },
+      {
+        "length": 15013,
+        "sequence_id": "CAKLHS020000035.1"
+      },
+      {
+        "length": 16356,
+        "sequence_id": "CAKLHS020000036.1"
+      },
+      {
+        "length": 61032,
+        "sequence_id": "CAKLHS020000037.1"
+      },
+      {
+        "length": 24064,
+        "sequence_id": "CAKLHS020000038.1"
+      },
+      {
+        "length": 64706,
+        "sequence_id": "CAKLHS020000039.1"
+      },
+      {
+        "length": 66670,
+        "sequence_id": "CAKLHS020000040.1"
+      },
+      {
+        "length": 168503,
+        "sequence_id": "CAKLHS020000041.1"
+      },
+      {
+        "length": 10871,
+        "sequence_id": "CAKLHS020000042.1"
+      },
+      {
+        "length": 19249,
+        "sequence_id": "CAKLHS020000043.1"
+      },
+      {
+        "length": 76986,
+        "sequence_id": "CAKLHS020000044.1"
+      },
+      {
+        "length": 26671,
+        "sequence_id": "CAKLHS020000045.1"
+      },
+      {
+        "length": 15554,
+        "sequence_id": "CAKLHS020000046.1"
+      },
+      {
+        "length": 23768,
+        "sequence_id": "CAKLHS020000047.1"
+      },
+      {
+        "length": 48929,
+        "sequence_id": "CAKLHS020000048.1"
+      },
+      {
+        "length": 75517,
+        "sequence_id": "CAKLHS020000049.1"
+      },
+      {
+        "length": 44823,
+        "sequence_id": "CAKLHS020000050.1"
+      },
+      {
+        "length": 16134,
+        "sequence_id": "CAKLHS020000051.1"
+      },
+      {
+        "length": 66156,
+        "sequence_id": "CAKLHS020000052.1"
+      },
+      {
+        "length": 39716,
+        "sequence_id": "CAKLHS020000053.1"
+      },
+      {
+        "length": 87268,
+        "sequence_id": "CAKLHS020000054.1"
+      },
+      {
+        "length": 32705,
+        "sequence_id": "CAKLHS020000055.1"
+      },
+      {
+        "length": 39894,
+        "sequence_id": "CAKLHS020000056.1"
+      },
+      {
+        "length": 184903,
+        "sequence_id": "CAKLHS020000057.1"
+      },
+      {
+        "length": 73588,
+        "sequence_id": "CAKLHS020000058.1"
+      },
+      {
+        "length": 32906,
+        "sequence_id": "CAKLHS020000059.1"
+      },
+      {
+        "length": 47768,
+        "sequence_id": "CAKLHS020000060.1"
+      },
+      {
+        "length": 17427,
+        "sequence_id": "CAKLHS020000061.1"
+      },
+      {
+        "length": 24015,
+        "sequence_id": "CAKLHS020000062.1"
+      },
+      {
+        "length": 16124,
+        "sequence_id": "CAKLHS020000063.1"
+      },
+      {
+        "length": 27966,
+        "sequence_id": "CAKLHS020000064.1"
+      },
+      {
+        "length": 21687,
+        "sequence_id": "CAKLHS020000065.1"
+      },
+      {
+        "length": 31618,
+        "sequence_id": "CAKLHS020000066.1"
+      },
+      {
+        "length": 19685,
+        "sequence_id": "CAKLHS020000067.1"
+      },
+      {
+        "length": 21059,
+        "sequence_id": "CAKLHS020000068.1"
+      },
+      {
+        "length": 19742,
+        "sequence_id": "CAKLHS020000069.1"
+      },
+      {
+        "length": 38008,
+        "sequence_id": "CAKLHS020000070.1"
+      },
+      {
+        "length": 16205,
+        "sequence_id": "CAKLHS020000071.1"
+      },
+      {
+        "length": 18561,
+        "sequence_id": "CAKLHS020000072.1"
+      },
+      {
+        "length": 10751,
+        "sequence_id": "CAKLHS020000073.1"
+      },
+      {
+        "length": 27730,
+        "sequence_id": "CAKLHS020000074.1"
+      },
+      {
+        "length": 10758,
+        "sequence_id": "CAKLHS020000075.1"
+      },
+      {
+        "length": 20427,
+        "sequence_id": "CAKLHS020000076.1"
+      },
+      {
+        "length": 32719,
+        "sequence_id": "CAKLHS020000077.1"
+      },
+      {
+        "length": 10977,
+        "sequence_id": "CAKLHS020000078.1"
+      },
+      {
+        "length": 16104,
+        "sequence_id": "CAKLHS020000079.1"
+      },
+      {
+        "length": 26366,
+        "sequence_id": "CAKLHS020000080.1"
+      },
+      {
+        "length": 11663,
+        "sequence_id": "CAKLHS020000081.1"
+      },
+      {
+        "length": 13090,
+        "sequence_id": "CAKLHS020000082.1"
+      },
+      {
+        "length": 21058,
+        "sequence_id": "CAKLHS020000083.1"
+      },
+      {
+        "length": 42553,
+        "sequence_id": "CAKLHS020000084.1"
+      },
+      {
+        "length": 40426,
+        "sequence_id": "CAKLHS020000085.1"
+      },
+      {
+        "length": 20947,
+        "sequence_id": "CAKLHS020000086.1"
+      },
+      {
+        "length": 16426,
+        "sequence_id": "CAKLHS020000087.1"
+      },
+      {
+        "length": 15671,
+        "sequence_id": "CAKLHS020000088.1"
+      },
+      {
+        "length": 38662,
+        "sequence_id": "CAKLHS020000089.1"
+      },
+      {
+        "length": 44064,
+        "sequence_id": "CAKLHS020000090.1"
+      },
+      {
+        "length": 26484,
+        "sequence_id": "CAKLHS020000091.1"
+      },
+      {
+        "length": 38827,
+        "sequence_id": "CAKLHS020000092.1"
+      },
+      {
+        "length": 32844,
+        "sequence_id": "CAKLHS020000093.1"
+      },
+      {
+        "length": 31121,
+        "sequence_id": "CAKLHS020000094.1"
+      },
+      {
+        "length": 49927,
+        "sequence_id": "CAKLHS020000095.1"
+      },
+      {
+        "length": 12148,
+        "sequence_id": "CAKLHS020000096.1"
+      },
+      {
+        "length": 19838,
+        "sequence_id": "CAKLHS020000097.1"
+      },
+      {
+        "length": 47599,
+        "sequence_id": "CAKLHS020000098.1"
+      },
+      {
+        "length": 11141,
+        "sequence_id": "CAKLHS020000099.1"
+      },
+      {
+        "length": 10155,
+        "sequence_id": "CAKLHS020000100.1"
+      },
+      {
+        "length": 10463,
+        "sequence_id": "CAKLHS020000101.1"
+      },
+      {
+        "length": 14085,
+        "sequence_id": "CAKLHS020000102.1"
+      },
+      {
+        "length": 10276,
+        "sequence_id": "CAKLHS020000103.1"
+      },
+      {
+        "length": 24074,
+        "sequence_id": "CAKLHS020000104.1"
+      },
+      {
+        "length": 17627,
+        "sequence_id": "CAKLHS020000105.1"
+      },
+      {
+        "length": 23864,
+        "sequence_id": "CAKLHS020000106.1"
+      },
+      {
+        "length": 16254,
+        "sequence_id": "CAKLHS020000107.1"
+      },
+      {
+        "length": 20784,
+        "sequence_id": "CAKLHS020000108.1"
+      },
+      {
+        "length": 26786,
+        "sequence_id": "CAKLHS020000109.1"
+      },
+      {
+        "length": 26268,
+        "sequence_id": "CAKLHS020000110.1"
+      },
+      {
+        "length": 37182,
+        "sequence_id": "CAKLHS020000111.1"
+      },
+      {
+        "length": 58607,
+        "sequence_id": "CAKLHS020000112.1"
+      },
+      {
+        "length": 36080,
+        "sequence_id": "CAKLHS020000113.1"
+      },
+      {
+        "length": 21704,
+        "sequence_id": "CAKLHS020000114.1"
+      },
+      {
+        "length": 16234,
+        "sequence_id": "CAKLHS020000115.1"
+      },
+      {
+        "length": 11825,
+        "sequence_id": "CAKLHS020000116.1"
+      },
+      {
+        "length": 41002,
+        "sequence_id": "CAKLHS020000117.1"
+      },
+      {
+        "length": 18995,
+        "sequence_id": "CAKLHS020000118.1"
+      },
+      {
+        "length": 43246,
+        "sequence_id": "CAKLHS020000119.1"
+      },
+      {
+        "length": 22032,
+        "sequence_id": "CAKLHS020000120.1"
+      },
+      {
+        "length": 13153,
+        "sequence_id": "CAKLHS020000121.1"
+      },
+      {
+        "length": 30132,
+        "sequence_id": "CAKLHS020000122.1"
+      },
+      {
+        "length": 17305,
+        "sequence_id": "CAKLHS020000123.1"
+      },
+      {
+        "length": 14904,
+        "sequence_id": "CAKLHS020000124.1"
+      },
+      {
+        "length": 31707,
+        "sequence_id": "CAKLHS020000125.1"
+      },
+      {
+        "length": 29169,
+        "sequence_id": "CAKLHS020000126.1"
+      },
+      {
+        "length": 16299,
+        "sequence_id": "OW971845.1"
+      }
+    ],
+    "gzip_input": true,
+    "gzip_integrity_checked": true,
+    "input": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2_CAST_EiJ_v3_genomic.fna.gz",
+    "lengths_scope": "all input sequences",
+    "lowercase_bases": 835921936,
+    "n_bases": 20418215,
+    "n_run_count": 278,
+    "n_runs_coordinates": "0-based half-open; all input sequences",
+    "outputs": {
+      "lengths": "/workspace/tevox-study/data/mouse/cast/source.fasta.lengths.tsv",
+      "n_runs": "/workspace/tevox-study/data/mouse/cast/source.N_runs.bed",
+      "selected_fasta": "/workspace/tevox-study/data/mouse/cast/primary.fna.gz",
+      "summary": "/workspace/tevox-study/data/mouse/cast/primary.fasta_selection.json"
+    },
+    "schema_version": 1,
+    "selected_bases": 2514319647,
+    "selected_sequence_count": 20,
+    "selection_file": "/workspace/tevox-study/data/mouse/cast/primary_sequence_ids.txt",
+    "selection_policy": "exact names, retain input order",
+    "sequence_count": 147,
+    "sequence_ids_unique": true,
+    "sequence_name_policy": "exact_first_header_token; no normalization",
+    "total_bases": 2519863764
+  },
+  "genes": {
+    "selected_path": "/workspace/tevox-study/data/mouse/cast/primary.genes.gff3.gz",
+    "excluded_path": "/workspace/tevox-study/data/mouse/cast/excluded.genes.gff3.gz",
+    "counts": {
+      "physical_lines": 1703920,
+      "selected_sequence_regions": 20,
+      "excluded_sequence_regions": 127,
+      "source_feature_rows": 1649158,
+      "selected_feature_rows": 1647103,
+      "renamed_feature_rows": 1647103,
+      "excluded_feature_rows": 2055
+    },
+    "all_feature_types": {
+      "region": 147,
+      "gene": 26255,
+      "mRNA": 64385,
+      "exon": 700902,
+      "three_prime_UTR": 78214,
+      "CDS": 530607,
+      "five_prime_UTR": 90629,
+      "ncRNA_gene": 16374,
+      "miRNA": 2174,
+      "unconfirmed_transcript": 3312,
+      "biological_region": 86371,
+      "lnc_RNA": 20940,
+      "snRNA": 1348,
+      "pseudogene": 11833,
+      "pseudogenic_transcript": 12940,
+      "snoRNA": 1286,
+      "transcript": 555,
+      "rRNA": 315,
+      "scRNA": 53,
+      "C_gene_segment": 33,
+      "J_gene_segment": 92,
+      "D_gene_segment": 22,
+      "V_gene_segment": 369,
+      "gene_segment": 2
+    },
+    "selected_feature_types": {
+      "region": 20,
+      "gene": 26198,
+      "mRNA": 64297,
+      "exon": 700252,
+      "three_prime_UTR": 78137,
+      "CDS": 530207,
+      "five_prime_UTR": 90519,
+      "ncRNA_gene": 16361,
+      "miRNA": 2171,
+      "unconfirmed_transcript": 3309,
+      "biological_region": 86002,
+      "lnc_RNA": 20925,
+      "snRNA": 1347,
+      "pseudogene": 11762,
+      "pseudogenic_transcript": 12869,
+      "snoRNA": 1286,
+      "transcript": 555,
+      "rRNA": 315,
+      "scRNA": 53,
+      "C_gene_segment": 33,
+      "J_gene_segment": 92,
+      "D_gene_segment": 22,
+      "V_gene_segment": 369,
+      "gene_segment": 2
+    },
+    "excluded_features_by_source_seqid": {
+      "CAKLHS020000001.1": 128,
+      "CAKLHS020000002.1": 65,
+      "CAKLHS020000003.1": 49,
+      "CAKLHS020000004.1": 38,
+      "CAKLHS020000005.1": 1,
+      "CAKLHS020000006.1": 15,
+      "CAKLHS020000007.1": 1,
+      "CAKLHS020000008.1": 3,
+      "CAKLHS020000009.1": 16,
+      "CAKLHS020000010.1": 393,
+      "CAKLHS020000011.1": 1,
+      "CAKLHS020000012.1": 21,
+      "CAKLHS020000013.1": 17,
+      "CAKLHS020000014.1": 66,
+      "CAKLHS020000015.1": 20,
+      "CAKLHS020000016.1": 1,
+      "CAKLHS020000017.1": 6,
+      "CAKLHS020000018.1": 1,
+      "CAKLHS020000019.1": 1,
+      "CAKLHS020000020.1": 20,
+      "CAKLHS020000021.1": 9,
+      "CAKLHS020000022.1": 1,
+      "CAKLHS020000023.1": 11,
+      "CAKLHS020000024.1": 2,
+      "CAKLHS020000025.1": 1,
+      "CAKLHS020000026.1": 2,
+      "CAKLHS020000027.1": 103,
+      "CAKLHS020000028.1": 1,
+      "CAKLHS020000029.1": 4,
+      "CAKLHS020000030.1": 57,
+      "CAKLHS020000031.1": 1,
+      "CAKLHS020000032.1": 2,
+      "CAKLHS020000033.1": 1,
+      "CAKLHS020000034.1": 66,
+      "CAKLHS020000035.1": 2,
+      "CAKLHS020000036.1": 4,
+      "CAKLHS020000037.1": 8,
+      "CAKLHS020000038.1": 2,
+      "CAKLHS020000039.1": 52,
+      "CAKLHS020000040.1": 12,
+      "CAKLHS020000041.1": 61,
+      "CAKLHS020000042.1": 1,
+      "CAKLHS020000043.1": 1,
+      "CAKLHS020000044.1": 10,
+      "CAKLHS020000045.1": 6,
+      "CAKLHS020000046.1": 65,
+      "CAKLHS020000047.1": 1,
+      "CAKLHS020000048.1": 2,
+      "CAKLHS020000049.1": 2,
+      "CAKLHS020000050.1": 1,
+      "CAKLHS020000051.1": 2,
+      "CAKLHS020000052.1": 4,
+      "CAKLHS020000053.1": 1,
+      "CAKLHS020000054.1": 1,
+      "CAKLHS020000055.1": 9,
+      "CAKLHS020000056.1": 13,
+      "CAKLHS020000057.1": 1,
+      "CAKLHS020000058.1": 114,
+      "CAKLHS020000059.1": 16,
+      "CAKLHS020000060.1": 1,
+      "CAKLHS020000061.1": 2,
+      "CAKLHS020000062.1": 51,
+      "CAKLHS020000063.1": 4,
+      "CAKLHS020000064.1": 1,
+      "CAKLHS020000065.1": 57,
+      "CAKLHS020000066.1": 4,
+      "CAKLHS020000067.1": 11,
+      "CAKLHS020000068.1": 1,
+      "CAKLHS020000069.1": 2,
+      "CAKLHS020000070.1": 15,
+      "CAKLHS020000071.1": 11,
+      "CAKLHS020000072.1": 1,
+      "CAKLHS020000073.1": 1,
+      "CAKLHS020000074.1": 1,
+      "CAKLHS020000075.1": 27,
+      "CAKLHS020000076.1": 2,
+      "CAKLHS020000077.1": 39,
+      "CAKLHS020000078.1": 5,
+      "CAKLHS020000079.1": 5,
+      "CAKLHS020000080.1": 1,
+      "CAKLHS020000081.1": 1,
+      "CAKLHS020000082.1": 2,
+      "CAKLHS020000083.1": 11,
+      "CAKLHS020000084.1": 13,
+      "CAKLHS020000085.1": 3,
+      "CAKLHS020000086.1": 1,
+      "CAKLHS020000087.1": 2,
+      "CAKLHS020000088.1": 1,
+      "CAKLHS020000089.1": 4,
+      "CAKLHS020000090.1": 1,
+      "CAKLHS020000091.1": 1,
+      "CAKLHS020000092.1": 7,
+      "CAKLHS020000093.1": 14,
+      "CAKLHS020000094.1": 10,
+      "CAKLHS020000095.1": 1,
+      "CAKLHS020000096.1": 3,
+      "CAKLHS020000097.1": 1,
+      "CAKLHS020000098.1": 9,
+      "CAKLHS020000099.1": 2,
+      "CAKLHS020000100.1": 1,
+      "CAKLHS020000101.1": 1,
+      "CAKLHS020000102.1": 1,
+      "CAKLHS020000103.1": 1,
+      "CAKLHS020000104.1": 2,
+      "CAKLHS020000105.1": 40,
+      "CAKLHS020000106.1": 2,
+      "CAKLHS020000107.1": 1,
+      "CAKLHS020000108.1": 1,
+      "CAKLHS020000109.1": 2,
+      "CAKLHS020000110.1": 1,
+      "CAKLHS020000111.1": 1,
+      "CAKLHS020000112.1": 33,
+      "CAKLHS020000113.1": 1,
+      "CAKLHS020000114.1": 2,
+      "CAKLHS020000115.1": 38,
+      "CAKLHS020000116.1": 2,
+      "CAKLHS020000117.1": 17,
+      "CAKLHS020000118.1": 2,
+      "CAKLHS020000119.1": 35,
+      "CAKLHS020000120.1": 9,
+      "CAKLHS020000121.1": 1,
+      "CAKLHS020000122.1": 7,
+      "CAKLHS020000123.1": 1,
+      "CAKLHS020000124.1": 1,
+      "CAKLHS020000125.1": 1,
+      "CAKLHS020000126.1": 6,
+      "MT": 1
+    },
+    "sequence_length_discrepancies": [],
+    "source_seqid_map": {
+      "1": "OW971825.1",
+      "10": "OW971826.1",
+      "11": "OW971827.1",
+      "12": "OW971828.1",
+      "13": "OW971829.1",
+      "14": "OW971830.1",
+      "15": "OW971831.1",
+      "16": "OW971832.1",
+      "17": "OW971833.1",
+      "18": "OW971834.1",
+      "19": "OW971835.1",
+      "2": "OW971836.1",
+      "3": "OW971837.1",
+      "4": "OW971838.1",
+      "5": "OW971839.1",
+      "6": "OW971840.1",
+      "7": "OW971841.1",
+      "8": "OW971842.1",
+      "9": "OW971843.1",
+      "CAKLHS020000001.1": "CAKLHS020000001.1",
+      "CAKLHS020000002.1": "CAKLHS020000002.1",
+      "CAKLHS020000003.1": "CAKLHS020000003.1",
+      "CAKLHS020000004.1": "CAKLHS020000004.1",
+      "CAKLHS020000005.1": "CAKLHS020000005.1",
+      "CAKLHS020000006.1": "CAKLHS020000006.1",
+      "CAKLHS020000007.1": "CAKLHS020000007.1",
+      "CAKLHS020000008.1": "CAKLHS020000008.1",
+      "CAKLHS020000009.1": "CAKLHS020000009.1",
+      "CAKLHS020000010.1": "CAKLHS020000010.1",
+      "CAKLHS020000011.1": "CAKLHS020000011.1",
+      "CAKLHS020000012.1": "CAKLHS020000012.1",
+      "CAKLHS020000013.1": "CAKLHS020000013.1",
+      "CAKLHS020000014.1": "CAKLHS020000014.1",
+      "CAKLHS020000015.1": "CAKLHS020000015.1",
+      "CAKLHS020000016.1": "CAKLHS020000016.1",
+      "CAKLHS020000017.1": "CAKLHS020000017.1",
+      "CAKLHS020000018.1": "CAKLHS020000018.1",
+      "CAKLHS020000019.1": "CAKLHS020000019.1",
+      "CAKLHS020000020.1": "CAKLHS020000020.1",
+      "CAKLHS020000021.1": "CAKLHS020000021.1",
+      "CAKLHS020000022.1": "CAKLHS020000022.1",
+      "CAKLHS020000023.1": "CAKLHS020000023.1",
+      "CAKLHS020000024.1": "CAKLHS020000024.1",
+      "CAKLHS020000025.1": "CAKLHS020000025.1",
+      "CAKLHS020000026.1": "CAKLHS020000026.1",
+      "CAKLHS020000027.1": "CAKLHS020000027.1",
+      "CAKLHS020000028.1": "CAKLHS020000028.1",
+      "CAKLHS020000029.1": "CAKLHS020000029.1",
+      "CAKLHS020000030.1": "CAKLHS020000030.1",
+      "CAKLHS020000031.1": "CAKLHS020000031.1",
+      "CAKLHS020000032.1": "CAKLHS020000032.1",
+      "CAKLHS020000033.1": "CAKLHS020000033.1",
+      "CAKLHS020000034.1": "CAKLHS020000034.1",
+      "CAKLHS020000035.1": "CAKLHS020000035.1",
+      "CAKLHS020000036.1": "CAKLHS020000036.1",
+      "CAKLHS020000037.1": "CAKLHS020000037.1",
+      "CAKLHS020000038.1": "CAKLHS020000038.1",
+      "CAKLHS020000039.1": "CAKLHS020000039.1",
+      "CAKLHS020000040.1": "CAKLHS020000040.1",
+      "CAKLHS020000041.1": "CAKLHS020000041.1",
+      "CAKLHS020000042.1": "CAKLHS020000042.1",
+      "CAKLHS020000043.1": "CAKLHS020000043.1",
+      "CAKLHS020000044.1": "CAKLHS020000044.1",
+      "CAKLHS020000045.1": "CAKLHS020000045.1",
+      "CAKLHS020000046.1": "CAKLHS020000046.1",
+      "CAKLHS020000047.1": "CAKLHS020000047.1",
+      "CAKLHS020000048.1": "CAKLHS020000048.1",
+      "CAKLHS020000049.1": "CAKLHS020000049.1",
+      "CAKLHS020000050.1": "CAKLHS020000050.1",
+      "CAKLHS020000051.1": "CAKLHS020000051.1",
+      "CAKLHS020000052.1": "CAKLHS020000052.1",
+      "CAKLHS020000053.1": "CAKLHS020000053.1",
+      "CAKLHS020000054.1": "CAKLHS020000054.1",
+      "CAKLHS020000055.1": "CAKLHS020000055.1",
+      "CAKLHS020000056.1": "CAKLHS020000056.1",
+      "CAKLHS020000057.1": "CAKLHS020000057.1",
+      "CAKLHS020000058.1": "CAKLHS020000058.1",
+      "CAKLHS020000059.1": "CAKLHS020000059.1",
+      "CAKLHS020000060.1": "CAKLHS020000060.1",
+      "CAKLHS020000061.1": "CAKLHS020000061.1",
+      "CAKLHS020000062.1": "CAKLHS020000062.1",
+      "CAKLHS020000063.1": "CAKLHS020000063.1",
+      "CAKLHS020000064.1": "CAKLHS020000064.1",
+      "CAKLHS020000065.1": "CAKLHS020000065.1",
+      "CAKLHS020000066.1": "CAKLHS020000066.1",
+      "CAKLHS020000067.1": "CAKLHS020000067.1",
+      "CAKLHS020000068.1": "CAKLHS020000068.1",
+      "CAKLHS020000069.1": "CAKLHS020000069.1",
+      "CAKLHS020000070.1": "CAKLHS020000070.1",
+      "CAKLHS020000071.1": "CAKLHS020000071.1",
+      "CAKLHS020000072.1": "CAKLHS020000072.1",
+      "CAKLHS020000073.1": "CAKLHS020000073.1",
+      "CAKLHS020000074.1": "CAKLHS020000074.1",
+      "CAKLHS020000075.1": "CAKLHS020000075.1",
+      "CAKLHS020000076.1": "CAKLHS020000076.1",
+      "CAKLHS020000077.1": "CAKLHS020000077.1",
+      "CAKLHS020000078.1": "CAKLHS020000078.1",
+      "CAKLHS020000079.1": "CAKLHS020000079.1",
+      "CAKLHS020000080.1": "CAKLHS020000080.1",
+      "CAKLHS020000081.1": "CAKLHS020000081.1",
+      "CAKLHS020000082.1": "CAKLHS020000082.1",
+      "CAKLHS020000083.1": "CAKLHS020000083.1",
+      "CAKLHS020000084.1": "CAKLHS020000084.1",
+      "CAKLHS020000085.1": "CAKLHS020000085.1",
+      "CAKLHS020000086.1": "CAKLHS020000086.1",
+      "CAKLHS020000087.1": "CAKLHS020000087.1",
+      "CAKLHS020000088.1": "CAKLHS020000088.1",
+      "CAKLHS020000089.1": "CAKLHS020000089.1",
+      "CAKLHS020000090.1": "CAKLHS020000090.1",
+      "CAKLHS020000091.1": "CAKLHS020000091.1",
+      "CAKLHS020000092.1": "CAKLHS020000092.1",
+      "CAKLHS020000093.1": "CAKLHS020000093.1",
+      "CAKLHS020000094.1": "CAKLHS020000094.1",
+      "CAKLHS020000095.1": "CAKLHS020000095.1",
+      "CAKLHS020000096.1": "CAKLHS020000096.1",
+      "CAKLHS020000097.1": "CAKLHS020000097.1",
+      "CAKLHS020000098.1": "CAKLHS020000098.1",
+      "CAKLHS020000099.1": "CAKLHS020000099.1",
+      "CAKLHS020000100.1": "CAKLHS020000100.1",
+      "CAKLHS020000101.1": "CAKLHS020000101.1",
+      "CAKLHS020000102.1": "CAKLHS020000102.1",
+      "CAKLHS020000103.1": "CAKLHS020000103.1",
+      "CAKLHS020000104.1": "CAKLHS020000104.1",
+      "CAKLHS020000105.1": "CAKLHS020000105.1",
+      "CAKLHS020000106.1": "CAKLHS020000106.1",
+      "CAKLHS020000107.1": "CAKLHS020000107.1",
+      "CAKLHS020000108.1": "CAKLHS020000108.1",
+      "CAKLHS020000109.1": "CAKLHS020000109.1",
+      "CAKLHS020000110.1": "CAKLHS020000110.1",
+      "CAKLHS020000111.1": "CAKLHS020000111.1",
+      "CAKLHS020000112.1": "CAKLHS020000112.1",
+      "CAKLHS020000113.1": "CAKLHS020000113.1",
+      "CAKLHS020000114.1": "CAKLHS020000114.1",
+      "CAKLHS020000115.1": "CAKLHS020000115.1",
+      "CAKLHS020000116.1": "CAKLHS020000116.1",
+      "CAKLHS020000117.1": "CAKLHS020000117.1",
+      "CAKLHS020000118.1": "CAKLHS020000118.1",
+      "CAKLHS020000119.1": "CAKLHS020000119.1",
+      "CAKLHS020000120.1": "CAKLHS020000120.1",
+      "CAKLHS020000121.1": "CAKLHS020000121.1",
+      "CAKLHS020000122.1": "CAKLHS020000122.1",
+      "CAKLHS020000123.1": "CAKLHS020000123.1",
+      "CAKLHS020000124.1": "CAKLHS020000124.1",
+      "CAKLHS020000125.1": "CAKLHS020000125.1",
+      "CAKLHS020000126.1": "CAKLHS020000126.1",
+      "MT": "OW971845.1",
+      "X": "OW971844.1"
+    }
+  },
+  "repeats": {
+    "selected_path": "/workspace/tevox-study/data/mouse/cast/primary.repeatMasker.out.gz",
+    "excluded_path": "/workspace/tevox-study/data/mouse/cast/excluded.repeatMasker.out.gz",
+    "counts": {
+      "source_rows": 4663225,
+      "excluded_rows": 6887,
+      "selected_rows": 4656338
+    },
+    "excluded_rows_by_seqid": {
+      "CAKLHS020000001.1": 1021,
+      "CAKLHS020000002.1": 177,
+      "CAKLHS020000003.1": 77,
+      "CAKLHS020000004.1": 88,
+      "CAKLHS020000005.1": 9,
+      "CAKLHS020000006.1": 158,
+      "CAKLHS020000007.1": 22,
+      "CAKLHS020000008.1": 103,
+      "CAKLHS020000009.1": 43,
+      "CAKLHS020000010.1": 128,
+      "CAKLHS020000011.1": 1,
+      "CAKLHS020000012.1": 113,
+      "CAKLHS020000013.1": 52,
+      "CAKLHS020000014.1": 164,
+      "CAKLHS020000015.1": 160,
+      "CAKLHS020000016.1": 192,
+      "CAKLHS020000017.1": 15,
+      "CAKLHS020000018.1": 5,
+      "CAKLHS020000019.1": 19,
+      "CAKLHS020000020.1": 67,
+      "CAKLHS020000021.1": 138,
+      "CAKLHS020000022.1": 5,
+      "CAKLHS020000023.1": 93,
+      "CAKLHS020000024.1": 65,
+      "CAKLHS020000025.1": 5,
+      "CAKLHS020000026.1": 45,
+      "CAKLHS020000027.1": 93,
+      "CAKLHS020000028.1": 45,
+      "CAKLHS020000029.1": 157,
+      "CAKLHS020000030.1": 35,
+      "CAKLHS020000031.1": 6,
+      "CAKLHS020000032.1": 24,
+      "CAKLHS020000033.1": 46,
+      "CAKLHS020000034.1": 109,
+      "CAKLHS020000035.1": 22,
+      "CAKLHS020000036.1": 13,
+      "CAKLHS020000037.1": 88,
+      "CAKLHS020000038.1": 16,
+      "CAKLHS020000039.1": 131,
+      "CAKLHS020000040.1": 112,
+      "CAKLHS020000041.1": 213,
+      "CAKLHS020000042.1": 23,
+      "CAKLHS020000043.1": 6,
+      "CAKLHS020000044.1": 95,
+      "CAKLHS020000045.1": 23,
+      "CAKLHS020000046.1": 49,
+      "CAKLHS020000047.1": 29,
+      "CAKLHS020000048.1": 53,
+      "CAKLHS020000049.1": 106,
+      "CAKLHS020000050.1": 92,
+      "CAKLHS020000051.1": 21,
+      "CAKLHS020000052.1": 80,
+      "CAKLHS020000053.1": 11,
+      "CAKLHS020000054.1": 5,
+      "CAKLHS020000055.1": 36,
+      "CAKLHS020000056.1": 63,
+      "CAKLHS020000057.1": 1,
+      "CAKLHS020000058.1": 88,
+      "CAKLHS020000059.1": 66,
+      "CAKLHS020000060.1": 79,
+      "CAKLHS020000061.1": 22,
+      "CAKLHS020000062.1": 22,
+      "CAKLHS020000063.1": 21,
+      "CAKLHS020000064.1": 51,
+      "CAKLHS020000065.1": 44,
+      "CAKLHS020000066.1": 32,
+      "CAKLHS020000067.1": 23,
+      "CAKLHS020000068.1": 10,
+      "CAKLHS020000069.1": 23,
+      "CAKLHS020000070.1": 73,
+      "CAKLHS020000071.1": 22,
+      "CAKLHS020000072.1": 1,
+      "CAKLHS020000073.1": 14,
+      "CAKLHS020000074.1": 9,
+      "CAKLHS020000075.1": 1,
+      "CAKLHS020000076.1": 35,
+      "CAKLHS020000077.1": 78,
+      "CAKLHS020000078.1": 14,
+      "CAKLHS020000079.1": 14,
+      "CAKLHS020000080.1": 13,
+      "CAKLHS020000081.1": 17,
+      "CAKLHS020000082.1": 18,
+      "CAKLHS020000083.1": 7,
+      "CAKLHS020000084.1": 86,
+      "CAKLHS020000085.1": 88,
+      "CAKLHS020000086.1": 45,
+      "CAKLHS020000087.1": 16,
+      "CAKLHS020000088.1": 5,
+      "CAKLHS020000089.1": 47,
+      "CAKLHS020000090.1": 56,
+      "CAKLHS020000091.1": 5,
+      "CAKLHS020000092.1": 34,
+      "CAKLHS020000093.1": 47,
+      "CAKLHS020000094.1": 39,
+      "CAKLHS020000095.1": 98,
+      "CAKLHS020000096.1": 11,
+      "CAKLHS020000097.1": 20,
+      "CAKLHS020000098.1": 65,
+      "CAKLHS020000099.1": 12,
+      "CAKLHS020000100.1": 10,
+      "CAKLHS020000101.1": 15,
+      "CAKLHS020000102.1": 19,
+      "CAKLHS020000103.1": 3,
+      "CAKLHS020000104.1": 27,
+      "CAKLHS020000105.1": 9,
+      "CAKLHS020000106.1": 58,
+      "CAKLHS020000107.1": 26,
+      "CAKLHS020000108.1": 1,
+      "CAKLHS020000109.1": 27,
+      "CAKLHS020000110.1": 7,
+      "CAKLHS020000111.1": 13,
+      "CAKLHS020000112.1": 49,
+      "CAKLHS020000113.1": 15,
+      "CAKLHS020000114.1": 24,
+      "CAKLHS020000115.1": 5,
+      "CAKLHS020000116.1": 32,
+      "CAKLHS020000117.1": 59,
+      "CAKLHS020000118.1": 23,
+      "CAKLHS020000119.1": 79,
+      "CAKLHS020000120.1": 17,
+      "CAKLHS020000121.1": 33,
+      "CAKLHS020000122.1": 9,
+      "CAKLHS020000123.1": 17,
+      "CAKLHS020000124.1": 16,
+      "CAKLHS020000125.1": 9,
+      "CAKLHS020000126.1": 42,
+      "OW971845.1": 4
+    }
+  },
+  "outputs": {
+    "fasta": {
+      "path": "/workspace/tevox-study/data/mouse/cast/primary.fna.gz",
+      "bytes": 925432206,
+      "sha256": "b0693be78b4c597d0867e534ef0ba198d0392067d325fb74c0752435ba1c9656"
+    },
+    "genes": {
+      "path": "/workspace/tevox-study/data/mouse/cast/primary.genes.gff3.gz",
+      "bytes": 28871831,
+      "sha256": "37337e687d613ed1da5d7658b5943b57d69136c0c2688f1d464ce597afd8e7cc"
+    },
+    "repeats": {
+      "path": "/workspace/tevox-study/data/mouse/cast/primary.repeatMasker.out.gz",
+      "bytes": 184590393,
+      "sha256": "ee0aa8b72ab5716c67b710ee6616e3f8bcb90e4be027312ed23a9cd70a44f2f8"
+    }
+  },
+  "repeat_record_audits": {
+    "full_record": {
+      "path": "/workspace/tevox-study/data/mouse/cast/repeat_duplicate_audit.json",
+      "sha256": "636416cbd62499e8b955a6937140ccec27554795293dd9b7c4c47cb32fed7f8d",
+      "result": {
+        "input": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz",
+        "comparison": "All whitespace-canonical full fields including ID and optional overlap marker; exact records only",
+        "source_records": 4663225,
+        "header_or_empty_lines": 3,
+        "unique_records": 4663225,
+        "duplicate_record_groups": 0,
+        "extra_duplicate_records": 0,
+        "multiplicity_distribution_duplicate_groups": {},
+        "duplicate_examples": [],
+        "canonical_sorted_stream_sha256": "f92f94988310f38a4213c497073078ff0ec91ade5ad376b89a2b44126a02e3f0",
+        "status": "no_exact_duplicates",
+        "source_modified": false
+      }
+    },
+    "id_coordinates": {
+      "path": "/workspace/tevox-study/data/mouse/cast/repeat_identity_audit.json",
+      "sha256": "a3577d66ed1bbbb217310c33bc3ab4b9e4726ed75c1198d506ee60978ef6dea7",
+      "result": {
+        "input": "/workspace/tevox-study/data/mouse/cast/GCA_921999005.2.repeatMasker.out.gz",
+        "identity_fields": [
+          "query_sequence",
+          "RepeatMasker_source_ID",
+          "query_begin_1based",
+          "query_end_inclusive"
+        ],
+        "source_records": 4663225,
+        "distinct_identities": 4663225,
+        "repeated_identity_groups": 0,
+        "identity_groups_with_different_full_records": 0,
+        "examples": [],
+        "source_modified": false,
+        "status": "unique_id_coordinate_identities"
+      }
+    }
+  },
+  "selection_tools": {
+    "select_mouse_primary.py": {
+      "path": "/workspace/tevox-study/scripts/select_mouse_primary.py",
+      "sha256": "bcdf2a291363906405ea1287d3e963ba4af4b2d4bac20a9149c82a5a9f1c3e61"
+    },
+    "fasta_select_fast.py": {
+      "path": "/workspace/tevox-study/scripts/fasta_select_fast.py",
+      "sha256": "ee456ea2af1d3ab0fde030a2095e65d523a31976e7edfc265f77a4deeaaa15de"
+    },
+    "fasta_qc.py": {
+      "path": "/workspace/tevox-study/scripts/fasta_qc.py",
+      "sha256": "d9dc79fa1a768d6d52ae43911c397d93a7acf711cc43739e0ec94717e6d19f17"
+    },
+    "preflight_genes.py": {
+      "path": "/workspace/tevox-study/scripts/preflight_genes.py",
+      "sha256": "d992c07b00b9b33483bf80dd065dd4ad9b2b1fcb063bdb235bfb36eb7553e9c8"
+    },
+    "audit_repeat_duplicates.py": {
+      "path": "/workspace/tevox-study/scripts/audit_repeat_duplicates.py",
+      "sha256": "450788554e2da51473b2ab7c83a22a38628a5811f381e7bb3a3a8528399c8589"
+    },
+    "audit_repeat_identities.py": {
+      "path": "/workspace/tevox-study/scripts/audit_repeat_identities.py",
+      "sha256": "44eba2bdbbbdfc094b93bb7add8ec521e6ac1b32026aaeb11c36ac45dc7ac82d"
+    }
+  },
+  "repeat_audit_conclusion": "No duplicate full source records or repeated source ID+query coordinate identities. Selected files are unchanged full-record subsets, so neither requires deduplication. No overlapping annotations or distinct IDs were merged."
+}

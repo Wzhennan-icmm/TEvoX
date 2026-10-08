@@ -1,0 +1,391 @@
+{
+  "source": "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz",
+  "output": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.fa.gz",
+  "output_sha256": "1eefbc8a9c3ea612331c1daf07ae1128dc89a3d6e8ceabecabcfbc27657a48e3",
+  "raw_sequences": {
+    "CP139523.2": {
+      "length": 244022067,
+      "sequence_sha256": "2c90d2062670e2c59c7974baad85f163b1315509936819c5145b0cfb0219a920"
+    },
+    "CP139519.2": {
+      "length": 242114397,
+      "sequence_sha256": "3c3b908f28cee4585ccceb892de2d5f79488104a48abf57e14890932b217fc06"
+    },
+    "CP139518.2": {
+      "length": 201097962,
+      "sequence_sha256": "1d5e8c81b01bfa6111bc79e77eec751abc97c3cab5d95a7caa4f1bd247af7041"
+    },
+    "CP139517.2": {
+      "length": 191669995,
+      "sequence_sha256": "925d3dffa7b44539aa78ebee52c6f67f0636308af8f992fc019093a30e2d953b"
+    },
+    "CP139516.2": {
+      "length": 183262120,
+      "sequence_sha256": "54fe37e7f2df109e70c7d85648860ee12943a92ed241e661f11f136592e847ce"
+    },
+    "CP139515.2": {
+      "length": 174742601,
+      "sequence_sha256": "7a926e9bca654e289d002b7265b4bd7bceeba58b9d4e30269f32fcc225dfbd7b"
+    },
+    "CP139514.2": {
+      "length": 160955030,
+      "sequence_sha256": "ea473bc88b292a627246fa4d8341eb1b0a06cf33f06ca557ea2e5c58f5e48d01"
+    },
+    "CP139513.2": {
+      "length": 146740677,
+      "sequence_sha256": "8847cc4910d077ae4f9167c656afe8882a8d7b3dfd42fca46c8231f7225af16a"
+    },
+    "CP139512.2": {
+      "length": 143803229,
+      "sequence_sha256": "397f7e31025c687c4d11caf350f4da400206a2270c3793b52dcc8042d830b1b5"
+    },
+    "CP139533.2": {
+      "length": 135899001,
+      "sequence_sha256": "b1e4768d048bed8a4a2c3e436eed62cd33682d636893265fe4a01f78fcfd6c4d"
+    },
+    "CP139532.2": {
+      "length": 135235771,
+      "sequence_sha256": "cbc1b438eb0a40914263b65f93bc22e02e659617a3da9cde699d262e2b857d79"
+    },
+    "CP139531.2": {
+      "length": 133580557,
+      "sequence_sha256": "092c336698e8b7440d72204c065d0ec4109e5ffb12656543d83367821b2bcdcd"
+    },
+    "CP139530.2": {
+      "length": 113336972,
+      "sequence_sha256": "bb8364fb79c8057a99ce381cc3842fe45d56b2ff2067f052ce5bce3fe6216a20"
+    },
+    "CP139529.2": {
+      "length": 108656801,
+      "sequence_sha256": "03d3733841ab17bae82c9bbf4e9ca36507e116249141616a8147dfe2208efd32"
+    },
+    "CP139528.2": {
+      "length": 100881320,
+      "sequence_sha256": "ce0696854b6dfbcce50ed6782cf95c8fb07cd0a3b3e8b797b3f33f23c11baf09"
+    },
+    "CP139527.2": {
+      "length": 90398409,
+      "sequence_sha256": "c1f9f6887fecfc279dace2ecdfdc084ea25345b40a6430a3ecbfbf3a42626543"
+    },
+    "CP139526.2": {
+      "length": 83770182,
+      "sequence_sha256": "eb6eaf3e778ba9ce4664d018b670d2c8afc807e141f9b142b0f0492dc5c376da"
+    },
+    "CP139525.2": {
+      "length": 78908764,
+      "sequence_sha256": "f76ce53b924850290fdb2624376ae85b3f0604c78b2448a4a303898e07100104"
+    },
+    "CP139524.2": {
+      "length": 61317335,
+      "sequence_sha256": "484992bf6c9276eee21731db5bbe7ba4815a046318f0442977705c483576392d"
+    },
+    "CP139522.2": {
+      "length": 66071306,
+      "sequence_sha256": "0947dee8bcd9cd8a0576f8443cff22185649d671d19fd3e8568f22715ecea89e"
+    },
+    "CP139521.2": {
+      "length": 47311724,
+      "sequence_sha256": "3f5450354fac522c6099394d80833c85458deb3daac62a5886e1005ca10f4031"
+    },
+    "CP139520.2": {
+      "length": 53395367,
+      "sequence_sha256": "0aa26386fbf713a1e5c36ea38aa7cb3e1639b95cf843dfca33b35d4a4767dfa8"
+    },
+    "CP139511.2": {
+      "length": 154341397,
+      "sequence_sha256": "32d3b53061a9074d32144ddcfa99168abc3e85655327991d89bb5b9e17cd5bf3"
+    },
+    "CP139510.1": {
+      "length": 16570,
+      "sequence_sha256": "f4fcd0847d9da6b66ab121013899a08f2365e035ad3c9fabdd31333dee1755f5"
+    }
+  },
+  "selected_sequences": {
+    "chr1_MATERNAL": {
+      "length": 244022067,
+      "sequence_sha256": "2c90d2062670e2c59c7974baad85f163b1315509936819c5145b0cfb0219a920"
+    },
+    "chr2_MATERNAL": {
+      "length": 242114397,
+      "sequence_sha256": "3c3b908f28cee4585ccceb892de2d5f79488104a48abf57e14890932b217fc06"
+    },
+    "chr3_MATERNAL": {
+      "length": 201097962,
+      "sequence_sha256": "1d5e8c81b01bfa6111bc79e77eec751abc97c3cab5d95a7caa4f1bd247af7041"
+    },
+    "chr4_MATERNAL": {
+      "length": 191669995,
+      "sequence_sha256": "925d3dffa7b44539aa78ebee52c6f67f0636308af8f992fc019093a30e2d953b"
+    },
+    "chr5_MATERNAL": {
+      "length": 183262120,
+      "sequence_sha256": "54fe37e7f2df109e70c7d85648860ee12943a92ed241e661f11f136592e847ce"
+    },
+    "chr6_MATERNAL": {
+      "length": 174742601,
+      "sequence_sha256": "7a926e9bca654e289d002b7265b4bd7bceeba58b9d4e30269f32fcc225dfbd7b"
+    },
+    "chr7_MATERNAL": {
+      "length": 160955030,
+      "sequence_sha256": "ea473bc88b292a627246fa4d8341eb1b0a06cf33f06ca557ea2e5c58f5e48d01"
+    },
+    "chr8_MATERNAL": {
+      "length": 146740677,
+      "sequence_sha256": "8847cc4910d077ae4f9167c656afe8882a8d7b3dfd42fca46c8231f7225af16a"
+    },
+    "chr9_MATERNAL": {
+      "length": 143803229,
+      "sequence_sha256": "397f7e31025c687c4d11caf350f4da400206a2270c3793b52dcc8042d830b1b5"
+    },
+    "chr10_MATERNAL": {
+      "length": 135899001,
+      "sequence_sha256": "b1e4768d048bed8a4a2c3e436eed62cd33682d636893265fe4a01f78fcfd6c4d"
+    },
+    "chr11_MATERNAL": {
+      "length": 135235771,
+      "sequence_sha256": "cbc1b438eb0a40914263b65f93bc22e02e659617a3da9cde699d262e2b857d79"
+    },
+    "chr12_MATERNAL": {
+      "length": 133580557,
+      "sequence_sha256": "092c336698e8b7440d72204c065d0ec4109e5ffb12656543d83367821b2bcdcd"
+    },
+    "chr13_MATERNAL": {
+      "length": 113336972,
+      "sequence_sha256": "bb8364fb79c8057a99ce381cc3842fe45d56b2ff2067f052ce5bce3fe6216a20"
+    },
+    "chr14_MATERNAL": {
+      "length": 108656801,
+      "sequence_sha256": "03d3733841ab17bae82c9bbf4e9ca36507e116249141616a8147dfe2208efd32"
+    },
+    "chr15_MATERNAL": {
+      "length": 100881320,
+      "sequence_sha256": "ce0696854b6dfbcce50ed6782cf95c8fb07cd0a3b3e8b797b3f33f23c11baf09"
+    },
+    "chr16_MATERNAL": {
+      "length": 90398409,
+      "sequence_sha256": "c1f9f6887fecfc279dace2ecdfdc084ea25345b40a6430a3ecbfbf3a42626543"
+    },
+    "chr17_MATERNAL": {
+      "length": 83770182,
+      "sequence_sha256": "eb6eaf3e778ba9ce4664d018b670d2c8afc807e141f9b142b0f0492dc5c376da"
+    },
+    "chr18_MATERNAL": {
+      "length": 78908764,
+      "sequence_sha256": "f76ce53b924850290fdb2624376ae85b3f0604c78b2448a4a303898e07100104"
+    },
+    "chr19_MATERNAL": {
+      "length": 61317335,
+      "sequence_sha256": "484992bf6c9276eee21731db5bbe7ba4815a046318f0442977705c483576392d"
+    },
+    "chr20_MATERNAL": {
+      "length": 66071306,
+      "sequence_sha256": "0947dee8bcd9cd8a0576f8443cff22185649d671d19fd3e8568f22715ecea89e"
+    },
+    "chr21_MATERNAL": {
+      "length": 47311724,
+      "sequence_sha256": "3f5450354fac522c6099394d80833c85458deb3daac62a5886e1005ca10f4031"
+    },
+    "chr22_MATERNAL": {
+      "length": 53395367,
+      "sequence_sha256": "0aa26386fbf713a1e5c36ea38aa7cb3e1639b95cf843dfca33b35d4a4767dfa8"
+    },
+    "chrX_MATERNAL": {
+      "length": 154341397,
+      "sequence_sha256": "32d3b53061a9074d32144ddcfa99168abc3e85655327991d89bb5b9e17cd5bf3"
+    }
+  },
+  "raw_to_selected_id": {
+    "CP139523.2": "chr1_MATERNAL",
+    "CP139519.2": "chr2_MATERNAL",
+    "CP139518.2": "chr3_MATERNAL",
+    "CP139517.2": "chr4_MATERNAL",
+    "CP139516.2": "chr5_MATERNAL",
+    "CP139515.2": "chr6_MATERNAL",
+    "CP139514.2": "chr7_MATERNAL",
+    "CP139513.2": "chr8_MATERNAL",
+    "CP139512.2": "chr9_MATERNAL",
+    "CP139533.2": "chr10_MATERNAL",
+    "CP139532.2": "chr11_MATERNAL",
+    "CP139531.2": "chr12_MATERNAL",
+    "CP139530.2": "chr13_MATERNAL",
+    "CP139529.2": "chr14_MATERNAL",
+    "CP139528.2": "chr15_MATERNAL",
+    "CP139527.2": "chr16_MATERNAL",
+    "CP139526.2": "chr17_MATERNAL",
+    "CP139525.2": "chr18_MATERNAL",
+    "CP139524.2": "chr19_MATERNAL",
+    "CP139522.2": "chr20_MATERNAL",
+    "CP139521.2": "chr21_MATERNAL",
+    "CP139520.2": "chr22_MATERNAL",
+    "CP139511.2": "chrX_MATERNAL"
+  },
+  "excluded_sequence_ids": [
+    "CP139510.1"
+  ],
+  "selected_bases": 3051512984,
+  "base_transformation": "none; original sequence case and bases preserved; HG002 header IDs renamed only",
+  "genes": {
+    "output": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.genes.gff3.gz",
+    "output_sha256": "63e7adae6d207677dbcdb8fad985eb5e7df811365ae9515c1954c10db0e8fd5f",
+    "counts": {
+      "source_rows": 3986740,
+      "kept_gene_features": 59555,
+      "kept_rows": 3986740
+    },
+    "source_rows_per_sequence": {
+      "chr1_MATERNAL": 392243,
+      "chr5_MATERNAL": 168656,
+      "chr7_MATERNAL": 174840,
+      "chr8_MATERNAL": 146411,
+      "chr11_MATERNAL": 212484,
+      "chr12_MATERNAL": 218893,
+      "chr2_MATERNAL": 350050,
+      "chr16_MATERNAL": 154969,
+      "chr14_MATERNAL": 125626,
+      "chr17_MATERNAL": 215941,
+      "chr21_MATERNAL": 40305,
+      "chr22_MATERNAL": 80461,
+      "chrX_MATERNAL": 119716,
+      "chr19_MATERNAL": 170972,
+      "chr10_MATERNAL": 185366,
+      "chr13_MATERNAL": 89308,
+      "chr15_MATERNAL": 149902,
+      "chr18_MATERNAL": 82411,
+      "chr20_MATERNAL": 81935,
+      "chr3_MATERNAL": 271351,
+      "chr4_MATERNAL": 178069,
+      "chr6_MATERNAL": 195910,
+      "chr9_MATERNAL": 180921
+    },
+    "selected_rows_per_sequence": {
+      "chr1_MATERNAL": 392243,
+      "chr5_MATERNAL": 168656,
+      "chr7_MATERNAL": 174840,
+      "chr8_MATERNAL": 146411,
+      "chr11_MATERNAL": 212484,
+      "chr12_MATERNAL": 218893,
+      "chr2_MATERNAL": 350050,
+      "chr16_MATERNAL": 154969,
+      "chr14_MATERNAL": 125626,
+      "chr17_MATERNAL": 215941,
+      "chr21_MATERNAL": 40305,
+      "chr22_MATERNAL": 80461,
+      "chrX_MATERNAL": 119716,
+      "chr19_MATERNAL": 170972,
+      "chr10_MATERNAL": 185366,
+      "chr13_MATERNAL": 89308,
+      "chr15_MATERNAL": 149902,
+      "chr18_MATERNAL": 82411,
+      "chr20_MATERNAL": 81935,
+      "chr3_MATERNAL": 271351,
+      "chr4_MATERNAL": 178069,
+      "chr6_MATERNAL": 195910,
+      "chr9_MATERNAL": 180921
+    }
+  },
+  "repeats": {
+    "output": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeats.tsv.gz",
+    "output_sha256": "99d5d205d734602b4e689a086fce4def59675a0457731e39c5f5022a6aadf641",
+    "counts": {
+      "source_rows": 4480264,
+      "kept_repeatmasker_fragments": 5422582,
+      "kept_rows": 4480264
+    },
+    "source_rows_per_sequence": {
+      "chr10_MATERNAL": 203971,
+      "chr11_MATERNAL": 205022,
+      "chr12_MATERNAL": 212662,
+      "chr13_MATERNAL": 142147,
+      "chr14_MATERNAL": 147507,
+      "chr15_MATERNAL": 138250,
+      "chr16_MATERNAL": 155579,
+      "chr17_MATERNAL": 145053,
+      "chr18_MATERNAL": 107446,
+      "chr19_MATERNAL": 114966,
+      "chr1_MATERNAL": 391109,
+      "chr20_MATERNAL": 108781,
+      "chr21_MATERNAL": 54845,
+      "chr22_MATERNAL": 73670,
+      "chr2_MATERNAL": 353286,
+      "chr3_MATERNAL": 296775,
+      "chr4_MATERNAL": 265849,
+      "chr5_MATERNAL": 259603,
+      "chr6_MATERNAL": 244241,
+      "chr7_MATERNAL": 237822,
+      "chr8_MATERNAL": 214819,
+      "chr9_MATERNAL": 188998,
+      "chrX_MATERNAL": 217863
+    },
+    "selected_rows_per_sequence": {
+      "chr10_MATERNAL": 203971,
+      "chr11_MATERNAL": 205022,
+      "chr12_MATERNAL": 212662,
+      "chr13_MATERNAL": 142147,
+      "chr14_MATERNAL": 147507,
+      "chr15_MATERNAL": 138250,
+      "chr16_MATERNAL": 155579,
+      "chr17_MATERNAL": 145053,
+      "chr18_MATERNAL": 107446,
+      "chr19_MATERNAL": 114966,
+      "chr1_MATERNAL": 391109,
+      "chr20_MATERNAL": 108781,
+      "chr21_MATERNAL": 54845,
+      "chr22_MATERNAL": 73670,
+      "chr2_MATERNAL": 353286,
+      "chr3_MATERNAL": 296775,
+      "chr4_MATERNAL": 265849,
+      "chr5_MATERNAL": 259603,
+      "chr6_MATERNAL": 244241,
+      "chr7_MATERNAL": 237822,
+      "chr8_MATERNAL": 214819,
+      "chr9_MATERNAL": 188998,
+      "chrX_MATERNAL": 217863
+    }
+  },
+  "assembly_report": "/workspace/tevox-study/discovery/hg002_mat_report.txt",
+  "assembly_report_sha256": "46d5c9928d5b6aa931ebf2d6249468520ca0d62abd27079e7a4723b1a09ecc34",
+  "source_asset_provenance": {
+    "fasta": "/workspace/tevox-study/data/human/hg002_mat/GCA_018852615.3_hg002v1.1.mat_genomic.fna.gz.provenance.json",
+    "gene_gff3": "/workspace/tevox-study/data/human/hg002_mat/hg002.v1.1.loff.v0.6.mat.gff.gz.provenance.json",
+    "repeats": "/workspace/tevox-study/data/human/hg002_mat/hg002v1.1.maternal.bb.provenance.json"
+  },
+  "selection_reason": {
+    "nuclear_chromosomes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "X"
+    ],
+    "exclude": [
+      "Y",
+      "MT"
+    ],
+    "reason": "CHM13v2 Y is derived from HG002, not CHM13; HG002 maternal haplotype supplies X. Exclude mitochondrial sequence from nuclear TE comparison."
+  },
+  "independent_selected_fasta_verification": {
+    "passed": true,
+    "sequences": 23,
+    "bases": 3051512984,
+    "method": "Independent decompression and per-sequence SHA256 of exact case-preserved bases compared to hashes recorded while streaming the original provider FASTA."
+  },
+  "repeat_duplicate_audit": "/workspace/tevox-study/metadata/human/hg002_mat_repeat_duplicates.json"
+}

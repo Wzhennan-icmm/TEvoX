@@ -1,0 +1,40 @@
+{
+  "input": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeats.tsv.gz",
+  "format": "bigrmsk",
+  "comparison": "All original source fields, including identifier and coordinates; only whitespace separators canonicalized. bigRmsk descriptions audited fragment by fragment.",
+  "counts": {
+    "browser_or_bed_rows": 4480264,
+    "source_fragment_records": 5422582,
+    "unique_exact_fragment_records": 5422582,
+    "exact_duplicate_fragment_records": 0,
+    "repeated_identity_with_different_record_fields": 0
+  },
+  "source_fragments_per_sequence": {
+    "chr10_MATERNAL": 244733,
+    "chr11_MATERNAL": 247584,
+    "chr12_MATERNAL": 256480,
+    "chr13_MATERNAL": 172758,
+    "chr14_MATERNAL": 179443,
+    "chr15_MATERNAL": 168142,
+    "chr16_MATERNAL": 184876,
+    "chr17_MATERNAL": 172961,
+    "chr18_MATERNAL": 129836,
+    "chr19_MATERNAL": 138442,
+    "chr1_MATERNAL": 471357,
+    "chr20_MATERNAL": 130236,
+    "chr21_MATERNAL": 66743,
+    "chr22_MATERNAL": 88499,
+    "chr2_MATERNAL": 427732,
+    "chr3_MATERNAL": 357713,
+    "chr4_MATERNAL": 323399,
+    "chr5_MATERNAL": 314801,
+    "chr6_MATERNAL": 296142,
+    "chr7_MATERNAL": 288087,
+    "chr8_MATERNAL": 259394,
+    "chr9_MATERNAL": 228325,
+    "chrX_MATERNAL": 274899
+  },
+  "exact_duplicates_per_sequence": {},
+  "duplicate_examples": [],
+  "action": "audit only; input preserved; no overlaps or distinct identifiers merged"
+}

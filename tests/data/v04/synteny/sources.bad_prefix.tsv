@@ -1,0 +1,2 @@
+source_id	format	collinearity	genes	wgd_node
+bad_prefix	mcscanx	blocks.bad_prefix.collinearity	genes.tsv	WGD1

@@ -1,0 +1,37 @@
+[
+  {
+    "species": "arabidopsis",
+    "exit_code": 0,
+    "output": "/workspace/tevox-v05-study/final/arabidopsis",
+    "completed_utc": "2026-10-06T16:14:16.212841+00:00",
+    "archive_exit_code": 0
+  },
+  {
+    "species": "human",
+    "exit_code": 0,
+    "output": "/workspace/tevox-v05-study/final/human",
+    "completed_utc": "2026-10-06T16:38:45.968186+00:00",
+    "archive_exit_code": 0
+  },
+  {
+    "species": "mouse",
+    "exit_code": 0,
+    "output": "/workspace/tevox-v05-study/final/mouse",
+    "completed_utc": "2026-10-06T17:08:16.929362+00:00",
+    "archive_exit_code": 0
+  },
+  {
+    "species": "rat_corrected",
+    "exit_code": 0,
+    "output": "/workspace/tevox-v05-study/final/rat_corrected",
+    "completed_utc": "2026-10-06T17:23:40.807544+00:00",
+    "archive_exit_code": 0
+  },
+  {
+    "species": "maize",
+    "exit_code": 0,
+    "output": "/workspace/tevox-v05-study/final/maize",
+    "completed_utc": "2026-10-06T17:33:00.062605+00:00",
+    "archive_exit_code": 0
+  }
+]

@@ -1,0 +1,197 @@
+{
+  "taxon": "Rattus norvegicus",
+  "taxid": 10116,
+  "pair_id": "rat_BN_GRCr8_vs_SHRSP_T2T",
+  "status": "verified_distinct_published_strains_with_matched_refseq_fasta_gene_gff3_and_repeatmasker",
+  "verified_on": "2026-10-03",
+  "large_files_downloaded": true,
+  "assemblies": [
+    {
+      "label": "BN",
+      "species": "Rattus norvegicus",
+      "strain": "BN/NHsdMcwi",
+      "sex": "male",
+      "assembly_accession": "GCF_036323735.1",
+      "assembly_name": "GRCr8",
+      "paired_genbank_accession": "GCA_036323735.1",
+      "biosample": "SAMN38730095",
+      "assembly_bioproject": "PRJNA1027884",
+      "refseq_total_length_bp": 2849581192,
+      "annotation_release": "GCF_036323735.1-RS_2026_08",
+      "release_directory": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/",
+      "assembly_directory": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/036/323/735/GCF_036323735.1_GRCr8/",
+      "publication": {
+        "title": "Construction and evaluation of a new rat reference genome assembly, GRCr8, from long reads and long-range scaffolding.",
+        "doi": "10.1101/gr.279292.124",
+        "pmid": "39516046",
+        "pmcid": "PMC11610589",
+        "journal": "Genome Research",
+        "year": 2024,
+        "fulltext_evidence": "rat/grcr8_fulltext.xml"
+      },
+      "checksums_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/md5checksums.txt",
+      "local_checksums": "rat/BN_release_md5checksums.txt",
+      "assembly_report_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/036/323/735/GCF_036323735.1_GRCr8/GCF_036323735.1_GRCr8_assembly_report.txt",
+      "local_assembly_report": "rat/BN_assembly_report.txt",
+      "repeat_method_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/036/323/735/GCF_036323735.1_GRCr8/GCF_036323735.1_GRCr8_rm.run",
+      "local_repeat_method": "rat/BN_rm.run",
+      "files": {
+        "fasta": {
+          "filename": "GCF_036323735.1_GRCr8_genomic.fna.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/GCF_036323735.1_GRCr8_genomic.fna.gz",
+          "assembly_directory_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/036/323/735/GCF_036323735.1_GRCr8/GCF_036323735.1_GRCr8_genomic.fna.gz",
+          "md5": "f7f47214cb2b7987c2edc85b3d3a10c5",
+          "compressed_bytes": 875872536,
+          "head_status": 200,
+          "head_last_modified": "Fri, 28 Aug 2026 12:14:06 GMT",
+          "local_path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz",
+          "local_sha256": "3b9ae168e5c680ce0afb3401d1a1a306a5373098a49219cda63598bc44943a69",
+          "verified_md5": "f7f47214cb2b7987c2edc85b3d3a10c5",
+          "provenance_record": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.fna.gz.provenance.json"
+        },
+        "gene_gff3": {
+          "filename": "GCF_036323735.1_GRCr8_genomic.gff.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/GCF_036323735.1_GRCr8_genomic.gff.gz",
+          "assembly_directory_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/036/323/735/GCF_036323735.1_GRCr8/GCF_036323735.1_GRCr8_genomic.gff.gz",
+          "md5": "06f108ab9641f498f9734642166d926e",
+          "compressed_bytes": 37442693,
+          "head_status": 200,
+          "head_last_modified": "Fri, 28 Aug 2026 12:14:16 GMT",
+          "local_path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+          "local_sha256": "fbb27c7cf14deae80d24959449d4b1c6f58f0ac3dd188f3e00da21081b259901",
+          "verified_md5": "06f108ab9641f498f9734642166d926e",
+          "provenance_record": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz.provenance.json"
+        },
+        "repeatmasker": {
+          "filename": "GCF_036323735.1_GRCr8_rm.out.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/GCF_036323735.1_GRCr8_rm.out.gz",
+          "assembly_directory_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/036/323/735/GCF_036323735.1_GRCr8/GCF_036323735.1_GRCr8_rm.out.gz",
+          "md5": "6b4bd557a65fc2333ef58304873375d2",
+          "compressed_bytes": 141528731,
+          "head_status": 200,
+          "head_last_modified": "Mon, 14 Sep 2026 16:11:32 GMT",
+          "local_path": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz",
+          "local_sha256": "cc033b3f572821a9d97bf501278a5a4ef100d7cb2bebc1e6458de25955cdf2ff",
+          "verified_md5": "6b4bd557a65fc2333ef58304873375d2",
+          "provenance_record": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_rm.out.gz.provenance.json"
+        }
+      }
+    },
+    {
+      "label": "SHRSP",
+      "species": "Rattus norvegicus",
+      "strain": "SHRSP/BbbUtx",
+      "sex": "male",
+      "assembly_accession": "GCF_021556685.1",
+      "assembly_name": "SHRSP_T2T",
+      "paired_genbank_accession": "GCA_021556685.2",
+      "biosample": "SAMN24538170",
+      "assembly_bioproject": "PRJNA793432",
+      "refseq_total_length_bp": 2855461197,
+      "annotation_release": "GCF_021556685.1-RS_2026_08",
+      "release_directory": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_021556685.1-RS_2026_08/",
+      "assembly_directory": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/021/556/685/GCF_021556685.1_SHRSP_T2T/",
+      "publication": {
+        "title": "Telomere-to-telomere genome assembly and a pangenome for the rat.",
+        "doi": "10.1016/j.xgen.2026.101281",
+        "pmid": "42561951",
+        "pmcid": "PMC13477028",
+        "journal": "Cell Genomics",
+        "year": 2026,
+        "fulltext_evidence": "rat/rat_t2t_fulltext.xml"
+      },
+      "checksums_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_021556685.1-RS_2026_08/md5checksums.txt",
+      "local_checksums": "rat/SHRSP_release_md5checksums.txt",
+      "assembly_report_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/021/556/685/GCF_021556685.1_SHRSP_T2T/GCF_021556685.1_SHRSP_T2T_assembly_report.txt",
+      "local_assembly_report": "rat/SHRSP_assembly_report.txt",
+      "repeat_method_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/021/556/685/GCF_021556685.1_SHRSP_T2T/GCF_021556685.1_SHRSP_T2T_rm.run",
+      "local_repeat_method": "rat/SHRSP_rm.run",
+      "files": {
+        "fasta": {
+          "filename": "GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_021556685.1-RS_2026_08/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+          "assembly_directory_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/021/556/685/GCF_021556685.1_SHRSP_T2T/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+          "md5": "c43259b81984db675c3a71166a7686f3",
+          "compressed_bytes": 874852829,
+          "head_status": 200,
+          "head_last_modified": "Fri, 28 Aug 2026 12:24:53 GMT",
+          "local_path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz",
+          "local_sha256": "88bc0dd2422beff05e30e16c9c2a761427982d9904893b7961ead1ba283a83dd",
+          "verified_md5": "c43259b81984db675c3a71166a7686f3",
+          "provenance_record": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.fna.gz.provenance.json"
+        },
+        "gene_gff3": {
+          "filename": "GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_021556685.1-RS_2026_08/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+          "assembly_directory_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/021/556/685/GCF_021556685.1_SHRSP_T2T/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+          "md5": "26688479d7493e686a7b06a674ec34bd",
+          "compressed_bytes": 41562811,
+          "head_status": 200,
+          "head_last_modified": "Fri, 28 Aug 2026 12:25:01 GMT",
+          "local_path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz",
+          "local_sha256": "828d12749401c4c0844ac9721430198c3809c1667696e409a826c4e59e21db74",
+          "verified_md5": "26688479d7493e686a7b06a674ec34bd",
+          "provenance_record": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_genomic.gff.gz.provenance.json"
+        },
+        "repeatmasker": {
+          "filename": "GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+          "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_021556685.1-RS_2026_08/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+          "assembly_directory_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/021/556/685/GCF_021556685.1_SHRSP_T2T/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+          "md5": "9d3df43b8cffc959663c8dfa69e7c0b1",
+          "compressed_bytes": 157958167,
+          "head_status": 200,
+          "head_last_modified": "Mon, 14 Sep 2026 16:04:05 GMT",
+          "local_path": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz",
+          "local_sha256": "a59a2a5758eab7a34c6232ec69413409c39e75e1f83e57c5e8b8502144b1f85e",
+          "verified_md5": "9d3df43b8cffc959663c8dfa69e7c0b1",
+          "provenance_record": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.out.gz.provenance.json"
+        }
+      }
+    }
+  ],
+  "annotation_comparability": {
+    "provider": "NCBI RefSeq",
+    "annotation_release_month": "2026_08",
+    "repeatmasker": "4.1.5",
+    "rmblastn": "2.14.1+",
+    "library": "CONS-Dfam_3.7",
+    "options": "-engine RMBlast -species 'rattus norvegicus' -s -no_is -cutoff 255",
+    "rm_run_files_byte_identical": true
+  },
+  "cautions": [
+    "RefSeq and GenBank assembly sequences are marked non-identical for each genome; use all three inputs from the same GCF release directory.",
+    "GCF_021556685.1 corresponds to GCA_021556685.2 (the 2026 T2T assembly), not GCA_021556685.1 (the prior 2023-paper HiFi assembly).",
+    "SHRSP_T2T is the assembly name; the paper reports 16 of 22 chromosomes assembled without gaps, seven gaps total. It is not a fully gapless genome.",
+    "The 2026 paper used RepeatMasker 4.1.8 with GIRI Rattus motifs, whereas the selected matched NCBI tracks use 4.1.5 plus Dfam 3.7 for both assemblies. Do not present NCBI-track statistics as reproducing the paper RepeatMasker counts.",
+    "Male strain assemblies differ in technical completeness and ancestral background. Assembly-specific TE candidates need unique orthologous flank evidence before being called strain-specific insertions/deletions.",
+    "The checksum-verified SHRSP repeat source contains 9,119,000 rows but only 4,559,500 distinct complete records, each repeated twice. Use rat_corrected_pair.json and the auditable deduplicated derivative for counts; original records remain available."
+  ],
+  "total_compressed_bytes": 2129217767,
+  "total_compressed_gib": 1.983,
+  "refseq_uncompressed_genome_bp": 5705042389,
+  "download_manifest": "/workspace/tevox-study/data/rat/download_manifest.json",
+  "download_status": "all_six_inputs_source_md5_verified_and_local_sha256_recorded",
+  "runner_manifest": "/workspace/tevox-study/metadata/rat_corrected_pair.json",
+  "repeat_source_anomaly": {
+    "assembly": "GCF_021556685.1",
+    "finding": "Every original complete SHRSP RepeatMasker record occurs exactly twice consecutively. Source checksum was valid despite this annotation duplication.",
+    "counts": {
+      "contig_reentry_events": 0,
+      "coordinate_order_violations": 0,
+      "header_or_blank_lines": 3,
+      "removed_consecutive_duplicate_rows": 4559500,
+      "retained_nonconsecutive_duplicate_rows": 0,
+      "retained_record_rows": 4559500,
+      "source_physical_lines": 9119003,
+      "source_record_rows": 9119000
+    },
+    "multiplicity_histogram": {
+      "2": 4559500
+    },
+    "correction": "Remove only exact consecutive full-record duplicates; preserve overlapping distinct fragments and all source originals.",
+    "derived_output": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz",
+    "derived_sha256": "8e640708e26c41ec179c52762267e1662211b370c495b73ad263c20420afee3f",
+    "provenance": "/workspace/tevox-study/metadata/rat_shrsp_repeat_dedup.json",
+    "source_group_map": "/workspace/tevox-study/data/rat/shrsp/GCF_021556685.1_SHRSP_T2T_rm.deduplicated.out.gz.source_groups.tsv.gz"
+  }
+}

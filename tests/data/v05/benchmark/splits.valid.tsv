@@ -1,0 +1,6 @@
+split_schema_version	dataset_id	truth_record_id	partition	outer_fold	inner_fold
+1.0.0	D_GLOBAL	CANTRUTH001	DEVELOPMENT	outer1	inner1
+1.0.0	D_GLOBAL	CANTRUTH002	DEVELOPMENT	outer1	inner1
+1.0.0	D_GLOBAL	CANTRUTH003	DEVELOPMENT	outer1	inner1
+1.0.0	D_GLOBAL	CANTRUTH004	DEVELOPMENT	outer1	inner1
+1.0.0	D_GLOBAL	CANTRUTH005	DEVELOPMENT	outer1	inner1

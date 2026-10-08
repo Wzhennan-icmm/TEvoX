@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHs1.over.chain.gz",
+    "path": "/workspace/tevox-v05-validation-20261005/truth/hg19ToHs1.over.chain.gz",
+    "bytes": 2513145,
+    "status": "downloaded"
+  },
+  {
+    "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hs1/liftOver/hs1ToHg19.over.chain.gz",
+    "path": "/workspace/tevox-v05-validation-20261005/truth/hs1ToHg19.over.chain.gz",
+    "bytes": 2857591,
+    "status": "downloaded"
+  },
+  {
+    "url": "https://ftp.ncbi.nlm.nih.gov/giab/ftp/data/AshkenazimTrio/analysis/NIST_SVs_Integration_v0.6/GIAB_Evaluations/",
+    "path": "/workspace/tevox-v05-validation-20261005/truth/giab_sv_v062_index.html",
+    "bytes": 1665,
+    "status": "downloaded"
+  },
+  {
+    "url": "https://api.github.com/repos/Wzhennan-icmm/TEvoX/actions/runs/30734448351/jobs",
+    "path": "/workspace/tevox-v05-validation-20261005/truth/baseline_jobs.json",
+    "bytes": 7235,
+    "status": "downloaded"
+  }
+]

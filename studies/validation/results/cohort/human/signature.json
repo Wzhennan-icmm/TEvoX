@@ -1,0 +1,71 @@
+{
+  "manifest": {
+    "path": "/workspace/tevox-study/results/human/manifest.json",
+    "bytes": 4460,
+    "sha256": "1501953ba7b01c0d39486af61babaa4766bf25ed5ac36ea9be0dc5b3542c8625"
+  },
+  "binary": {
+    "path": "/workspace/tevox-v05-validation-20261006/tevox-final",
+    "bytes": 678000,
+    "sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7"
+  },
+  "alignment": {
+    "path": "/workspace/tevox-study/results/human/alignment.paf.gz",
+    "bytes": 11811169,
+    "sha256": "d72245cff3703f9d4d0a8a492f20d5e7e26014dae34945c7736d82e0ec651ad6"
+  },
+  "source_inputs": [
+    {
+      "role": "fasta",
+      "genome": "chm13",
+      "path": "/workspace/tevox-study/data/human/chm13/selected_nuclear.fa.gz",
+      "bytes": 1011778152,
+      "sha256": "304ae091fc71f1192aacb657c1addc5246c1fe3873efc96dce71935cc036b524"
+    },
+    {
+      "role": "repeats",
+      "genome": "chm13",
+      "path": "/workspace/tevox-study/data/human/chm13/selected_nuclear.repeats.tsv.gz",
+      "bytes": 105974890,
+      "sha256": "9a65b5d6a89b63d79d4543062bba59cbcf73abd7da248c0cd0281d224322638c"
+    },
+    {
+      "role": "genes",
+      "genome": "chm13",
+      "path": "/workspace/tevox-study/data/human/chm13/selected_nuclear.genes.gff3.gz",
+      "bytes": 59505455,
+      "sha256": "efe0420ed7278d69ad76f690e11bb02f2c1db49037bbd71e22904f3bd2deb0f3"
+    },
+    {
+      "role": "fasta",
+      "genome": "hg002_mat",
+      "path": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.fa.gz",
+      "bytes": 1017438407,
+      "sha256": "1eefbc8a9c3ea612331c1daf07ae1128dc89a3d6e8ceabecabcfbc27657a48e3"
+    },
+    {
+      "role": "repeats",
+      "genome": "hg002_mat",
+      "path": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.repeatmasker.out.gz",
+      "bytes": 182874797,
+      "sha256": "eda9f44d936b9d0bdaf88bdd715c608823a56d6519caffca5edd13fc41447deb"
+    },
+    {
+      "role": "genes",
+      "genome": "hg002_mat",
+      "path": "/workspace/tevox-study/data/human/hg002_mat/selected_nuclear.genes.gff3.gz",
+      "bytes": 34661899,
+      "sha256": "63e7adae6d207677dbcdb8fad985eb5e7df811365ae9515c1954c10db0e8fd5f"
+    }
+  ],
+  "family_policy": "repeat-name",
+  "scripts": {
+    "annotate_candidates.py": "45ded3f62ba22abc75b758de25fa88cb23d2b6bdae66e9fe791a8054df96e6a7",
+    "archive_run.py": "8275cd5c6bc9ac83286bedcd72613edcb2cd4ed22141d76f8b3610a04bdfc20d",
+    "normalize_annotations.py": "3ef9740365a26ab02d52ef17b0c5123e66f0c67826d7b49a5f8b626fb4d562e9",
+    "paf_exact.py": "784d4f1f2e8c94dcf1a691ce7678ed503c5b7a93b24edb0183dc7a0936cb5454",
+    "run_pair.py": "474f66229331396be1331538aa23d99c3bdf9b63680ba0448ec3a308d1a326b0",
+    "test_inputs.py": "6806ee0085898ed077e15c785914dfce28d803f7490b385b780b3f3bc72bf2c2",
+    "test_run_integrity.py": "c4d3704875e669d4101926ff1aa9e3407020272d6e5b9f297457da408fc24aeb"
+  }
+}

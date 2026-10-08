@@ -1,0 +1,5 @@
+benchmark_schema_version	dataset_id	truth_record_id	truth_locus_id	genome_id	te_id	ancestral_event_id	homology_group_id	validation_batch_id
+1.0.0	D_GLOBAL	MEM001	TL_GREEDY	A	A_greedy	EVENT_GREEDY	HMG_GLOBAL	SIM_GLOBAL
+1.0.0	D_GLOBAL	MEM002	TL_GLOBAL	A	A_global	EVENT_GLOBAL	HMG_GLOBAL	SIM_GLOBAL
+1.0.0	D_GLOBAL	MEM003	TL_GLOBAL	B	B_bridge	EVENT_GLOBAL	HMG_GLOBAL	SIM_GLOBAL
+1.0.0	D_GLOBAL	MEM004	TL_GLOBAL	C	C_global	EVENT_GLOBAL	HMG_GLOBAL	SIM_GLOBAL

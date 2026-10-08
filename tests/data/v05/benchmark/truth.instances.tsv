@@ -1,0 +1,5 @@
+benchmark_schema_version	dataset_id	truth_record_id	truth_locus_id	genome_id	technical_state	biological_state	annotation_state	legacy_state	claimable	contig	start	end	truth_confidence	validation_method	validation_source	validation_batch_id
+1.0.0	D_GLOBAL	INSTRUTH001	TL_GREEDY	A	CALLABLE	PRESENT	MATCHED	PRESENT_ANNOTATED	true	chr1	40	60	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL
+1.0.0	D_GLOBAL	INSTRUTH002	TL_GLOBAL	A	CALLABLE	PRESENT	MATCHED	PRESENT_ANNOTATED	true	chr1	100	120	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL
+1.0.0	D_GLOBAL	INSTRUTH003	TL_GLOBAL	B	CALLABLE	PRESENT	MATCHED	PRESENT_ANNOTATED	true	chr1	40	60	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL
+1.0.0	D_GLOBAL	INSTRUTH004	TL_GLOBAL	C	CALLABLE	PRESENT	MATCHED	PRESENT_ANNOTATED	true	chr1	40	60	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL

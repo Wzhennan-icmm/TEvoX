@@ -1,0 +1,59 @@
+{
+  "status": "EXTERNAL_POSITIVE_ABSENCE_SUBSET",
+  "counts": {
+    "vcf_records": 74012,
+    "pass_homozygous_deletion": 2031,
+    "nonunique_or_gapped_mapping": 1197,
+    "compatible_deletions": 243,
+    "outside_tier1_with_flanks": 420,
+    "chm13_ref_sequence_mismatch": 47,
+    "positive_te_fragments": 42
+  },
+  "parameters": {
+    "command": "prepare",
+    "vcf": "/workspace/tevox-v05-validation-20261005/truth/giab_vcf.vcf.gz",
+    "regions": "/workspace/tevox-v05-validation-20261005/truth/giab_regions.txt",
+    "forward": "/workspace/tevox-v05-validation-20261005/truth/hg19ToHs1.over.chain.gz",
+    "reverse": "/workspace/tevox-v05-validation-20261005/truth/hs1ToHg19.over.chain.gz",
+    "fasta": "/workspace/tevox-v05-study/results/human/chm13/genome.fa",
+    "te": "/workspace/tevox-v05-study/results/human/chm13/repeats.bed",
+    "output": "/workspace/tevox-v05-validation-20261005/truth/giab-chm13-hg002",
+    "source_genome": "chm13",
+    "target_genome": "hg002_mat",
+    "flank": 50,
+    "te_coverage": 0.95,
+    "deletion_coverage": 0.8
+  },
+  "inputs": {
+    "vcf": {
+      "path": "/workspace/tevox-v05-validation-20261005/truth/giab_vcf.vcf.gz",
+      "sha256": "1bc8e515189e32eb02a8a2050a4f70e88a80d9ad1d9fafe65ca1931d6f7b7f13"
+    },
+    "regions": {
+      "path": "/workspace/tevox-v05-validation-20261005/truth/giab_regions.txt",
+      "sha256": "962da1439091836346e3c76b2cb4c1191586ed2f8ce49bc3ea49eeec75b4ab2b"
+    },
+    "forward": {
+      "path": "/workspace/tevox-v05-validation-20261005/truth/hg19ToHs1.over.chain.gz",
+      "sha256": "f5e1c8048900b2b553904995a923b08592057f56ea19cb52c71d9ae63c195f03"
+    },
+    "reverse": {
+      "path": "/workspace/tevox-v05-validation-20261005/truth/hs1ToHg19.over.chain.gz",
+      "sha256": "ed945b765d22eb2ff8203ce5046f175c251a8230e5f57fa0531fef2a3ac7d494"
+    },
+    "fasta": {
+      "path": "/workspace/tevox-v05-study/results/human/chm13/genome.fa",
+      "sha256": "9374c0c1ae3d228786ae49db85e4c770007e6cd8e7574303f93369a16601c76b"
+    },
+    "te": {
+      "path": "/workspace/tevox-v05-study/results/human/chm13/repeats.bed",
+      "sha256": "110fbf8d16cb3b1da6953c474b962437da8283d2821bdcbaa4386583807c9c5b"
+    }
+  },
+  "limitations": [
+    "No negative labels: precision/FDR and membership calibration cannot be estimated.",
+    "Read data may overlap assembly inputs; independence of all experimental reads is not established.",
+    "Strict transfer/overlap filters select simple reference-like loci and do not represent genome-wide performance.",
+    "Homozygous HG002 genotypes avoid inferring haplotype from unphased heterozygous calls."
+  ]
+}

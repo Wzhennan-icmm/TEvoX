@@ -1,0 +1,6 @@
+benchmark_schema_version	dataset_id	truth_record_id	source_genome_id	source_te_id	target_genome_id	target_te_id	label	ancestral_event_id	source_truth_locus_id	target_truth_locus_id	truth_confidence	validation_method	validation_source	validation_batch_id	curation_blinded	taxon_a	taxon_b	clade_holdout_id
+1.0.0	D_GLOBAL	CANTRUTH001	A	A_greedy	B	B_bridge	DIFFERENT_LOCUS	.	TL_GREEDY	TL_GLOBAL	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL	true	TaxonA	TaxonB	CLADE_AB
+1.0.0	D_GLOBAL	CANTRUTH002	A	A_global	B	B_bridge	SAME_LOCUS	EVENT_GLOBAL	TL_GLOBAL	TL_GLOBAL	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL	true	TaxonA	TaxonB	CLADE_AB
+1.0.0	D_GLOBAL	CANTRUTH003	B	B_bridge	C	C_global	SAME_LOCUS	EVENT_GLOBAL	TL_GLOBAL	TL_GLOBAL	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL	true	TaxonB	TaxonC	CLADE_BC
+1.0.0	D_GLOBAL	CANTRUTH004	A	A_global	C	C_global	SAME_LOCUS	EVENT_GLOBAL	TL_GLOBAL	TL_GLOBAL	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL	true	TaxonA	TaxonC	CLADE_AC
+1.0.0	D_GLOBAL	CANTRUTH005	A	A_greedy	C	C_global	DIFFERENT_LOCUS	.	TL_GREEDY	TL_GLOBAL	HIGH	CONTROLLED_FIXTURE	tests/data/v05/global	SIM_GLOBAL	true	TaxonA	TaxonC	CLADE_AC

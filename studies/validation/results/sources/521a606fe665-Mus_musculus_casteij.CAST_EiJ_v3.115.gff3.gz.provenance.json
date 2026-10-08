@@ -1,0 +1,35 @@
+{
+  "checksum_source": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/CHECKSUMS",
+  "completed_at": "2026-10-03T08:21:18.439023+00:00",
+  "curl_log": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz.awaiting_bsd.provenance.json.curl.log",
+  "effective_url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+  "observed": {
+    "bytes": 21010744,
+    "md5": "378c95d58c8ca5d9c38b4d04be9efb2c",
+    "sha256": "ba0f01cd108fad0bc64ba679c0db7c4006588f25affbd926afdbc3de4524ab04",
+    "bsd_sum": 12244,
+    "bsd_blocks_1024": 20519
+  },
+  "original_url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+  "output": "/workspace/tevox-study/data/mouse/cast/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+  "request": {
+    "expected_bytes": 21010744,
+    "expected_md5": null,
+    "expected_sha256": null,
+    "original_url": "https://ftp.ensembl.org/pub/release-115/gff3/mus_musculus_casteij/Mus_musculus_casteij.CAST_EiJ_v3.115.gff3.gz",
+    "url_sha256": "29a99299c4aa26da385968b5d5b048399362c0f7fbd00c1e9cce5279f5d38abd"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:21:16.789030+00:00",
+  "verification": "source_bsd_sum_verified",
+  "verified_algorithms": [
+    "bsd-sum"
+  ],
+  "expected_provider_checksum": {
+    "algorithm": "BSD sum",
+    "sum": 12244,
+    "blocks_1024": 20519
+  }
+}

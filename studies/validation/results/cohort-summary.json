@@ -1,0 +1,699 @@
+{
+  "status": "ALL_FIVE_COMPLETED",
+  "runs": [
+    {
+      "species": "human",
+      "label": "\u4eba",
+      "directory": "/workspace/tevox-v05-study/final/human",
+      "binary_sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7",
+      "counts": {
+        "input_files": 5,
+        "genomes": 2,
+        "tes": 9189437,
+        "alignment_views": 17840,
+        "native_evidence_groups": 8920,
+        "synteny_evidence_groups": 0,
+        "synteny_provider_inputs": 0,
+        "evidence_observations": 9224586,
+        "observation_score_rows": 9224586,
+        "candidate_observations": 19775091,
+        "internal_candidates": 19773623,
+        "graph_candidates": 19773623,
+        "candidates": 19773623,
+        "candidate_feature_rows": 19773623,
+        "decisions": 9189437,
+        "genes": 0,
+        "synteny_blocks": 0,
+        "synteny_anchors": 0,
+        "copy_contexts": 0,
+        "te_context_assignments": 0,
+        "edges": 4488602,
+        "relations": 15226381,
+        "solver_components": 4789201,
+        "loci": 4802303
+      },
+      "empty_site_source_fragments": {
+        "chm13": 929,
+        "hg002_mat": 872
+      },
+      "state_counts": [
+        {
+          "genome_id": "chm13",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 857
+        },
+        {
+          "genome_id": "chm13",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 82555
+        },
+        {
+          "genome_id": "chm13",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 4619638
+        },
+        {
+          "genome_id": "chm13",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 64733
+        },
+        {
+          "genome_id": "chm13",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 9722
+        },
+        {
+          "genome_id": "chm13",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 70
+        },
+        {
+          "genome_id": "chm13",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 24728
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 922
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 83357
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 4569799
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 107143
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 20591
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 69
+        },
+        {
+          "genome_id": "hg002_mat",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 20422
+        }
+      ],
+      "resource_usage": {
+        "wall_seconds": 748.6944737420001,
+        "user_seconds": 926.52043,
+        "system_seconds": 72.15929,
+        "peak_rss_kib": 18422940,
+        "method": "wait4 child resource usage"
+      },
+      "comparison_to_previous_engine_run": {
+        "counts": true,
+        "state_counts": true,
+        "empty_site_source_fragments": true
+      }
+    },
+    {
+      "species": "mouse",
+      "label": "\u5c0f\u9f20",
+      "directory": "/workspace/tevox-v05-study/final/mouse",
+      "binary_sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7",
+      "counts": {
+        "input_files": 5,
+        "genomes": 2,
+        "tes": 6295781,
+        "alignment_views": 38536,
+        "native_evidence_groups": 19268,
+        "synteny_evidence_groups": 0,
+        "synteny_provider_inputs": 0,
+        "evidence_observations": 6198150,
+        "observation_score_rows": 6198150,
+        "candidate_observations": 12454764,
+        "internal_candidates": 12454121,
+        "graph_candidates": 12454121,
+        "candidates": 12454121,
+        "candidate_feature_rows": 12454121,
+        "decisions": 6295781,
+        "genes": 0,
+        "synteny_blocks": 0,
+        "synteny_anchors": 0,
+        "copy_contexts": 0,
+        "te_context_assignments": 0,
+        "edges": 2950247,
+        "relations": 15737858,
+        "solver_components": 3604241,
+        "loci": 3656990
+      },
+      "empty_site_source_fragments": {
+        "c57": 24727,
+        "cast": 21759
+      },
+      "state_counts": [
+        {
+          "genome_id": "c57",
+          "state": "ASSEMBLY_GAP",
+          "claimable": "false",
+          "count": 10
+        },
+        {
+          "genome_id": "c57",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 21545
+        },
+        {
+          "genome_id": "c57",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 125374
+        },
+        {
+          "genome_id": "c57",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 3147700
+        },
+        {
+          "genome_id": "c57",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 172468
+        },
+        {
+          "genome_id": "c57",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 14589
+        },
+        {
+          "genome_id": "c57",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 1858
+        },
+        {
+          "genome_id": "c57",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 173446
+        },
+        {
+          "genome_id": "cast",
+          "state": "ASSEMBLY_GAP",
+          "claimable": "false",
+          "count": 3
+        },
+        {
+          "genome_id": "cast",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 24475
+        },
+        {
+          "genome_id": "cast",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 125454
+        },
+        {
+          "genome_id": "cast",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 3148081
+        },
+        {
+          "genome_id": "cast",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 174129
+        },
+        {
+          "genome_id": "cast",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 15910
+        },
+        {
+          "genome_id": "cast",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 1676
+        },
+        {
+          "genome_id": "cast",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 167262
+        }
+      ],
+      "resource_usage": {
+        "wall_seconds": 536.0970397679998,
+        "user_seconds": 679.846451,
+        "system_seconds": 44.429545,
+        "peak_rss_kib": 15992292,
+        "method": "wait4 child resource usage"
+      },
+      "comparison_to_previous_engine_run": {
+        "counts": true,
+        "state_counts": true,
+        "empty_site_source_fragments": true
+      }
+    },
+    {
+      "species": "rat_corrected",
+      "label": "\u5927\u9f20",
+      "directory": "/workspace/tevox-v05-study/final/rat_corrected",
+      "binary_sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7",
+      "counts": {
+        "input_files": 5,
+        "genomes": 2,
+        "tes": 6019240,
+        "alignment_views": 14056,
+        "native_evidence_groups": 7028,
+        "synteny_evidence_groups": 0,
+        "synteny_provider_inputs": 0,
+        "evidence_observations": 5997771,
+        "observation_score_rows": 5997771,
+        "candidate_observations": 11417728,
+        "internal_candidates": 11416646,
+        "graph_candidates": 11416646,
+        "candidates": 11416646,
+        "candidate_feature_rows": 11416646,
+        "decisions": 6019240,
+        "genes": 0,
+        "synteny_blocks": 0,
+        "synteny_anchors": 0,
+        "copy_contexts": 0,
+        "te_context_assignments": 0,
+        "edges": 2960948,
+        "relations": 9106476,
+        "solver_components": 3196672,
+        "loci": 3242422
+      },
+      "empty_site_source_fragments": {
+        "bn": 11053,
+        "shrsp": 10669
+      },
+      "state_counts": [
+        {
+          "genome_id": "bn",
+          "state": "ASSEMBLY_GAP",
+          "claimable": "false",
+          "count": 3
+        },
+        {
+          "genome_id": "bn",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 10441
+        },
+        {
+          "genome_id": "bn",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 50058
+        },
+        {
+          "genome_id": "bn",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 3011043
+        },
+        {
+          "genome_id": "bn",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 64361
+        },
+        {
+          "genome_id": "bn",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 4430
+        },
+        {
+          "genome_id": "bn",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 295
+        },
+        {
+          "genome_id": "bn",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 101791
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 10799
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 52249
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 3008197
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 66218
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 34014
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 320
+        },
+        {
+          "genome_id": "shrsp",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 70625
+        }
+      ],
+      "resource_usage": {
+        "wall_seconds": 504.55671922299916,
+        "user_seconds": 607.394099,
+        "system_seconds": 44.911011,
+        "peak_rss_kib": 12547796,
+        "method": "wait4 child resource usage"
+      },
+      "comparison_to_previous_engine_run": {
+        "counts": true,
+        "state_counts": true,
+        "empty_site_source_fragments": true
+      }
+    },
+    {
+      "species": "arabidopsis",
+      "label": "\u62df\u5357\u82a5",
+      "directory": "/workspace/tevox-v05-study/final/arabidopsis",
+      "binary_sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7",
+      "counts": {
+        "input_files": 5,
+        "genomes": 2,
+        "tes": 48010,
+        "alignment_views": 4324,
+        "native_evidence_groups": 2162,
+        "synteny_evidence_groups": 0,
+        "synteny_provider_inputs": 0,
+        "evidence_observations": 40017,
+        "observation_score_rows": 40017,
+        "candidate_observations": 51905,
+        "internal_candidates": 51813,
+        "graph_candidates": 51813,
+        "candidates": 51813,
+        "candidate_feature_rows": 51813,
+        "decisions": 48010,
+        "genes": 0,
+        "synteny_blocks": 0,
+        "synteny_anchors": 0,
+        "copy_contexts": 0,
+        "te_context_assignments": 0,
+        "edges": 9821,
+        "relations": 134533,
+        "solver_components": 40201,
+        "loci": 40617
+      },
+      "empty_site_source_fragments": {
+        "nyl7": 317,
+        "sq1": 317
+      },
+      "state_counts": [
+        {
+          "genome_id": "nyl7",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 309
+        },
+        {
+          "genome_id": "nyl7",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 1630
+        },
+        {
+          "genome_id": "nyl7",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 24779
+        },
+        {
+          "genome_id": "nyl7",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 6205
+        },
+        {
+          "genome_id": "nyl7",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 305
+        },
+        {
+          "genome_id": "nyl7",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 9
+        },
+        {
+          "genome_id": "nyl7",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 7380
+        },
+        {
+          "genome_id": "sq1",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 303
+        },
+        {
+          "genome_id": "sq1",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 1600
+        },
+        {
+          "genome_id": "sq1",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 23231
+        },
+        {
+          "genome_id": "sq1",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 7872
+        },
+        {
+          "genome_id": "sq1",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 305
+        },
+        {
+          "genome_id": "sq1",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 18
+        },
+        {
+          "genome_id": "sq1",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 7288
+        }
+      ],
+      "resource_usage": {
+        "wall_seconds": 11.530164456999955,
+        "user_seconds": 12.371041,
+        "system_seconds": 0.483162,
+        "peak_rss_kib": 270472,
+        "method": "wait4 child resource usage"
+      },
+      "comparison_to_previous_engine_run": {
+        "counts": true,
+        "state_counts": true,
+        "empty_site_source_fragments": true
+      }
+    },
+    {
+      "species": "maize",
+      "label": "\u7389\u7c73",
+      "directory": "/workspace/tevox-v05-study/final/maize",
+      "binary_sha256": "4211f2f1526a3c6a3e9417befb9b86d80c1869ca516825e98691c4e4e665c9e7",
+      "counts": {
+        "input_files": 5,
+        "genomes": 2,
+        "tes": 2244994,
+        "alignment_views": 191684,
+        "native_evidence_groups": 95842,
+        "synteny_evidence_groups": 0,
+        "synteny_provider_inputs": 0,
+        "evidence_observations": 1818168,
+        "observation_score_rows": 1818168,
+        "candidate_observations": 3629080,
+        "internal_candidates": 3629050,
+        "graph_candidates": 3629050,
+        "candidates": 3629050,
+        "candidate_feature_rows": 3629050,
+        "decisions": 2244994,
+        "genes": 0,
+        "synteny_blocks": 0,
+        "synteny_anchors": 0,
+        "copy_contexts": 0,
+        "te_context_assignments": 0,
+        "edges": 661704,
+        "relations": 1779326,
+        "solver_components": 1626901,
+        "loci": 1636553
+      },
+      "empty_site_source_fragments": {
+        "b73": 7048,
+        "oh43": 7012
+      },
+      "state_counts": [
+        {
+          "genome_id": "b73",
+          "state": "ASSEMBLY_GAP",
+          "claimable": "false",
+          "count": 1
+        },
+        {
+          "genome_id": "b73",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 6975
+        },
+        {
+          "genome_id": "b73",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 25834
+        },
+        {
+          "genome_id": "b73",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 1120419
+        },
+        {
+          "genome_id": "b73",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 31335
+        },
+        {
+          "genome_id": "b73",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 7348
+        },
+        {
+          "genome_id": "b73",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 138
+        },
+        {
+          "genome_id": "b73",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 444503
+        },
+        {
+          "genome_id": "oh43",
+          "state": "EMPTY_SITE_CONFIRMED",
+          "claimable": "true",
+          "count": 7021
+        },
+        {
+          "genome_id": "oh43",
+          "state": "FAMILY_OR_BOUNDARY_DISCORDANCE",
+          "claimable": "true",
+          "count": 27460
+        },
+        {
+          "genome_id": "oh43",
+          "state": "PRESENT_ANNOTATED",
+          "claimable": "true",
+          "count": 1124575
+        },
+        {
+          "genome_id": "oh43",
+          "state": "PRESENT_UNANNOTATED",
+          "claimable": "true",
+          "count": 32699
+        },
+        {
+          "genome_id": "oh43",
+          "state": "PROJECTION_AMBIGUOUS",
+          "claimable": "false",
+          "count": 16310
+        },
+        {
+          "genome_id": "oh43",
+          "state": "STRUCTURAL_ALTERNATIVE",
+          "claimable": "true",
+          "count": 160
+        },
+        {
+          "genome_id": "oh43",
+          "state": "UNCALLABLE",
+          "claimable": "false",
+          "count": 428328
+        }
+      ],
+      "resource_usage": {
+        "wall_seconds": 320.25019747400074,
+        "user_seconds": 352.052565,
+        "system_seconds": 17.651005,
+        "peak_rss_kib": 6313140,
+        "method": "wait4 child resource usage"
+      },
+      "comparison_to_previous_engine_run": {
+        "counts": true,
+        "state_counts": true,
+        "empty_site_source_fragments": true
+      }
+    }
+  ]
+}

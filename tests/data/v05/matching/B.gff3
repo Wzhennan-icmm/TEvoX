@@ -1,0 +1,4 @@
+##gff-version 3
+chrB1	fixture	transposable_element	181	220	.	+	.	ID=B_MATCH_1;family=Fam1
+chrB1	fixture	transposable_element	181	220	.	+	.	ID=B_MATCH_CONFLICT;family=Fam2
+chrB1	fixture	transposable_element	192	231	.	+	.	ID=B_MATCH_2;family=Fam1

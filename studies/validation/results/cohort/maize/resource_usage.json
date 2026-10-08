@@ -1,0 +1,7 @@
+{
+  "wall_seconds": 320.25019747400074,
+  "user_seconds": 352.052565,
+  "system_seconds": 17.651005,
+  "peak_rss_kib": 6313140,
+  "method": "wait4 child resource usage"
+}

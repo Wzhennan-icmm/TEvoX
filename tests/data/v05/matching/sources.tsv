@@ -1,0 +1,2 @@
+source_id	format	collinearity	genes	wgd_node
+assignment_fixture	mcscanx	../../v04/synteny/blocks.collinearity	../../v04/synteny/genes.tsv	WGD1

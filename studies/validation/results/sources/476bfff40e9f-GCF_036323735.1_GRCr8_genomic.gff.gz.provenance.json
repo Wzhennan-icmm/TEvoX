@@ -1,0 +1,28 @@
+{
+  "checksum_source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/md5checksums.txt",
+  "completed_at": "2026-10-03T08:13:17.001677+00:00",
+  "curl_log": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz.provenance.json.curl.log",
+  "effective_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/GCF_036323735.1_GRCr8_genomic.gff.gz",
+  "observed": {
+    "bytes": 37442693,
+    "md5": "06f108ab9641f498f9734642166d926e",
+    "sha256": "fbb27c7cf14deae80d24959449d4b1c6f58f0ac3dd188f3e00da21081b259901"
+  },
+  "original_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/GCF_036323735.1_GRCr8_genomic.gff.gz",
+  "output": "/workspace/tevox-study/data/rat/bn/GCF_036323735.1_GRCr8_genomic.gff.gz",
+  "request": {
+    "expected_bytes": 37442693,
+    "expected_md5": "06f108ab9641f498f9734642166d926e",
+    "expected_sha256": null,
+    "original_url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/10116/GCF_036323735.1-RS_2026_08/GCF_036323735.1_GRCr8_genomic.gff.gz",
+    "url_sha256": "721ce6639f580188fef8509e5bbb9b0fd4720828dbc3d83986d5353909ccd408"
+  },
+  "resumed_bytes": 0,
+  "reused": false,
+  "schema_version": 1,
+  "started_at": "2026-10-03T08:13:16.319021+00:00",
+  "verification": "source_checksum_verified",
+  "verified_algorithms": [
+    "md5"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "exit_code": 0,
+  "status": "PASS",
+  "restored_archive_inputs": 7,
+  "scope": "complete relational schema plus original input digests"
+}

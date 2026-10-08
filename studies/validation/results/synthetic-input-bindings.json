@@ -1,0 +1,467 @@
+{
+  "generator": "/workspace/tevox-review-20261003/early-development/v0.5-source/studies/validation/synthetic_suite.py",
+  "cases": [
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies4_missing1_seed31",
+      "provenance_sha256": "d8e717c91f1fef6336c367d6bc1fbca800726c1ef3a4bb1c34909da0907628ad",
+      "seed": 31,
+      "loci": 128,
+      "copies": 4,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "17be50b521aceba5c11ecfd65280ef3045059ca3ee26f70fed314060b4ec4bd0",
+        "O_P.paf": "246422d35db4b049dd93a3b27d3ddbfa34c4bd08af668f3d485d9c4afd8ad820",
+        "P.bed": "bdf870a5a202be7200a0c8b3c5c5210ffbfa9d277e3f559aef7a2b70561911e1",
+        "P.fa": "b14aa5db68f6c3784eef3bc4bc3a99b1c42296bb4b6b1d63d161b0426f688c9c",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "3a6bdc4c0a2879e9d4e00292ee2aab70c00a3d6996951c4fb26f96f0664333ed",
+        "genes.tsv": "26f7b681d90e925414cd96a5b71dc4ea85f0b65ae0786ff3d1c8b2d6272572cf",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "a71707d0d3c3dc9c59d5da0bdb8efc58622d88dac7ac2b664f3f3372b53c3a66"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies4_missing0_seed31",
+      "provenance_sha256": "0097e837b60244c6df4060a141732e54ab8a9cb9ed1cc73d7205ac3ee2498979",
+      "seed": 31,
+      "loci": 128,
+      "copies": 4,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "17be50b521aceba5c11ecfd65280ef3045059ca3ee26f70fed314060b4ec4bd0",
+        "O_P.paf": "246422d35db4b049dd93a3b27d3ddbfa34c4bd08af668f3d485d9c4afd8ad820",
+        "P.bed": "eaa2d25141b307ad9e59e8e5793b35f36557c12bc868492c773915ee1aad4584",
+        "P.fa": "b14aa5db68f6c3784eef3bc4bc3a99b1c42296bb4b6b1d63d161b0426f688c9c",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "3a6bdc4c0a2879e9d4e00292ee2aab70c00a3d6996951c4fb26f96f0664333ed",
+        "genes.tsv": "26f7b681d90e925414cd96a5b71dc4ea85f0b65ae0786ff3d1c8b2d6272572cf",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "7e07494ed6804092f20924f2ca904f6603f1c7bd2e075a3cfdaf9f6eb7d86cb5"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies2_missing1_seed53",
+      "provenance_sha256": "586a683ac3171877d49dc6d8789c495a75b27a380ceae3ba6bd0d849c16d4675",
+      "seed": 53,
+      "loci": 128,
+      "copies": 2,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "fbe309fde61104b86f6bcb806a0f4c5b3cb80bd6d31c4bf577d39bc91671e972",
+        "O_P.paf": "8fd8bc21d3aca08a91ac8d5ddb6e6f0a0a5308d4a47fb963bb5bbb43756f31d9",
+        "P.bed": "f34eb35387281dc96f12486fe1d31e8e069443e62b80293b16f7c98193f63999",
+        "P.fa": "8c5a71b8e042745ce76418fd1d6e2132293e61b8e920f20584590fd08e635109",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "86bf12e5543265c4487a810ca2d183c0c8745bfea4879e7190e00bda0f53fdf8",
+        "genes.tsv": "b0225d10e25bf49ca820a239e2e5d306c578ca9dc327397d900fc65a5779b845",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "bee2844ec38bd9fd2102e26031364e74e8b7cc0e612f7ca70ead80162706d90f"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies2_missing0_seed17",
+      "provenance_sha256": "51e6958220eb23723736470098babdd4bf47e9487fb33398c2dad21ef506c87a",
+      "seed": 17,
+      "loci": 128,
+      "copies": 2,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "99c184719c641ffbcbb9c3bc14a08f06173e58be7ce3683b87479a94ee944c41",
+        "O_P.paf": "8fd8bc21d3aca08a91ac8d5ddb6e6f0a0a5308d4a47fb963bb5bbb43756f31d9",
+        "P.bed": "6048d0f8662dff4dd59f17e71b411d843d13070d97da2d8f2ebf19f92afa6a70",
+        "P.fa": "c31a17944269fdfc72d65eeea09fc98259490dc41da1800564f823a981c13b94",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "86bf12e5543265c4487a810ca2d183c0c8745bfea4879e7190e00bda0f53fdf8",
+        "genes.tsv": "b0225d10e25bf49ca820a239e2e5d306c578ca9dc327397d900fc65a5779b845",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "32b20acef4b9d53f597c64e17332d496e2e864122f40b430808d232c618fa2d9"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies2_missing1_seed31",
+      "provenance_sha256": "63cdc2fb94ae153465c8fa90e9513ba2c9bcb66c7ede4187e68e4888f0dc44dd",
+      "seed": 31,
+      "loci": 128,
+      "copies": 2,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "17be50b521aceba5c11ecfd65280ef3045059ca3ee26f70fed314060b4ec4bd0",
+        "O_P.paf": "8fd8bc21d3aca08a91ac8d5ddb6e6f0a0a5308d4a47fb963bb5bbb43756f31d9",
+        "P.bed": "f34eb35387281dc96f12486fe1d31e8e069443e62b80293b16f7c98193f63999",
+        "P.fa": "d48eae89f4dd0d81f758348c489bbe25ccdd749657e4cd29dde58b1a83e6cae2",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "86bf12e5543265c4487a810ca2d183c0c8745bfea4879e7190e00bda0f53fdf8",
+        "genes.tsv": "b0225d10e25bf49ca820a239e2e5d306c578ca9dc327397d900fc65a5779b845",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "bee2844ec38bd9fd2102e26031364e74e8b7cc0e612f7ca70ead80162706d90f"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies6_missing1_seed31",
+      "provenance_sha256": "e0c042910bd607ee959b47a84a089ecd827311824689632da1ad76d5492354e9",
+      "seed": 31,
+      "loci": 128,
+      "copies": 6,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "17be50b521aceba5c11ecfd65280ef3045059ca3ee26f70fed314060b4ec4bd0",
+        "O_P.paf": "48bee57b42a00716283e4122958486ea0ae9043336d0166ae17d74f411fb5d39",
+        "P.bed": "6acd744c89a9c9b69b779c3bbd65371b5435971fb0e59de80953d074a8672b34",
+        "P.fa": "8659930965d36096599471a8ba34b6283ad871e868eefe5192583a118f0ad198",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "aee521a6e9d9592b76e01538b2d9e31d97d26a3536a6e058b109dbc51038d60a",
+        "genes.tsv": "02774869dc4386fda1f34ea6d19938500e6c122cb2e995c192c091357cff9441",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "1594a2ace7a7d6d7db97e4b8ab807081bec7b47aaa876f5f2042fe20f0e6dfa5"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies2_missing0_seed31",
+      "provenance_sha256": "dfd40fb7995140f90106201ecc37832ae6914f59894ec03d9b44092aea60c917",
+      "seed": 31,
+      "loci": 128,
+      "copies": 2,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "17be50b521aceba5c11ecfd65280ef3045059ca3ee26f70fed314060b4ec4bd0",
+        "O_P.paf": "8fd8bc21d3aca08a91ac8d5ddb6e6f0a0a5308d4a47fb963bb5bbb43756f31d9",
+        "P.bed": "6048d0f8662dff4dd59f17e71b411d843d13070d97da2d8f2ebf19f92afa6a70",
+        "P.fa": "d48eae89f4dd0d81f758348c489bbe25ccdd749657e4cd29dde58b1a83e6cae2",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "86bf12e5543265c4487a810ca2d183c0c8745bfea4879e7190e00bda0f53fdf8",
+        "genes.tsv": "b0225d10e25bf49ca820a239e2e5d306c578ca9dc327397d900fc65a5779b845",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "32b20acef4b9d53f597c64e17332d496e2e864122f40b430808d232c618fa2d9"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies4_missing0_seed17",
+      "provenance_sha256": "91728a52a9e200f743c97532698c32b970c13524933e679d102e40c0980b41c6",
+      "seed": 17,
+      "loci": 128,
+      "copies": 4,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "99c184719c641ffbcbb9c3bc14a08f06173e58be7ce3683b87479a94ee944c41",
+        "O_P.paf": "246422d35db4b049dd93a3b27d3ddbfa34c4bd08af668f3d485d9c4afd8ad820",
+        "P.bed": "eaa2d25141b307ad9e59e8e5793b35f36557c12bc868492c773915ee1aad4584",
+        "P.fa": "f78dc3097582b9b7758938cab7e3218e4aa57434a9efa5294f7fed85fb789c1c",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "3a6bdc4c0a2879e9d4e00292ee2aab70c00a3d6996951c4fb26f96f0664333ed",
+        "genes.tsv": "26f7b681d90e925414cd96a5b71dc4ea85f0b65ae0786ff3d1c8b2d6272572cf",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "7e07494ed6804092f20924f2ca904f6603f1c7bd2e075a3cfdaf9f6eb7d86cb5"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies6_missing1_seed53",
+      "provenance_sha256": "c02b41693234903a18b28fde827fcb2ae65116c4f422e3e93d4891437cdb2511",
+      "seed": 53,
+      "loci": 128,
+      "copies": 6,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "fbe309fde61104b86f6bcb806a0f4c5b3cb80bd6d31c4bf577d39bc91671e972",
+        "O_P.paf": "48bee57b42a00716283e4122958486ea0ae9043336d0166ae17d74f411fb5d39",
+        "P.bed": "6acd744c89a9c9b69b779c3bbd65371b5435971fb0e59de80953d074a8672b34",
+        "P.fa": "60d48156061916e55109374e935033a950703f3dde6f43cd26447eccc9096580",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "aee521a6e9d9592b76e01538b2d9e31d97d26a3536a6e058b109dbc51038d60a",
+        "genes.tsv": "02774869dc4386fda1f34ea6d19938500e6c122cb2e995c192c091357cff9441",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "1594a2ace7a7d6d7db97e4b8ab807081bec7b47aaa876f5f2042fe20f0e6dfa5"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies2_missing1_seed17",
+      "provenance_sha256": "5ad6440b34bdd1fb54b8a4fc8a52f48b527ad5b037e5fab3325a6840a0471ef2",
+      "seed": 17,
+      "loci": 128,
+      "copies": 2,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "99c184719c641ffbcbb9c3bc14a08f06173e58be7ce3683b87479a94ee944c41",
+        "O_P.paf": "8fd8bc21d3aca08a91ac8d5ddb6e6f0a0a5308d4a47fb963bb5bbb43756f31d9",
+        "P.bed": "f34eb35387281dc96f12486fe1d31e8e069443e62b80293b16f7c98193f63999",
+        "P.fa": "c31a17944269fdfc72d65eeea09fc98259490dc41da1800564f823a981c13b94",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "86bf12e5543265c4487a810ca2d183c0c8745bfea4879e7190e00bda0f53fdf8",
+        "genes.tsv": "b0225d10e25bf49ca820a239e2e5d306c578ca9dc327397d900fc65a5779b845",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "bee2844ec38bd9fd2102e26031364e74e8b7cc0e612f7ca70ead80162706d90f"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies6_missing0_seed17",
+      "provenance_sha256": "5c59739828228ed107eecb95c669a0cf9f71d812e216513514b87fe0d8780fd8",
+      "seed": 17,
+      "loci": 128,
+      "copies": 6,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "99c184719c641ffbcbb9c3bc14a08f06173e58be7ce3683b87479a94ee944c41",
+        "O_P.paf": "48bee57b42a00716283e4122958486ea0ae9043336d0166ae17d74f411fb5d39",
+        "P.bed": "542ad8b23dc0edb5e24a4869cb1fc8ba44542bcfc54f5192242ea6843647999f",
+        "P.fa": "6b49c9d9974356791363c987fb546d00d083c56a281389bfeb864bbfbab539f5",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "aee521a6e9d9592b76e01538b2d9e31d97d26a3536a6e058b109dbc51038d60a",
+        "genes.tsv": "02774869dc4386fda1f34ea6d19938500e6c122cb2e995c192c091357cff9441",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "82cc5408a1751f86b43933b9be7709941de4103743808151bd107a92a6b36029"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies6_missing0_seed31",
+      "provenance_sha256": "ba0cad2432952ff18066f5f0c4b752f045c258a822dd0225e2c15b768a368144",
+      "seed": 31,
+      "loci": 128,
+      "copies": 6,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "17be50b521aceba5c11ecfd65280ef3045059ca3ee26f70fed314060b4ec4bd0",
+        "O_P.paf": "48bee57b42a00716283e4122958486ea0ae9043336d0166ae17d74f411fb5d39",
+        "P.bed": "542ad8b23dc0edb5e24a4869cb1fc8ba44542bcfc54f5192242ea6843647999f",
+        "P.fa": "8659930965d36096599471a8ba34b6283ad871e868eefe5192583a118f0ad198",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "aee521a6e9d9592b76e01538b2d9e31d97d26a3536a6e058b109dbc51038d60a",
+        "genes.tsv": "02774869dc4386fda1f34ea6d19938500e6c122cb2e995c192c091357cff9441",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "82cc5408a1751f86b43933b9be7709941de4103743808151bd107a92a6b36029"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies6_missing1_seed17",
+      "provenance_sha256": "5a960c9b77e5262bda5a6762edb10070edabe7b190addb274d1f743f260a57be",
+      "seed": 17,
+      "loci": 128,
+      "copies": 6,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "99c184719c641ffbcbb9c3bc14a08f06173e58be7ce3683b87479a94ee944c41",
+        "O_P.paf": "48bee57b42a00716283e4122958486ea0ae9043336d0166ae17d74f411fb5d39",
+        "P.bed": "6acd744c89a9c9b69b779c3bbd65371b5435971fb0e59de80953d074a8672b34",
+        "P.fa": "6b49c9d9974356791363c987fb546d00d083c56a281389bfeb864bbfbab539f5",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "aee521a6e9d9592b76e01538b2d9e31d97d26a3536a6e058b109dbc51038d60a",
+        "genes.tsv": "02774869dc4386fda1f34ea6d19938500e6c122cb2e995c192c091357cff9441",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "1594a2ace7a7d6d7db97e4b8ab807081bec7b47aaa876f5f2042fe20f0e6dfa5"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies6_missing0_seed53",
+      "provenance_sha256": "18383b97f00c765f0150b7a61a7909dcbee8a8700f4a1c7e333dfd8dfe614732",
+      "seed": 53,
+      "loci": 128,
+      "copies": 6,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "fbe309fde61104b86f6bcb806a0f4c5b3cb80bd6d31c4bf577d39bc91671e972",
+        "O_P.paf": "48bee57b42a00716283e4122958486ea0ae9043336d0166ae17d74f411fb5d39",
+        "P.bed": "542ad8b23dc0edb5e24a4869cb1fc8ba44542bcfc54f5192242ea6843647999f",
+        "P.fa": "60d48156061916e55109374e935033a950703f3dde6f43cd26447eccc9096580",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "aee521a6e9d9592b76e01538b2d9e31d97d26a3536a6e058b109dbc51038d60a",
+        "genes.tsv": "02774869dc4386fda1f34ea6d19938500e6c122cb2e995c192c091357cff9441",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "82cc5408a1751f86b43933b9be7709941de4103743808151bd107a92a6b36029"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies4_missing1_seed53",
+      "provenance_sha256": "12b111042062c413a7b130fd92ca4ec22f17bfd58ae67bc86f9939a71948d85b",
+      "seed": 53,
+      "loci": 128,
+      "copies": 4,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "fbe309fde61104b86f6bcb806a0f4c5b3cb80bd6d31c4bf577d39bc91671e972",
+        "O_P.paf": "246422d35db4b049dd93a3b27d3ddbfa34c4bd08af668f3d485d9c4afd8ad820",
+        "P.bed": "bdf870a5a202be7200a0c8b3c5c5210ffbfa9d277e3f559aef7a2b70561911e1",
+        "P.fa": "8eb6e86c74d32d25326b16a009228672db6974fcaa1102adae3a551409303190",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "3a6bdc4c0a2879e9d4e00292ee2aab70c00a3d6996951c4fb26f96f0664333ed",
+        "genes.tsv": "26f7b681d90e925414cd96a5b71dc4ea85f0b65ae0786ff3d1c8b2d6272572cf",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "a71707d0d3c3dc9c59d5da0bdb8efc58622d88dac7ac2b664f3f3372b53c3a66"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies4_missing0_seed53",
+      "provenance_sha256": "cfccd56b4853c4d5425827b753c0fa86c65793459e2ce26700f80c127a1aebd9",
+      "seed": 53,
+      "loci": 128,
+      "copies": 4,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "fbe309fde61104b86f6bcb806a0f4c5b3cb80bd6d31c4bf577d39bc91671e972",
+        "O_P.paf": "246422d35db4b049dd93a3b27d3ddbfa34c4bd08af668f3d485d9c4afd8ad820",
+        "P.bed": "eaa2d25141b307ad9e59e8e5793b35f36557c12bc868492c773915ee1aad4584",
+        "P.fa": "8eb6e86c74d32d25326b16a009228672db6974fcaa1102adae3a551409303190",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "3a6bdc4c0a2879e9d4e00292ee2aab70c00a3d6996951c4fb26f96f0664333ed",
+        "genes.tsv": "26f7b681d90e925414cd96a5b71dc4ea85f0b65ae0786ff3d1c8b2d6272572cf",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "7e07494ed6804092f20924f2ca904f6603f1c7bd2e075a3cfdaf9f6eb7d86cb5"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies2_missing0_seed53",
+      "provenance_sha256": "d2df221e2c0a3152045868e9cc065185435f2025717b4eed7deab419290c554a",
+      "seed": 53,
+      "loci": 128,
+      "copies": 2,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "fbe309fde61104b86f6bcb806a0f4c5b3cb80bd6d31c4bf577d39bc91671e972",
+        "O_P.paf": "8fd8bc21d3aca08a91ac8d5ddb6e6f0a0a5308d4a47fb963bb5bbb43756f31d9",
+        "P.bed": "6048d0f8662dff4dd59f17e71b411d843d13070d97da2d8f2ebf19f92afa6a70",
+        "P.fa": "8c5a71b8e042745ce76418fd1d6e2132293e61b8e920f20584590fd08e635109",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "86bf12e5543265c4487a810ca2d183c0c8745bfea4879e7190e00bda0f53fdf8",
+        "genes.tsv": "b0225d10e25bf49ca820a239e2e5d306c578ca9dc327397d900fc65a5779b845",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "32b20acef4b9d53f597c64e17332d496e2e864122f40b430808d232c618fa2d9"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/polyploid/loci128_copies4_missing1_seed17",
+      "provenance_sha256": "985022a0e83feb0655a292a7314c32a13ea44a9f2be6540afa58edd4adcec577",
+      "seed": 17,
+      "loci": 128,
+      "copies": 4,
+      "missing_annotation": true,
+      "inputs": {
+        "O.bed": "b4f33d0a4103e6aa99ad7e742a906b2aa44955dcc12cc6fcfcdc5f8f966ac48b",
+        "O.fa": "99c184719c641ffbcbb9c3bc14a08f06173e58be7ce3683b87479a94ee944c41",
+        "O_P.paf": "246422d35db4b049dd93a3b27d3ddbfa34c4bd08af668f3d485d9c4afd8ad820",
+        "P.bed": "bdf870a5a202be7200a0c8b3c5c5210ffbfa9d277e3f559aef7a2b70561911e1",
+        "P.fa": "f78dc3097582b9b7758938cab7e3218e4aa57434a9efa5294f7fed85fb789c1c",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "3a6bdc4c0a2879e9d4e00292ee2aab70c00a3d6996951c4fb26f96f0664333ed",
+        "genes.tsv": "26f7b681d90e925414cd96a5b71dc4ea85f0b65ae0786ff3d1c8b2d6272572cf",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "a71707d0d3c3dc9c59d5da0bdb8efc58622d88dac7ac2b664f3f3372b53c3a66"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/scaling/loci1000_copies1_missing0_seed17",
+      "provenance_sha256": "b97d8d7e515b7fcb25efc5e45ae6c0d3f749601912fe36f42a5025d426cebe88",
+      "seed": 17,
+      "loci": 1000,
+      "copies": 1,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "97b3672638727391f8c4c7bbaf68b3ee671f347e1b9d3babd68cca4c8ea9581d",
+        "O.fa": "bd21e21b8edfd1d50bb1e65f326be9223f71d69db8f92b31cb0c579e47d4fd36",
+        "O_P.paf": "fb9665dea62c70640e0c8fc3d05a6f71ecbc058ac3899ddc6ac33c39456c7fc4",
+        "P.bed": "7a1470d796d94ea2cf3e01cfc0aaf13bc497ae599462aeebc5add8e6114d4910",
+        "P.fa": "768e6a8a44624d75018abbd94d8f855ab82a9dbc6bbbc3a61f96de4889c1c425",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "6f49356c2eaab972c9cfd619f7c12c04b1138d5e989925a66712d8bbda792911",
+        "genes.tsv": "d17db32fc520f34ea1abc39b8cfbf17cce7d2c1ef2abc03f784d3b3742735223",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "505a6dc993bf878ed37ebb60cfcbe8b445adc14190467770f4b1897ca65282fa"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/scaling/loci100_copies1_missing0_seed17",
+      "provenance_sha256": "10225ed1261890c2c100e5194cf7577dd5499df0a08b534e5f8bbd24ce543a1f",
+      "seed": 17,
+      "loci": 100,
+      "copies": 1,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "1c823ae8816af4128383cf993498138aa881e84110f31ba57d08d6b599f027a8",
+        "O.fa": "0b24ac012fb77dea8165e45047192b8e31bf14551d99cf211312360e0431dfde",
+        "O_P.paf": "783db3b011fde773c133090ab3b3ba763d6e6023791f98985ee2ef01be956da4",
+        "P.bed": "62395e2377b1ab78b8f6fd4c4594be2fbf7e7289dc25225cc7d3ed5eba0c4627",
+        "P.fa": "310e73676a81055fa21bcbdb1e8193b1a927892a36f2dfad66282cb447910230",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "6f49356c2eaab972c9cfd619f7c12c04b1138d5e989925a66712d8bbda792911",
+        "genes.tsv": "bd4f36f5514a3e43f42f6bc96ab7746fa0b54e9e44935ca3d60195fa72f37d7d",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "0ad2340ccf62198cd403e22778231e8824ad28a1957e8ea21f594399b1a21698"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/scaling/loci10000_copies1_missing0_seed17",
+      "provenance_sha256": "b0d4436018ac03a0970989883a536cab1d28f0616232bb270a978bd2f3d3fa25",
+      "seed": 17,
+      "loci": 10000,
+      "copies": 1,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "5705a3a7b59ec0f96f2b01aa192367760911d8eb5f1a7706aaeda1867302df78",
+        "O.fa": "46a912abd51cd6c764eb33447f2a0db274dee5b214809cb8c09aa507de38b40c",
+        "O_P.paf": "e2317a9f262ef691905bbba92d1baff2b76fbba737327276d8dbee1d796f3bdf",
+        "P.bed": "963f847910c1e9e2ca030404c9d04c07cad27448db6f16f3e7caec30be8c153e",
+        "P.fa": "6b2c2ddc9cc4013057de64395c83467ee03deb3ee8eb83bac0b733c750877aa8",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "6f49356c2eaab972c9cfd619f7c12c04b1138d5e989925a66712d8bbda792911",
+        "genes.tsv": "1a68f9a9b36e29b9f6ada22cc6bbade7dfe8ea596a31ce7262e7895299810e58",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "8d5a3eb0e621a9aee1f87e74acbd7b68c3b8f57e6572677f195a6a94c2444e04"
+      }
+    },
+    {
+      "case": "/workspace/tevox-v05-validation-20261006/scaling/loci100000_copies1_missing0_seed17",
+      "provenance_sha256": "75000d6f13969c4a36b10e78ab4bd63c673116bbfe779887499e04cd634f6ddf",
+      "seed": 17,
+      "loci": 100000,
+      "copies": 1,
+      "missing_annotation": false,
+      "inputs": {
+        "O.bed": "84117da28e7fc3ccb692fce42a210d0b9fa7e5b85d1ff05b64fb221a750772a1",
+        "O.fa": "772e2c44df713afece5a1317c36c1476772d6618a08841d3c68b8b9ae8f032a0",
+        "O_P.paf": "7706471a98f5d936bd1a334cd12e26aacafd7fbd98f566ac98fe178647f978af",
+        "P.bed": "c753b4ea723f6c09f6fc04d916fc88e2ee52c398145e215d4bdf6ee349830f27",
+        "P.fa": "d0110557b1bb1d09e308372a35f4154030ad92a6e655eda4b9ceaaadbd7a984a",
+        "alignments.tsv": "f3a190b5822b83c83807dee428bda4598a6eb1696a3f3a60fa799a004bdb3790",
+        "blocks.collinearity": "6f49356c2eaab972c9cfd619f7c12c04b1138d5e989925a66712d8bbda792911",
+        "genes.tsv": "8ee6387038bd7d3f222a25a7481cfe20c4c1a23b87008532fbc83708819fba4e",
+        "manifest.tsv": "590df9880fe63b2aa4a6e93d8b53111aaf13565b9c8fbc7a6b4486d2f3616ff2",
+        "synteny.tsv": "5352fef60799b331ae4be7872c6be0ef9c7d6546bcf1cb5d5ec46c36e988ca34",
+        "truth.members.tsv": "f2d68ecd7264d822f48297b09939a1ac049d8d70c74f14af842d074e1a546c9b"
+      }
+    }
+  ]
+}
